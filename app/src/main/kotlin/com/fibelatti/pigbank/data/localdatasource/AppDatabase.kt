@@ -3,7 +3,6 @@ package com.fibelatti.pigbank.data.localdatasource
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
-import com.fibelatti.pigbank.data.common.AppTypeConverters
 import com.fibelatti.pigbank.data.goal.Goal
 import com.fibelatti.pigbank.data.goal.GoalRepositoryContract
 import com.fibelatti.pigbank.data.goal.Savings

@@ -1,4 +1,4 @@
-package com.fibelatti.pigbank.data.common
+package com.fibelatti.pigbank.data.localdatasource
 
 import android.arch.persistence.room.TypeConverter
 import java.util.Date
