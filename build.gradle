@@ -1,0 +1,33 @@
+buildscript {
+    apply from: 'versions.gradle'
+    apply from: 'app-info.gradle'
+    apply from: 'ktlint.gradle'
+    apply from: 'detekt.gradle'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        google()
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:$versions.gradleVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlinVersion"
+        classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$versions.dexCountPlugin"
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        jcenter()
+        google()
+        maven { url 'https://maven.fabric.io/public' }
+    }
+}
+
+clean {
+    delete rootProject.buildDir
+}

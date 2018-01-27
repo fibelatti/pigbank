@@ -1,0 +1,10 @@
+ext.appInfo = [
+    // Application
+    appName      : 'PigBank',
+    applicationId: 'com.fibelatti.pigbank',
+
+    // Version information
+    versionMajor : 1,
+    versionMinor : 0,
+    versionPatch : 0
+]

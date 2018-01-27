@@ -1,0 +1,97 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.getkeepsafe.dexcount'
+apply plugin: 'io.fabric'
+
+android {
+    compileSdkVersion versions.compileSdkVersion
+    buildToolsVersion versions.buildToolsVersion
+
+    defaultConfig {
+        applicationId appInfo.applicationId
+        versionCode appInfo.versionMajor * 10000 + appInfo.versionMinor * 100 + appInfo.versionPatch
+        versionName "$appInfo.versionMajor.$appInfo.versionMinor.$appInfo.versionPatch"
+        minSdkVersion versions.minSdkVersion
+        targetSdkVersion versions.targetSdkVersion
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+
+        manifestPlaceholders = [fabricApiKey: FABRIC_API_KEY]
+    }
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            resValue "string", "app_name", appInfo.appName + " Dev"
+
+            minifyEnabled false
+        }
+        release {
+            resValue "string", "app_name", appInfo.appName
+
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+
+        String sharedTestDir = 'src/sharedTest/kotlin'
+
+        test {
+            java.srcDir sharedTestDir
+            java.srcDirs += 'src/test/kotlin'
+            java.srcDirs += 'src/test/resources'
+        }
+
+        androidTest {
+            java.srcDir sharedTestDir
+            java.srcDirs += 'src/androidTest/kotlin'
+        }
+    }
+}
+
+preBuild.dependsOn ':detekt'
+preBuild.dependsOn ':ktlint'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Kotlin
+    implementation libraries.kotlin
+
+    // Support Library
+    implementation libraries.supportLibrary
+    implementation libraries.designLibrary
+    implementation libraries.constraintLayout
+
+    // Dagger
+    implementation libraries.dagger
+    kapt libraries.daggerCompiler
+
+    // Rx
+    implementation libraries.rxJava
+    implementation libraries.rxAndroid
+
+    // Persistence
+    implementation libraries.room
+    kapt libraries.roomCompiler
+
+    // Fabric
+    implementation(libraries.crashlytics) {
+        transitive = true
+    }
+    implementation(libraries.answers) {
+        transitive = true
+    }
+
+    // Testing
+    testImplementation libraries.junit
+    testImplementation libraries.mockitoCore
+
+    androidTestImplementation libraries.supportAnnotations
+    androidTestImplementation libraries.testRunner
+    androidTestImplementation libraries.kotlinTest
+}
