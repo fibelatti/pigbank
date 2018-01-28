@@ -15,5 +15,38 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="${fabricApiKey}"/>
+
+        <!-- ACTIVITY -->
+        <activity
+            android:name=".presentation.goals.GoalsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".presentation.goaldetail.GoalDetailActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".presentation.goals.GoalsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.goals.GoalsActivity"/>
+        </activity>
+        <activity
+            android:name=".presentation.preferences.PreferencesActivity"
+            android:configChanges="orientation"
+            android:parentActivityName=".presentation.goals.GoalsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.goals.GoalsActivity"/>
+        </activity>
     </application>
 </manifest>
