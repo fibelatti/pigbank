@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingEnd="@dimen/padding_regular"
+    android:paddingStart="@dimen/padding_regular">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/layout_preferences_crash_report_opt_out"/>
+
+            <android.support.v4.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/preferences_space_regular"/>
+
+            <include layout="@layout/layout_preferences_analytics_opt_out"/>
+
+            <android.support.v4.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/preferences_space_regular"/>
+
+            <include layout="@layout/layout_preferences_reset_hints"/>
+
+            <android.support.v4.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/preferences_space_large"/>
+
+            <include
+                android:id="@+id/dividerFooter"
+                layout="@layout/layout_divider_default"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_size"/>
+
+            <LinearLayout
+                android:id="@+id/layoutShareAndRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_large"
+                android:layout_marginRight="@dimen/margin_large"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/buttonShare"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_weight="1"
+                    android:text="@string/preferences_share"
+                    android:theme="@style/AppButton.About"/>
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/buttonRate"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_weight="1"
+                    android:text="@string/preferences_rate"
+                    android:theme="@style/AppButton.About"/>
+            </LinearLayout>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewAbout"
+                style="@style/TextPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_smaller"
+                android:gravity="center_horizontal"
+                android:text="@string/preferences_about"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewAppVersion"
+                style="@style/TextPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_smaller"
+                android:gravity="center_horizontal"
+                android:text="@string/preferences_app_version"/>
+
+            <android.support.v4.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/preferences_space_large"/>
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

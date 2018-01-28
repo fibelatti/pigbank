@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_item_height"
+    android:background="@drawable/selector_background_savings"
+    android:padding="@dimen/padding_small"
+    tools:layout_margin="@dimen/margin_small">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineAction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.80"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.70"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textViewDescription"
+        style="@style/TextPrimary.Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/textViewSavingsProgress"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineAction"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread"
+        tools:text="Trip to Japan"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textViewSavingsProgress"
+        style="@style/TextPrimary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/textViewDaysUntilDeadline"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineAction"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDescription"
+        tools:text="200.00 of 2000.00 saved"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textViewDaysUntilDeadline"
+        style="@style/TextPrimary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineProgress"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineAction"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSavingsProgress"
+        tools:text="200 days until deadline"/>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineProgress">
+
+        <FrameLayout
+            android:id="@+id/layoutProgressPercent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/selector_background_savings_progress"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textViewSavingsProgressPercent"
+            style="@style/TextPrimary.WhiteHighContrast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="@dimen/margin_small"
+            android:textStyle="bold"
+            tools:text="40% saved"/>
+    </FrameLayout>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imageViewSaveToGoal"
+        android:layout_width="@dimen/pig_icon_size"
+        android:layout_height="@dimen/pig_icon_size"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toTopOf="@+id/textViewSaveToGoal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guidelineAction"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:srcCompat="@drawable/ic_pig"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textViewSaveToGoal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:text="@string/goal_save_money"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/text_size_small"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineProgress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guidelineAction"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewSaveToGoal"/>
+</android.support.constraint.ConstraintLayout>

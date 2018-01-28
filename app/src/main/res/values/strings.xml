@@ -1,3 +1,65 @@
 <resources>
+    <!-- Generics -->
+    <string name="hint_ok">OK</string>
+    <string name="hint_yes">Yes</string>
+    <string name="hint_no">No</string>
+    <string name="hint_done">Done</string>
+    <string name="hint_cancel">Cancel</string>
+    <string name="hint_search">Search</string>
+    <string name="hint_back">Navigate back</string>
+    <string name="hint_try_again">Try again</string>
+    <string name="hint_loading">Loading</string>
+    <string name="hint_dismiss">Dismiss</string>
+    <string name="hint_reset">Reset</string>
+    <string name="hint_did_you_know">Did you know?</string>
 
+    <string name="generic_log_error">Error in %1$s (%2$s)</string>
+
+    <string name="generic_msg_error">Oops! Something went wrong. Please try again.</string>
+
+    <string name="menu_preferences">Preferences</string>
+
+    <!-- Goal -->
+    <string name="goal_add">Add Goal</string>
+    <string name="goal_save_money">Save money</string>
+    <string name="goal_saved_relative">%1$d of %2$d saved</string>
+    <plurals name="goal_deadline_remaining">
+        <item quantity="one">Last day to achieve your goal!</item>
+        <item quantity="other">%d days until deadline</item>
+    </plurals>
+    <string name="goal_saved_percent">%d%% saved</string>
+    <string name="goal_description">Description</string>
+    <string name="goal_cost">Cost</string>
+    <string name="goal_deadline">Deadline</string>
+    <string name="goal_savings">Savings</string>
+    <string name="goal_total_saved">%d saved</string>
+    <string name="goal_total_remaining">%d remaining</string>
+    <string name="goal_savings_per_day">Save %d per day</string>
+    <string name="goal_savings_per_week">Save %d per week</string>
+    <string name="goal_savings_per_month">Save %d per month (30 day average)</string>
+
+    <!-- Savings -->
+    <string name="savings_saved">%d saved in %s</string>
+
+    <!-- Preferences -->
+    <string name="preferences_changes_saved">Changes saved</string>
+
+    <string name="preferences_crash_report_opt_out_title">Crash Report Opt-out</string>
+    <string name="preferences_crash_report_opt_out_description">This app uses Crashlytics to collect anonymized data about crashes and errors, which helps me make this app more stable. If you don\'t want your data to be sent uncheck this option
+        \n\nYou can read Crashlytics privacy policy <a href="http://try.crashlytics.com/terms/">here</a></string>
+
+    <string name="preferences_analytics_opt_out_title">Analytics Opt-out</string>
+    <string name="preferences_analytics_opt_out_description">This app uses Fabric to collect anonymized analytics data, which helps me to understand how people use the app to keep improving the user experience. No information about the groups you create is collected. If you don\'t want your data to be sent uncheck this option
+        \n\nYou can read Fabric privacy policy <a href="http://try.crashlytics.com/terms/">here</a></string>
+
+    <string name="preferences_reset_hints_title">App Hints</string>
+    <string name="preferences_reset_hints_button">Show again</string>
+    <string name="preferences_reset_hints_description">All the hints that you dismissed will be shown again</string>
+
+    <string name="preferences_share">Share PigBank with a friend!</string>
+    <string name="preferences_share_title">Sharing PigBank</string>
+    <string name="preferences_share_text">Check out PigBank and keep track of your goals! Download at %s</string>
+    <string name="preferences_rate">Rate PigBank in the Play Store!</string>
+    <string name="preferences_about">Developed with ❤ by Filipe Belatti</string>
+    <string name="preferences_app_version">Version: %s</string>
 </resources>

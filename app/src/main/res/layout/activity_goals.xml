@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingEnd="@dimen/padding_regular"
+    android:paddingStart="@dimen/padding_regular">
+
+    <include layout="@layout/layout_toolbar_default"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/layoutHintContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerViewGoals"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewGoals"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/dividerButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutHintContainer"/>
+
+        <include
+            android:id="@+id/dividerButton"
+            style="@style/EdgeToEdgeDivider"
+            layout="@layout/layout_divider_default"
+            app:layout_constraintBottom_toTopOf="@+id/buttonAddGoal"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewGoals"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/buttonAddGoal"
+            style="@style/AppButton.Primary"
+            android:layout_width="@dimen/button_width"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:text="@string/goal_add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dividerButton"/>
+    </android.support.constraint.ConstraintLayout>
+</FrameLayout>
+
