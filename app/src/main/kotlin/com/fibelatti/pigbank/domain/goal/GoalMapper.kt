@@ -9,6 +9,25 @@ object GoalMapper {
     private const val weekDays = 7
     private const val monthDays = 30
 
+    fun toPresentationModel(goal: Goal) = with(goal) {
+        val remainingCost = cost - savings
+        val daysUntilDeadline = deadline.time - Date().time
+
+        PresentationModel(
+            id = id,
+            description = description,
+            cost = cost,
+            totalSaved = savings,
+            remainingCost = remainingCost,
+            percentSaved = savings / cost,
+            deadline = deadline,
+            daysUntilDeadline = daysUntilDeadline,
+            suggestedSavingsPerDay = remainingCost / daysUntilDeadline,
+            suggestedSavingsPerWeek = remainingCost / (daysUntilDeadline / weekDays),
+            suggestedSavingsPerMonth = remainingCost / (daysUntilDeadline / monthDays),
+            savings = emptyList())
+    }
+
     fun toPresentationModel(goalWithSavings: GoalWithSavings) = with(goalWithSavings) {
         val remainingCost = goal.cost - goalWithSavings.goal.savings
         val daysUntilDeadline = goal.deadline.time - Date().time
