@@ -24,39 +24,48 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.70"/>
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/textViewDescription"
-        style="@style/TextPrimary.Title"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/textViewSavingsProgress"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineAction"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="spread"
-        tools:text="Trip to Japan"/>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/textViewSavingsProgress"
-        style="@style/TextPrimary"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/textViewDaysUntilDeadline"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineAction"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDescription"
-        tools:text="200.00 of 2000.00 saved"/>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/textViewDaysUntilDeadline"
-        style="@style/TextPrimary"
-        android:layout_width="0dp"
+        android:id="@+id/layoutClickableGoal"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/guidelineProgress"
         app:layout_constraintEnd_toStartOf="@+id/guidelineAction"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSavingsProgress"
-        tools:text="200 days until deadline"/>
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textViewDescription"
+            style="@style/TextPrimary.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/textViewSavingsProgress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Trip to Japan"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textViewSavingsProgress"
+            style="@style/TextPrimary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/textViewDaysUntilDeadline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewDescription"
+            tools:text="200.00 of 2000.00 saved"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textViewDaysUntilDeadline"
+            style="@style/TextPrimary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewSavingsProgress"
+            tools:text="200 days until deadline"/>
+    </android.support.constraint.ConstraintLayout>
 
     <FrameLayout
         android:layout_width="0dp"
