@@ -23,7 +23,7 @@
     <string name="goal_title">My Goals</string>
     <string name="goal_add">Add Goal</string>
     <string name="goal_save_money">Save money</string>
-    <string name="goal_saved_relative">%1$d of %2$d saved</string>
+    <string name="goal_saved_relative">%1$.2f of %2$.2f saved</string>
     <plurals name="goal_deadline_remaining">
         <item quantity="one">Last day to achieve your goal!</item>
         <item quantity="other">%d days until deadline</item>
@@ -33,14 +33,14 @@
     <string name="goal_cost">Cost</string>
     <string name="goal_deadline">Deadline</string>
     <string name="goal_savings">Savings</string>
-    <string name="goal_total_saved">%d saved</string>
-    <string name="goal_total_remaining">%d remaining</string>
-    <string name="goal_savings_per_day">Save %d per day</string>
-    <string name="goal_savings_per_week">Save %d per week</string>
-    <string name="goal_savings_per_month">Save %d per month (30 day average)</string>
+    <string name="goal_total_saved">%.2f saved</string>
+    <string name="goal_total_remaining">%.2f remaining</string>
+    <string name="goal_savings_per_day">Save %.2f per day</string>
+    <string name="goal_savings_per_week">Save %.2f per week</string>
+    <string name="goal_savings_per_month">Save %.2f per month (30 day average)</string>
 
     <!-- Savings -->
-    <string name="savings_saved">%d saved in %s</string>
+    <string name="savings_saved">%.2f saved in %s</string>
 
     <!-- Preferences -->
     <string name="preferences_changes_saved">Changes saved</string>

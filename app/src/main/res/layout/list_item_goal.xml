@@ -25,8 +25,8 @@
         app:layout_constraintGuide_percent="0.70"/>
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="0dp"
         android:id="@+id/layoutClickableGoal"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/guidelineProgress"
         app:layout_constraintEnd_toStartOf="@+id/guidelineAction"
@@ -75,21 +75,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guidelineProgress">
 
-        <FrameLayout
-            android:id="@+id/layoutProgressPercent"
+        <ProgressBar
+            android:id="@+id/progressBarPercent"
+            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/selector_background_savings_progress"/>
+            android:progressDrawable="@drawable/selector_background_savings_progress"/>
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/textViewSavingsProgressPercent"
-            style="@style/TextPrimary.WhiteHighContrast"
+            style="@style/TextPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_margin="@dimen/margin_small"
-            android:textStyle="bold"
-            tools:text="40% saved"/>
+            tools:text="50% saved"/>
     </FrameLayout>
 
     <android.support.v7.widget.AppCompatImageView
