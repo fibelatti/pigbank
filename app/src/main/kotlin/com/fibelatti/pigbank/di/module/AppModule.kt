@@ -9,6 +9,8 @@ import com.fibelatti.pigbank.data.localdatasource.AppDatabase
 import com.fibelatti.pigbank.data.localdatasource.DATABASE_NAME
 import com.fibelatti.pigbank.di.qualifier.AppQualifier
 import com.fibelatti.pigbank.di.scope.AppScope
+import com.fibelatti.pigbank.presentation.common.AppSchedulerProvider
+import com.fibelatti.pigbank.presentation.common.SchedulerProvider
 import dagger.Module
 import dagger.Provides
 import java.util.Locale
@@ -28,6 +30,9 @@ class AppModule(private var app: Application) {
 
     @Provides
     fun provideLocaleDefault(): Locale = Locale.getDefault()
+
+    @Provides
+    fun provideSchedulerProvider(): SchedulerProvider = AppSchedulerProvider()
 
     @Provides
     @AppScope
