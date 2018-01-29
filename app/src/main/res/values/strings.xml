@@ -20,6 +20,7 @@
     <string name="menu_preferences">Preferences</string>
 
     <!-- Goal -->
+    <string name="goal_title">My Goals</string>
     <string name="goal_add">Add Goal</string>
     <string name="goal_save_money">Save money</string>
     <string name="goal_saved_relative">%1$d of %2$d saved</string>
