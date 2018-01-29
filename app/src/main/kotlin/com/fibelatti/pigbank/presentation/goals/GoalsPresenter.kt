@@ -31,6 +31,10 @@ class GoalsPresenter(
 
         view.addSavingsClicked()
             .getObservable()
+            .subscribeUntilDetached { view.showAddSavingsDialog(goal = it) }
+
+        view.addSavingsToGoal()
+            .getObservable()
             .subscribeUntilDetached { saveForGoal(view = view, goal = it.first, amount = it.second) }
     }
 
