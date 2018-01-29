@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import com.fibelatti.pigbank.presentation.base.BaseActivity
 import com.fibelatti.pigbank.presentation.base.BaseIntentBuilder
+import com.fibelatti.pigbank.presentation.models.Goal
 
 //region Top level declarations
 //endregion
@@ -13,6 +14,7 @@ class GoalDetailActivity :
     //region Companion objects and interfaces
     companion object {
         val TAG: String = GoalDetailActivity::class.java.simpleName
+        private const val BUNDLE_GOAL = "GOAL"
     }
     //endregion
 
@@ -60,5 +62,10 @@ class GoalDetailActivity :
 
     //region Private methods
     //endregion
-    class IntentBuilder(context: Context) : BaseIntentBuilder<GoalDetailActivity>(context, GoalDetailActivity::class.java)
+    class IntentBuilder(context: Context) : BaseIntentBuilder<GoalDetailActivity>(context, GoalDetailActivity::class.java) {
+        fun addGoalExtra(goal: Goal): IntentBuilder {
+            intent.putExtra(BUNDLE_GOAL, goal)
+            return this
+        }
+    }
 }

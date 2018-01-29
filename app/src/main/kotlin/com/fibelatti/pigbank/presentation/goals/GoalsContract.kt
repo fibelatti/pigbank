@@ -3,7 +3,6 @@ package com.fibelatti.pigbank.presentation.goals
 import com.fibelatti.pigbank.presentation.base.BaseContract
 import com.fibelatti.pigbank.presentation.common.ObservableView
 import com.fibelatti.pigbank.presentation.models.Goal
-import com.fibelatti.pigbank.presentation.models.Savings
 
 interface GoalsContract {
     interface Presenter : BaseContract.Presenter<View>
@@ -16,7 +15,7 @@ interface GoalsContract {
 
         fun goalClicked(): ObservableView<Goal>
 
-        fun addSavings(): ObservableView<Pair<Goal, Savings>>
+        fun addSavingsClicked(): ObservableView<Pair<Goal, Float>>
         //endregion
 
         //region Consumes
