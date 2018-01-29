@@ -8,6 +8,7 @@ import com.fibelatti.pigbank.presentation.models.Goal as PresentationModel
 object GoalMapper {
     private const val weekDays = 7
     private const val monthDays = 30
+    private const val minRelativeDaysToAlert = 10
 
     fun toPresentationModel(goal: Goal) = with(goal) {
         val remainingCost = cost - savings
@@ -15,6 +16,7 @@ object GoalMapper {
 
         PresentationModel(
             id = id,
+            creationDate = creationDate,
             description = description,
             cost = cost,
             totalSaved = savings,
@@ -22,6 +24,7 @@ object GoalMapper {
             percentSaved = savings / cost,
             deadline = deadline,
             daysUntilDeadline = daysUntilDeadline,
+            emphasizeRemainingDays = shouldEmphasizeRemainingDays(goal = this, daysUntilDeadline = daysUntilDeadline),
             suggestedSavingsPerDay = remainingCost / daysUntilDeadline,
             suggestedSavingsPerWeek = remainingCost / (daysUntilDeadline / weekDays),
             suggestedSavingsPerMonth = remainingCost / (daysUntilDeadline / monthDays),
@@ -34,6 +37,7 @@ object GoalMapper {
 
         PresentationModel(
             id = goal.id,
+            creationDate = goal.creationDate,
             description = goal.description,
             cost = goal.cost,
             totalSaved = goal.savings,
@@ -41,6 +45,7 @@ object GoalMapper {
             percentSaved = goal.savings / goal.cost,
             deadline = goal.deadline,
             daysUntilDeadline = daysUntilDeadline,
+            emphasizeRemainingDays = shouldEmphasizeRemainingDays(goal, daysUntilDeadline),
             suggestedSavingsPerDay = remainingCost / daysUntilDeadline,
             suggestedSavingsPerWeek = remainingCost / (daysUntilDeadline / weekDays),
             suggestedSavingsPerMonth = remainingCost / (daysUntilDeadline / monthDays),
@@ -49,6 +54,12 @@ object GoalMapper {
     }
 
     fun toDataModel(goal: PresentationModel) = with(goal) {
-        Goal(id, description, cost, totalSaved, deadline)
+        Goal(id, creationDate, description, cost, totalSaved, deadline)
     }
+
+    private fun shouldEmphasizeRemainingDays(goal: Goal, daysUntilDeadline: Long) =
+        when (daysUntilDeadline / (goal.deadline.time - goal.creationDate.time)) {
+            in 0..minRelativeDaysToAlert -> true
+            else -> false
+        }
 }

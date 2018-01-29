@@ -22,7 +22,7 @@ class AddGoalUseCase @Inject constructor(private val database: AppDatabase) {
                     percentSaved,
                     deadline,
                     daysUntilDeadline,
-                    daysUntilDeadlineColor,
+                    emphasizeRemainingDays,
                     suggestedSavingsPerDay,
                     suggestedSavingsPerWeek,
                     suggestedSavingsPerMonth,
