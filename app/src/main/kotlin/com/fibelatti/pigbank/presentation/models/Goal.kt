@@ -5,6 +5,7 @@ import android.os.Parcelable
 import com.fibelatti.pigbank.presentation.common.createParcel
 import com.fibelatti.pigbank.presentation.common.readDate
 import com.fibelatti.pigbank.presentation.common.writeDate
+import com.fibelatti.pigbank.presentation.goals.adapter.ViewType
 import java.util.Date
 
 data class Goal(
@@ -20,7 +21,7 @@ data class Goal(
     val suggestedSavingsPerWeek: Float,
     val suggestedSavingsPerMonth: Float,
     val savings: List<Savings>
-) : Parcelable {
+) : Parcelable, ViewType {
     constructor(source: Parcel) : this(
         source.readLong(),
         source.readString(),
@@ -35,6 +36,11 @@ data class Goal(
         source.readFloat(),
         ArrayList<Savings>().apply { source.readList(this, Savings::class.java.classLoader) }
     )
+
+    companion object {
+        @JvmField
+        val CREATOR = createParcel { Goal(it) }
+    }
 
     override fun describeContents() = 0
 
@@ -53,8 +59,5 @@ data class Goal(
         writeList(savings)
     }
 
-    companion object {
-        @JvmField
-        val CREATOR = createParcel { Goal(it) }
-    }
+    override fun getViewType(): Int = ViewType.GOAL
 }
