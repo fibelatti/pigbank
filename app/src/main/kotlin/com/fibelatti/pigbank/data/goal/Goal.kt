@@ -12,6 +12,8 @@ data class Goal(
     @ColumnInfo(name = COLUMN_ID)
     @PrimaryKey(autoGenerate = true)
     val id: Long,
+    @ColumnInfo(name = COLUMN_CREATION_DATE)
+    val creationDate: Date,
     @ColumnInfo(name = COLUMN_DESCRIPTION)
     val description: String,
     @ColumnInfo(name = COLUMN_COST)
@@ -28,10 +30,12 @@ data class Goal(
         const val COLUMN_COST = "cost"
         const val COLUMN_SAVINGS = "savings"
         const val COLUMN_DEADLINE = "deadline"
+        const val COLUMN_CREATION_DATE = "creation_date"
     }
 
     @Ignore constructor() : this(
         id = 0,
+        creationDate = Date(),
         description = "",
         cost = 0F,
         savings = 0F,

@@ -12,9 +12,21 @@ class AddGoalUseCase @Inject constructor(private val database: AppDatabase) {
         with(goal) {
             database.runInTransaction({
                 val updatedSum = savings.sumByFloat { it.amount }
-                val copy = Goal(id, description, cost, updatedSum, remainingCost, percentSaved,
-                    deadline, daysUntilDeadline, suggestedSavingsPerDay, suggestedSavingsPerWeek,
-                    suggestedSavingsPerMonth, savings)
+                val copy = Goal(
+                    id,
+                    creationDate,
+                    description,
+                    cost,
+                    updatedSum,
+                    remainingCost,
+                    percentSaved,
+                    deadline,
+                    daysUntilDeadline,
+                    daysUntilDeadlineColor,
+                    suggestedSavingsPerDay,
+                    suggestedSavingsPerWeek,
+                    suggestedSavingsPerMonth,
+                    savings)
 
                 database.getGoalRepository()
                     .saveGoal(GoalMapper.toDataModel(copy))

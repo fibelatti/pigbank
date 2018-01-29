@@ -19,6 +19,7 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
     private val goalSavingsBefore = 0F
     private val goalSavingsAfter = 300F
     private val goalDeadline = Date(1546214400) // 2018/12/31
+    private val goalCreationDate = Date(1517184000) // 2018/01/29
 
     private val firstSavingsId = 10L
     private val firstSavingsAmount = 300F
@@ -161,7 +162,7 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
         assertTrue(testObserver.values()[0].isNotEmpty())
     }
 
-    private fun createGoal(savings: Float = goalSavingsBefore) = Goal(goalId, goalDescription, goalCost, savings, goalDeadline)
+    private fun createGoal(savings: Float = goalSavingsBefore) = Goal(goalId, goalCreationDate, goalDescription, goalCost, savings, goalDeadline)
 
     private fun createSavings() = Savings(firstSavingsId, goalId, firstSavingsAmount, firstSavingsDate)
 
