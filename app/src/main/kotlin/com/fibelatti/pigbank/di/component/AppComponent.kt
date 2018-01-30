@@ -2,7 +2,7 @@ package com.fibelatti.pigbank.di.component
 
 import android.app.Application
 import com.fibelatti.pigbank.App
-import com.fibelatti.pigbank.di.builder.ActivityBuilder
+import com.fibelatti.pigbank.di.module.ActivityBuilderModule
 import com.fibelatti.pigbank.di.module.AppModule
 import com.fibelatti.pigbank.di.scope.AppScope
 import dagger.BindsInstance
@@ -14,7 +14,7 @@ import dagger.android.support.DaggerApplication
 @Component(
     modules = [
         AndroidSupportInjectionModule::class,
-        ActivityBuilder::class,
+        ActivityBuilderModule::class,
         AppModule::class]
 )
 @AppScope

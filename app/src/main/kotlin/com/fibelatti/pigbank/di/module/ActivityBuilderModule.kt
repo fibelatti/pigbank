@@ -1,12 +1,11 @@
-package com.fibelatti.pigbank.di.builder
+package com.fibelatti.pigbank.di.module
 
-import com.fibelatti.pigbank.di.module.GoalsModule
 import com.fibelatti.pigbank.presentation.goals.GoalsActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
-interface ActivityBuilder {
+interface ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [GoalsModule::class])
     fun bindGoalsActivity(): GoalsActivity
 }
