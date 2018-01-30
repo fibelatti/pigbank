@@ -1,9 +1,9 @@
 package com.fibelatti.pigbank.presentation.base
 
-import android.support.v4.app.Fragment
+import dagger.android.support.DaggerFragment
 
 abstract class BaseFragment :
-    Fragment(),
+    DaggerFragment(),
     BaseContract.View {
 
     //region Companion objects and interfaces
