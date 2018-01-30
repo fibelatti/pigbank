@@ -70,6 +70,8 @@ dependencies {
     // Dagger
     implementation libraries.dagger
     kapt libraries.daggerCompiler
+    implementation libraries.daggerAndroid
+    kapt libraries.daggerAndroidCompiler
 
     // Rx
     implementation libraries.rxJava
