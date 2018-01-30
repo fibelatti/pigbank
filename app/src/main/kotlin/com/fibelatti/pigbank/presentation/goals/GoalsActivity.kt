@@ -3,9 +3,7 @@ package com.fibelatti.pigbank.presentation.goals
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import com.fibelatti.pigbank.App
 import com.fibelatti.pigbank.R
-import com.fibelatti.pigbank.R.dimen
 import com.fibelatti.pigbank.presentation.base.BaseActivity
 import com.fibelatti.pigbank.presentation.base.BaseIntentBuilder
 import com.fibelatti.pigbank.presentation.common.ItemOffsetDecoration
@@ -49,7 +47,6 @@ class GoalsActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_goals)
-        App.instance.instantiateGoalsComponent(activity = this)?.inject(this)
 
         setUpLayout()
         setupRecyclerView()
@@ -63,11 +60,6 @@ class GoalsActivity :
     override fun onPause() {
         presenter.unbind()
         super.onPause()
-    }
-
-    override fun onDestroy() {
-        App.instance.releaseGoalsComponent()
-        super.onDestroy()
     }
     //endregion
 
@@ -120,7 +112,7 @@ class GoalsActivity :
     }
 
     private fun setupRecyclerView() {
-        recyclerViewGoals.addItemDecoration(ItemOffsetDecoration(recyclerViewGoals.context, dimen.margin_smaller))
+        recyclerViewGoals.addItemDecoration(ItemOffsetDecoration(recyclerViewGoals.context, R.dimen.margin_smaller))
         recyclerViewGoals.adapter = adapter
         recyclerViewGoals.layoutManager = LinearLayoutManager(this)
     }

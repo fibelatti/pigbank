@@ -1,20 +1,33 @@
 package com.fibelatti.pigbank.di.component
 
+import android.app.Application
+import com.fibelatti.pigbank.App
+import com.fibelatti.pigbank.di.module.ActivityBuilderModule
 import com.fibelatti.pigbank.di.module.AppModule
-import com.fibelatti.pigbank.di.module.GoalDetailModule
-import com.fibelatti.pigbank.di.module.GoalsModule
-import com.fibelatti.pigbank.di.module.PreferencesModule
 import com.fibelatti.pigbank.di.scope.AppScope
+import dagger.BindsInstance
 import dagger.Component
+import dagger.android.AndroidInjector
+import dagger.android.support.AndroidSupportInjectionModule
+import dagger.android.support.DaggerApplication
 
 @Component(
-    modules = [AppModule::class]
+    modules = [
+        AndroidSupportInjectionModule::class,
+        ActivityBuilderModule::class,
+        AppModule::class]
 )
 @AppScope
-interface AppComponent {
-    fun instantiateComponent(goalsModule: GoalsModule): GoalsComponent
+interface AppComponent : AndroidInjector<DaggerApplication> {
+    fun inject(app: App)
 
-    fun instantiateComponent(goalDetailModule: GoalDetailModule): GoalDetailComponent
+    override fun inject(instance: DaggerApplication)
 
-    fun instantiateComponent(preferencesModule: PreferencesModule): PreferencesComponent
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        fun application(application: Application): Builder
+
+        fun build(): AppComponent
+    }
 }

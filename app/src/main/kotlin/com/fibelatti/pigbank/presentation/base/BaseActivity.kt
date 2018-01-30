@@ -1,9 +1,9 @@
 package com.fibelatti.pigbank.presentation.base
 
-import android.support.v7.app.AppCompatActivity
+import dagger.android.support.DaggerAppCompatActivity
 
 abstract class BaseActivity :
-    AppCompatActivity(),
+    DaggerAppCompatActivity(),
     BaseContract.View {
 
     //region Companion objects and interfaces

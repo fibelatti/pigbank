@@ -1,7 +1,5 @@
 package com.fibelatti.pigbank.di.module
 
-import android.content.Context
-import android.support.v4.app.FragmentActivity
 import com.fibelatti.pigbank.domain.goal.GetGoalsUseCase
 import com.fibelatti.pigbank.domain.goal.SaveForGoalUseCase
 import com.fibelatti.pigbank.presentation.common.SchedulerProvider
@@ -14,14 +12,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class GoalsModule(private val activity: FragmentActivity) {
-
-    @Provides
-    fun provideContext(): Context = activity.baseContext
-
-    @Provides
-    fun provideActivity(): FragmentActivity = activity
-
+class GoalsModule {
     @Provides
     fun provideGoalsPresenter(schedulerProvider: SchedulerProvider,
                               getGoalsUseCase: GetGoalsUseCase,
