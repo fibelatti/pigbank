@@ -1,4 +1,4 @@
-package com.fibelatti.raffler
+package com.fibelatti.pigbank
 
 import io.reactivex.observers.TestObserver
 
