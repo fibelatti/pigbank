@@ -7,7 +7,7 @@ import com.fibelatti.pigbank.R
 import com.fibelatti.pigbank.presentation.addgoal.AddGoalDialogFragment
 import com.fibelatti.pigbank.presentation.base.BaseActivity
 import com.fibelatti.pigbank.presentation.base.BaseIntentBuilder
-import com.fibelatti.pigbank.presentation.common.ItemOffsetDecoration
+import com.fibelatti.pigbank.presentation.common.LinearLayoutManagerOffsetDecoration
 import com.fibelatti.pigbank.presentation.common.ObservableView
 import com.fibelatti.pigbank.presentation.common.extensions.toast
 import com.fibelatti.pigbank.presentation.goaldetail.GoalDetailActivity
@@ -85,7 +85,7 @@ class GoalsActivity :
     }
 
     override fun openGoal(goal: Goal) {
-        startActivity(GoalDetailActivity.IntentBuilder(this).addGoalIdExtra(goal.id).build())
+        startActivity(GoalDetailActivity.IntentBuilder(this).addGoalExtra(goal).build())
     }
 
     override fun showAddSavingsDialog(goal: Goal) {
@@ -115,7 +115,7 @@ class GoalsActivity :
     }
 
     private fun setupRecyclerView() {
-        recyclerViewGoals.addItemDecoration(ItemOffsetDecoration(recyclerViewGoals.context, R.dimen.margin_smaller))
+        recyclerViewGoals.addItemDecoration(LinearLayoutManagerOffsetDecoration(recyclerViewGoals.context, R.dimen.margin_small))
         recyclerViewGoals.adapter = adapter
         recyclerViewGoals.layoutManager = LinearLayoutManager(this)
     }
