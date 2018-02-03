@@ -1,4 +1,4 @@
-package com.fibelatti.pigbank.presentation.common
+package com.fibelatti.pigbank.presentation.common.extensions
 
 import android.os.Parcel
 import android.os.Parcelable

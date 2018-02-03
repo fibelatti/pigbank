@@ -2,9 +2,9 @@ package com.fibelatti.pigbank.presentation.preferences
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.fibelatti.pigbank.presentation.common.createParcel
-import com.fibelatti.pigbank.presentation.common.readBoolean
-import com.fibelatti.pigbank.presentation.common.writeBoolean
+import com.fibelatti.pigbank.presentation.common.extensions.createParcel
+import com.fibelatti.pigbank.presentation.common.extensions.readBoolean
+import com.fibelatti.pigbank.presentation.common.extensions.writeBoolean
 
 data class Preferences(
     val crashReportEnabled: Boolean,

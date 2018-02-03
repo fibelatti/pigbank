@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import com.fibelatti.pigbank.R
 import com.fibelatti.pigbank.presentation.base.BaseDelegateAdapter
 import com.fibelatti.pigbank.presentation.base.BaseViewType
-import com.fibelatti.pigbank.presentation.common.inflate
+import com.fibelatti.pigbank.presentation.common.extensions.inflate
 
 class LoadingDelegateAdapter : BaseDelegateAdapter {
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder = ViewHolder(parent)

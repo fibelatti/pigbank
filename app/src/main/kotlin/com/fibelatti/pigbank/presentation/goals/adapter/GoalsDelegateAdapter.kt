@@ -7,7 +7,7 @@ import com.fibelatti.pigbank.R
 import com.fibelatti.pigbank.presentation.base.BaseDelegateAdapter
 import com.fibelatti.pigbank.presentation.base.BaseViewType
 import com.fibelatti.pigbank.presentation.common.ObservableView
-import com.fibelatti.pigbank.presentation.common.inflate
+import com.fibelatti.pigbank.presentation.common.extensions.inflate
 import com.fibelatti.pigbank.presentation.models.Goal
 import kotlinx.android.synthetic.main.list_item_goal.view.imageViewSaveToGoal
 import kotlinx.android.synthetic.main.list_item_goal.view.layoutClickableGoal

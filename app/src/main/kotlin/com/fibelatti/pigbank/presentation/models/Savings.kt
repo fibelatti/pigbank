@@ -2,9 +2,10 @@ package com.fibelatti.pigbank.presentation.models
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.fibelatti.pigbank.presentation.common.createParcel
-import com.fibelatti.pigbank.presentation.common.readDate
-import com.fibelatti.pigbank.presentation.common.writeDate
+import com.fibelatti.pigbank.presentation.common.extensions.createParcel
+import com.fibelatti.pigbank.presentation.common.extensions.readDate
+import com.fibelatti.pigbank.presentation.common.extensions.writeDate
+import com.fibelatti.pigbank.presentation.goaldetail.adapter.ViewType
 import java.util.Date
 
 data class Savings(

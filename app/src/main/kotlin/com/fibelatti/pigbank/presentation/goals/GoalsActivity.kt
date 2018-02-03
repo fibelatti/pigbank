@@ -8,7 +8,7 @@ import com.fibelatti.pigbank.presentation.base.BaseActivity
 import com.fibelatti.pigbank.presentation.base.BaseIntentBuilder
 import com.fibelatti.pigbank.presentation.common.ItemOffsetDecoration
 import com.fibelatti.pigbank.presentation.common.ObservableView
-import com.fibelatti.pigbank.presentation.common.toast
+import com.fibelatti.pigbank.presentation.common.extensions.toast
 import com.fibelatti.pigbank.presentation.goaldetail.GoalDetailActivity
 import com.fibelatti.pigbank.presentation.goals.adapter.GoalsAdapter
 import com.fibelatti.pigbank.presentation.models.Goal
