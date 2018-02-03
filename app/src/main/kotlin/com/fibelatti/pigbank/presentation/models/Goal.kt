@@ -11,30 +11,30 @@ import com.fibelatti.pigbank.presentation.goals.adapter.ViewType
 import java.util.Date
 
 data class Goal(
-    val id: Long,
-    val creationDate: Date,
     val description: String,
     val cost: Float,
-    val totalSaved: Float,
-    val remainingCost: Float,
-    val percentSaved: Float,
     val deadline: Date,
-    val daysUntilDeadline: Long,
-    val emphasizeRemainingDays: Boolean,
-    val suggestedSavingsPerDay: Float,
-    val suggestedSavingsPerWeek: Float,
-    val suggestedSavingsPerMonth: Float,
-    val savings: List<Savings>
+    val id: Long = 0,
+    val creationDate: Date = Date(),
+    val totalSaved: Float = 0F,
+    val remainingCost: Float = 0F,
+    val percentSaved: Float = 0F,
+    val daysUntilDeadline: Long = 0,
+    val emphasizeRemainingDays: Boolean = false,
+    val suggestedSavingsPerDay: Float = 0F,
+    val suggestedSavingsPerWeek: Float = 0F,
+    val suggestedSavingsPerMonth: Float = 0F,
+    val savings: List<Savings> = emptyList()
 ) : Parcelable, ViewType {
     constructor(source: Parcel) : this(
-        source.readLong(),
-        source.readDate(),
         source.readString(),
         source.readFloat(),
-        source.readFloat(),
-        source.readFloat(),
-        source.readFloat(),
         source.readDate(),
+        source.readLong(),
+        source.readDate(),
+        source.readFloat(),
+        source.readFloat(),
+        source.readFloat(),
         source.readLong(),
         source.readBoolean(),
         source.readFloat(),
@@ -51,14 +51,14 @@ data class Goal(
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
-        writeLong(id)
-        writeDate(creationDate)
         writeString(description)
         writeFloat(cost)
+        writeDate(deadline)
+        writeLong(id)
+        writeDate(creationDate)
         writeFloat(totalSaved)
         writeFloat(remainingCost)
         writeFloat(percentSaved)
-        writeDate(deadline)
         writeLong(daysUntilDeadline)
         writeBoolean(emphasizeRemainingDays)
         writeFloat(suggestedSavingsPerDay)
@@ -68,4 +68,23 @@ data class Goal(
     }
 
     override fun getViewType(): Int = ViewType.GOAL
+
+    fun deepCopy(
+        description: String = this.description,
+        cost: Float = this.cost,
+        deadline: Date = this.deadline,
+        id: Long = this.id,
+        creationDate: Date = this.creationDate,
+        totalSaved: Float = this.totalSaved,
+        remainingCost: Float = this.remainingCost,
+        percentSaved: Float = this.percentSaved,
+        daysUntilDeadline: Long = this.daysUntilDeadline,
+        emphasizeRemainingDays: Boolean = this.emphasizeRemainingDays,
+        suggestedSavingsPerDay: Float = this.suggestedSavingsPerDay,
+        suggestedSavingsPerWeek: Float = this.suggestedSavingsPerWeek,
+        suggestedSavingsPerMonth: Float = this.suggestedSavingsPerMonth,
+        savings: List<Savings> = this.savings.map { it.copy() }
+    ) = Goal(description, cost, deadline, id, creationDate, totalSaved, remainingCost, percentSaved,
+        daysUntilDeadline, emphasizeRemainingDays, suggestedSavingsPerDay, suggestedSavingsPerWeek,
+        suggestedSavingsPerMonth, savings)
 }
