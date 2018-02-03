@@ -9,8 +9,10 @@ import com.fibelatti.pigbank.data.localdatasource.AppDatabase
 import com.fibelatti.pigbank.data.localdatasource.DATABASE_NAME
 import com.fibelatti.pigbank.di.module.AppModule.Binder
 import com.fibelatti.pigbank.di.scope.AppScope
-import com.fibelatti.pigbank.presentation.common.AppSchedulerProvider
-import com.fibelatti.pigbank.presentation.common.SchedulerProvider
+import com.fibelatti.pigbank.presentation.common.providers.AppSchedulerProvider
+import com.fibelatti.pigbank.presentation.common.providers.SchedulerProvider
+import com.fibelatti.pigbank.presentation.common.providers.AppResourceProvider
+import com.fibelatti.pigbank.presentation.common.providers.ResourceProvider
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

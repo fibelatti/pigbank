@@ -3,7 +3,7 @@ package com.fibelatti.pigbank.presentation.goals
 import com.fibelatti.pigbank.domain.goal.GetGoalsUseCase
 import com.fibelatti.pigbank.domain.goal.SaveForGoalUseCase
 import com.fibelatti.pigbank.presentation.base.BasePresenter
-import com.fibelatti.pigbank.presentation.common.SchedulerProvider
+import com.fibelatti.pigbank.presentation.common.providers.SchedulerProvider
 import com.fibelatti.pigbank.presentation.models.Goal
 
 class GoalsPresenter(

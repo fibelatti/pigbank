@@ -1,7 +1,7 @@
 package com.fibelatti.pigbank.presentation.base
 
 import android.support.annotation.CallSuper
-import com.fibelatti.pigbank.presentation.common.SchedulerProvider
+import com.fibelatti.pigbank.presentation.common.providers.SchedulerProvider
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
