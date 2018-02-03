@@ -7,7 +7,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 
-class ItemOffsetDecoration(private val itemOffset: Int) : RecyclerView.ItemDecoration() {
+class GridLayoutManagerOffsetDecoration(private val itemOffset: Int) : RecyclerView.ItemDecoration() {
 
     constructor(context: Context, @DimenRes itemOffsetId: Int) : this(context.resources.getDimensionPixelSize(itemOffsetId))
 

@@ -12,36 +12,20 @@ class AddGoalUseCase @Inject constructor(private val database: AppDatabase) {
     fun addGoal(goal: Goal): Single<Long> {
         var goalId = -1L
 
-        with(goal) {
-            database.runInTransaction({
-                val updatedSum = savings.sumByFloat { it.amount }
-                val copy = Goal(
-                    description,
-                    cost,
-                    deadline,
-                    id,
-                    creationDate,
-                    updatedSum,
-                    remainingCost,
-                    percentSaved,
-                    daysUntilDeadline,
-                    emphasizeRemainingDays,
-                    suggestedSavingsPerDay,
-                    suggestedSavingsPerWeek,
-                    suggestedSavingsPerMonth,
-                    savings)
+        database.runInTransaction({
+            val updatedSum = goal.savings.sumByFloat { it.amount }
+            val copy = goal.deepCopy(totalSaved = updatedSum)
 
-                goalId = database.getGoalRepository()
-                    .saveGoal(GoalMapper.toDataModel(copy))
+            goalId = database.getGoalRepository()
+                .saveGoal(GoalMapper.toDataModel(copy))
 
-                val updatedSavings: Array<Savings>? = savings.map { SavingsMapper.toDataModel(it) }.toTypedArray()
+            val updatedSavings: Array<Savings>? = goal.savings.map { SavingsMapper.toDataModel(it) }.toTypedArray()
 
-                updatedSavings?.let {
-                    database.getSavingsRepository()
-                        .saveSavings(*updatedSavings)
-                }
-            })
-        }
+            updatedSavings?.let {
+                database.getSavingsRepository()
+                    .saveSavings(*updatedSavings)
+            }
+        })
 
         return if (goalId != -1L) Single.just(goalId) else Single.error(Throwable(DATABASE_GENERIC_ERROR_MESSAGE))
     }

@@ -8,11 +8,12 @@ import com.fibelatti.pigbank.presentation.models.Goal as PresentationModel
 object GoalMapper {
     private const val weekDays = 7
     private const val monthDays = 30
-    private const val minRelativeDaysToAlert = 10
+    private const val minRelativeDaysToAlert = 0.10F
+    private const val oneDayInMilliseconds = 1000 * 60 * 60 * 24
 
     fun toPresentationModel(goal: Goal) = with(goal) {
         val remainingCost = cost - savings
-        val daysUntilDeadline = deadline.time - Date().time
+        val daysUntilDeadline = (deadline.time - Date().time) / oneDayInMilliseconds
 
         PresentationModel(
             id = id,
@@ -58,8 +59,8 @@ object GoalMapper {
     }
 
     private fun shouldEmphasizeRemainingDays(goal: Goal, daysUntilDeadline: Long) =
-        when (daysUntilDeadline / (goal.deadline.time - goal.creationDate.time)) {
-            in 0..minRelativeDaysToAlert -> true
+        when (daysUntilDeadline.toFloat() / ((goal.deadline.time - goal.creationDate.time) / oneDayInMilliseconds).toFloat()) {
+            in 0F..minRelativeDaysToAlert -> true
             else -> false
         }
 }

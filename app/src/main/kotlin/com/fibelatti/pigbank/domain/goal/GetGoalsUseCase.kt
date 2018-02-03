@@ -13,7 +13,7 @@ class GetGoalsUseCase @Inject constructor(private val database: AppDatabase) {
             .onErrorReturn { emptyList() }
             .flattenAsObservable<DataModel> { list -> list }
             .map { GoalMapper.toPresentationModel(goal = it) }
-            .toList()
+            .toSortedList { goal1, goal2 -> (goal1.daysUntilDeadline - goal2.daysUntilDeadline).toInt() }
 
     fun getGoalById(id: Long): Single<PresentationModel> =
         database.getGoalRepository()

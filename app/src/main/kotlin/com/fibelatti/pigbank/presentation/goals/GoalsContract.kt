@@ -10,15 +10,17 @@ interface GoalsContract {
     interface View : BaseContract.View, Producer, Consumer
 
     interface Producer {
-        fun preferencesClicked(): ObservableView<Unit>
+        val preferencesClicked: ObservableView<Unit>
 
-        fun addGoalClicked(): ObservableView<Unit>
+        val addGoalClicked: ObservableView<Unit>
+
+        val addSavingsToGoal: ObservableView<Pair<Goal, Float>>
+
+        val newGoalAdded: ObservableView<Goal>
 
         fun goalClicked(): ObservableView<Goal>
 
         fun addSavingsClicked(): ObservableView<Goal>
-
-        fun addSavingsToGoal(): ObservableView<Pair<Goal, Float>>
     }
 
     interface Consumer {
