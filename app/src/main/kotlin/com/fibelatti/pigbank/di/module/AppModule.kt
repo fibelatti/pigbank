@@ -33,11 +33,14 @@ class AppModule {
     fun provideLocaleDefault(): Locale = Locale.getDefault()
 
     @Provides
+    fun provideResourceProvider(context: Context): ResourceProvider = AppResourceProvider(context)
+
+    @Provides
     fun provideSchedulerProvider(): SchedulerProvider = AppSchedulerProvider()
 
     @Provides
     @AppScope
-    fun providesDatabase(app: Application) = Room.databaseBuilder(app.applicationContext,
+    fun providesDatabase(context: Context) = Room.databaseBuilder(context,
         AppDatabase::class.java, DATABASE_NAME)
         .fallbackToDestructiveMigration()
         .build()

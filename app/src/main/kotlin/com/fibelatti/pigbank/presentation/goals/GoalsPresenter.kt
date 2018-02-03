@@ -4,13 +4,15 @@ import com.fibelatti.pigbank.domain.goal.GetGoalsUseCase
 import com.fibelatti.pigbank.domain.goal.SaveForGoalUseCase
 import com.fibelatti.pigbank.presentation.base.BasePresenter
 import com.fibelatti.pigbank.presentation.common.providers.SchedulerProvider
+import com.fibelatti.pigbank.presentation.common.providers.ResourceProvider
 import com.fibelatti.pigbank.presentation.models.Goal
 
 class GoalsPresenter(
     schedulerProvider: SchedulerProvider,
+    resourceProvider: ResourceProvider,
     private val getGoalsUseCase: GetGoalsUseCase,
     private val saveForGoalUseCase: SaveForGoalUseCase
-) : GoalsContract.Presenter, BasePresenter<GoalsContract.View>(schedulerProvider) {
+) : GoalsContract.Presenter, BasePresenter<GoalsContract.View>(schedulerProvider, resourceProvider) {
 
     override fun bind(view: GoalsContract.View) {
         super.bind(view)

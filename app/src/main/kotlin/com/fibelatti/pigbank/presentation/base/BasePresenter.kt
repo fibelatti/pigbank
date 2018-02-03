@@ -2,14 +2,17 @@ package com.fibelatti.pigbank.presentation.base
 
 import android.support.annotation.CallSuper
 import com.fibelatti.pigbank.presentation.common.providers.SchedulerProvider
+import com.fibelatti.pigbank.presentation.common.providers.ResourceProvider
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BasePresenter<in V : BaseContract.View>(protected val schedulerProvider: SchedulerProvider) :
-    BaseContract.Presenter<V> {
+abstract class BasePresenter<in V : BaseContract.View>(
+    protected val schedulerProvider: SchedulerProvider,
+    protected val resourceProvider: ResourceProvider
+) : BaseContract.Presenter<V> {
 
     private lateinit var viewDisposables: CompositeDisposable
 
