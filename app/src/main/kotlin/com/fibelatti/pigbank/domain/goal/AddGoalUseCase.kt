@@ -3,42 +3,30 @@ package com.fibelatti.pigbank.domain.goal
 import com.fibelatti.pigbank.common.sumByFloat
 import com.fibelatti.pigbank.data.goal.Savings
 import com.fibelatti.pigbank.data.localdatasource.AppDatabase
+import com.fibelatti.pigbank.data.localdatasource.DATABASE_GENERIC_ERROR_MESSAGE
 import com.fibelatti.pigbank.presentation.models.Goal
-import io.reactivex.Completable
+import io.reactivex.Single
 import javax.inject.Inject
 
 class AddGoalUseCase @Inject constructor(private val database: AppDatabase) {
-    fun addGoal(goal: Goal): Completable {
-        with(goal) {
-            database.runInTransaction({
-                val updatedSum = savings.sumByFloat { it.amount }
-                val copy = Goal(
-                    id,
-                    creationDate,
-                    description,
-                    cost,
-                    updatedSum,
-                    remainingCost,
-                    percentSaved,
-                    deadline,
-                    daysUntilDeadline,
-                    emphasizeRemainingDays,
-                    suggestedSavingsPerDay,
-                    suggestedSavingsPerWeek,
-                    suggestedSavingsPerMonth,
-                    savings)
+    fun addGoal(goal: Goal): Single<Long> {
+        var goalId = -1L
 
-                database.getGoalRepository()
-                    .saveGoal(GoalMapper.toDataModel(copy))
+        database.runInTransaction({
+            val updatedSum = goal.savings.sumByFloat { it.amount }
+            val copy = goal.deepCopy(totalSaved = updatedSum)
 
-                val updatedSavings: Array<Savings> = savings
-                    .map { SavingsMapper.toDataModel(it) }.toTypedArray()
+            goalId = database.getGoalRepository()
+                .saveGoal(GoalMapper.toDataModel(copy))
 
+            val updatedSavings: Array<Savings>? = goal.savings.map { SavingsMapper.toDataModel(it) }.toTypedArray()
+
+            updatedSavings?.let {
                 database.getSavingsRepository()
                     .saveSavings(*updatedSavings)
-            })
-        }
+            }
+        })
 
-        return Completable.complete()
+        return if (goalId != -1L) Single.just(goalId) else Single.error(Throwable(DATABASE_GENERIC_ERROR_MESSAGE))
     }
 }

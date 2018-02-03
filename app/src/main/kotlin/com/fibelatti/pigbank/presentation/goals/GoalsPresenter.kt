@@ -3,27 +3,37 @@ package com.fibelatti.pigbank.presentation.goals
 import com.fibelatti.pigbank.domain.goal.GetGoalsUseCase
 import com.fibelatti.pigbank.domain.goal.SaveForGoalUseCase
 import com.fibelatti.pigbank.presentation.base.BasePresenter
-import com.fibelatti.pigbank.presentation.common.SchedulerProvider
+import com.fibelatti.pigbank.presentation.common.providers.ResourceProvider
+import com.fibelatti.pigbank.presentation.common.providers.SchedulerProvider
 import com.fibelatti.pigbank.presentation.models.Goal
 
 class GoalsPresenter(
     schedulerProvider: SchedulerProvider,
+    resourceProvider: ResourceProvider,
     private val getGoalsUseCase: GetGoalsUseCase,
     private val saveForGoalUseCase: SaveForGoalUseCase
-) : GoalsContract.Presenter, BasePresenter<GoalsContract.View>(schedulerProvider) {
+) : GoalsContract.Presenter, BasePresenter<GoalsContract.View>(schedulerProvider, resourceProvider) {
 
     override fun bind(view: GoalsContract.View) {
         super.bind(view)
 
         showUpdatedGoals(view)
 
-        view.preferencesClicked()
+        view.preferencesClicked
             .getObservable()
             .subscribeUntilDetached({ view.goToPreferences() })
 
-        view.addGoalClicked()
+        view.addGoalClicked
             .getObservable()
             .subscribeUntilDetached { view.createGoal() }
+
+        view.addSavingsToGoal
+            .getObservable()
+            .subscribeUntilDetached { saveForGoal(view = view, goal = it.first, amount = it.second) }
+
+        view.newGoalAdded
+            .getObservable()
+            .subscribeUntilDetached { view.openGoal(goal = it) }
 
         view.goalClicked()
             .getObservable()
@@ -32,10 +42,6 @@ class GoalsPresenter(
         view.addSavingsClicked()
             .getObservable()
             .subscribeUntilDetached { view.showAddSavingsDialog(goal = it) }
-
-        view.addSavingsToGoal()
-            .getObservable()
-            .subscribeUntilDetached { saveForGoal(view = view, goal = it.first, amount = it.second) }
     }
 
     private fun showUpdatedGoals(view: GoalsContract.View) {

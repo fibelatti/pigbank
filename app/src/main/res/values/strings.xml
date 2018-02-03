@@ -38,6 +38,9 @@
     <string name="goal_savings_per_day">Save %.2f per day</string>
     <string name="goal_savings_per_week">Save %.2f per week</string>
     <string name="goal_savings_per_month">Save %.2f per month (30 day average)</string>
+    <string name="goal_add_invalid_description">Please give a short description to your goal</string>
+    <string name="goal_add_invalid_cost">How much do you need to save?</string>
+    <string name="goal_add_invalid_deadline">When do you expect to achieve your goal?</string>
 
     <!-- Savings -->
     <string name="savings_saved">%.2f saved in %s</string>

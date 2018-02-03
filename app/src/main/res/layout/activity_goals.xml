@@ -5,6 +5,8 @@
     android:id="@+id/layoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     android:paddingEnd="@dimen/padding_regular"
     android:paddingStart="@dimen/padding_regular">
 

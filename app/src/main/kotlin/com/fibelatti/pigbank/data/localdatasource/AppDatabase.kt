@@ -12,6 +12,8 @@ const val DATABASE_NAME = "com.fibelatti.pigbank.data.db"
 
 const val DATABASE_CURRENT_VERSION = 1
 
+const val DATABASE_GENERIC_ERROR_MESSAGE = "An error occurred when trying to perform a database operation"
+
 @Database(entities = [Goal::class, Savings::class],
     version = DATABASE_CURRENT_VERSION,
     exportSchema = false)

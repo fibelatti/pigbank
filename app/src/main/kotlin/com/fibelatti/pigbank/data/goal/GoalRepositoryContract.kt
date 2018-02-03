@@ -20,7 +20,7 @@ interface GoalRepositoryContract {
     fun getAllGoals(): Single<List<Goal>>
 
     @Insert(onConflict = REPLACE)
-    fun saveGoal(goal: Goal)
+    fun saveGoal(goal: Goal): Long
 
     @Query(
         "delete from " + Goal.TABLE_NAME +
