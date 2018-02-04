@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
-class GroupItemRepositoryTest : BaseDbTest() {
+class SavingsRepositoryLocalDataSourceTest : BaseDbTest() {
     //region Mocked Data
     private val firstGoalId = 1L
     private val firstGoalCreationDate = Date(1517184000)

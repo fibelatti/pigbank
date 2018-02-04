@@ -131,7 +131,7 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
         insertSavings()
 
         // Act
-        appDatabase.getGoalRepository().deleteGoalById(goalId)
+        val deletedRows = appDatabase.getGoalRepository().deleteGoalById(goalId)
 
         // Assert
         appDatabase.getGoalRepository()
@@ -140,6 +140,7 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
             .observeOn(testSchedulerProvider.mainThread())
             .subscribe(testObserver)
 
+        assertEquals(expected = 1, actual = deletedRows)
         assertSingleOnCompleteWithNoErrors(testObserver)
         assertTrue(testObserver.values()[0].isEmpty())
     }

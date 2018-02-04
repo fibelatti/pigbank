@@ -26,5 +26,5 @@ interface GoalRepositoryContract {
         "delete from " + Goal.TABLE_NAME +
             " where " + Goal.COLUMN_ID + " = :goalId"
     )
-    fun deleteGoalById(goalId: Long)
+    fun deleteGoalById(goalId: Long): Int
 }
