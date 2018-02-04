@@ -27,14 +27,14 @@ object GoalMapper {
             daysUntilDeadline = daysUntilDeadline,
             emphasizeRemainingDays = shouldEmphasizeRemainingDays(goal = this, daysUntilDeadline = daysUntilDeadline),
             suggestedSavingsPerDay = remainingCost / daysUntilDeadline,
-            suggestedSavingsPerWeek = remainingCost / (daysUntilDeadline / weekDays),
-            suggestedSavingsPerMonth = remainingCost / (daysUntilDeadline / monthDays),
+            suggestedSavingsPerWeek = if (daysUntilDeadline >= weekDays) remainingCost / (daysUntilDeadline / weekDays) else 0F,
+            suggestedSavingsPerMonth = if (daysUntilDeadline >= monthDays) remainingCost / (daysUntilDeadline / monthDays) else 0F,
             savings = emptyList())
     }
 
     fun toPresentationModel(goalWithSavings: GoalWithSavings) = with(goalWithSavings) {
-        val remainingCost = goal.cost - goalWithSavings.goal.savings
-        val daysUntilDeadline = goal.deadline.time - Date().time
+        val remainingCost = goal.cost - goal.savings
+        val daysUntilDeadline = (goal.deadline.time - Date().time) / oneDayInMilliseconds
 
         PresentationModel(
             id = goal.id,
@@ -46,10 +46,10 @@ object GoalMapper {
             percentSaved = goal.savings / goal.cost,
             deadline = goal.deadline,
             daysUntilDeadline = daysUntilDeadline,
-            emphasizeRemainingDays = shouldEmphasizeRemainingDays(goal, daysUntilDeadline),
+            emphasizeRemainingDays = shouldEmphasizeRemainingDays(goal = goal, daysUntilDeadline = daysUntilDeadline),
             suggestedSavingsPerDay = remainingCost / daysUntilDeadline,
-            suggestedSavingsPerWeek = remainingCost / (daysUntilDeadline / weekDays),
-            suggestedSavingsPerMonth = remainingCost / (daysUntilDeadline / monthDays),
+            suggestedSavingsPerWeek = if (daysUntilDeadline >= weekDays) remainingCost / (daysUntilDeadline / weekDays) else 0F,
+            suggestedSavingsPerMonth = if (daysUntilDeadline >= monthDays) remainingCost / (daysUntilDeadline / monthDays) else 0F,
             savings = savings.map { SavingsMapper.toPresentationModel(it) }
         )
     }

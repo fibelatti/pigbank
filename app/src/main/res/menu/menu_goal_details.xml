@@ -2,9 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menuItem_quickDecisions"
+        android:id="@+id/menuItemSave"
         android:enabled="true"
-        android:icon="@drawable/ic_pig"
-        android:title="@string/goal_save_money"
+        android:title="@string/hint_save"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/menuItemDelete"
+        android:enabled="true"
+        android:title="@string/hint_delete"
         app:showAsAction="always"/>
 </menu>

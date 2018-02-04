@@ -1,4 +1,4 @@
-package com.fibelatti.raffler
+package com.fibelatti.pigbank
 
 import com.fibelatti.pigbank.presentation.common.providers.SchedulerProvider
 import io.reactivex.Scheduler
