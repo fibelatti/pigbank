@@ -16,14 +16,12 @@ class SavingsRepositoryLocalDataSourceTest : BaseDbTest() {
     private val firstGoalCreationDate = Date(1517184000)
     private val firstGoalDescription = "New MacBook Pro"
     private val firstGoalCost = 2000F
-    private val firstGoalSavings = 300F
     private val firstGoalDeadline = Date(1546214400) // 2018/12/31
 
     private val secondGoalId = 2L
     private val secondGoalCreationDate = Date(1517184000)
     private val secondGoalDescription = "Trip to Japan"
     private val secondGoalCost = 1500F
-    private val secondGoalSavings = 200F
     private val secondGoalDeadline = Date(1546214400) // 2018/12/31
 
     private val firstSavingsId = 10L
@@ -116,8 +114,8 @@ class SavingsRepositoryLocalDataSourceTest : BaseDbTest() {
     }
 
     private fun createSampleData() {
-        insertGoal(Goal(firstGoalId, firstGoalCreationDate, firstGoalDescription, firstGoalCost, firstGoalSavings, firstGoalDeadline))
-        insertGoal(Goal(secondGoalId, secondGoalCreationDate, secondGoalDescription, secondGoalCost, secondGoalSavings, secondGoalDeadline))
+        insertGoal(Goal(firstGoalId, firstGoalCreationDate, firstGoalDescription, firstGoalCost, firstGoalDeadline))
+        insertGoal(Goal(secondGoalId, secondGoalCreationDate, secondGoalDescription, secondGoalCost, secondGoalDeadline))
         insertSavings(Savings(firstSavingsId, firstGoalId, firstSavingsAmount, firstSavingsDate))
         insertSavings(Savings(secondSavingsId, secondGoalId, secondSavingsAmount, secondSavingsDate))
         insertSavings(Savings(thirdSavingsId, secondGoalId, thirdSavingsAmount, thirdSavingsDate))

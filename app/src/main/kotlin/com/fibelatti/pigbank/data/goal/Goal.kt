@@ -18,8 +18,6 @@ data class Goal(
     val description: String,
     @ColumnInfo(name = COLUMN_COST)
     val cost: Float,
-    @ColumnInfo(name = COLUMN_SAVINGS)
-    val savings: Float,
     @ColumnInfo(name = COLUMN_DEADLINE)
     val deadline: Date
 ) {
@@ -28,7 +26,6 @@ data class Goal(
         const val COLUMN_ID = "_id"
         const val COLUMN_DESCRIPTION = "description"
         const val COLUMN_COST = "cost"
-        const val COLUMN_SAVINGS = "savings"
         const val COLUMN_DEADLINE = "deadline"
         const val COLUMN_CREATION_DATE = "creation_date"
     }
@@ -38,6 +35,5 @@ data class Goal(
         creationDate = Date(),
         description = "",
         cost = 0F,
-        savings = 0F,
         deadline = Date(0))
 }

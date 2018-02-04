@@ -10,21 +10,17 @@ import io.reactivex.Single
 @Dao
 interface GoalRepositoryContract {
     @Transaction
-    @Query(
-        "select * from " + Goal.TABLE_NAME +
-            " where " + Goal.COLUMN_ID + " = :goalId"
-    )
+    @Query(value = "select * from " + Goal.TABLE_NAME +
+        " where " + Goal.COLUMN_ID + " = :goalId")
     fun getGoalById(goalId: Long): Single<GoalWithSavings>
 
-    @Query("select * from " + Goal.TABLE_NAME)
-    fun getAllGoals(): Single<List<Goal>>
+    @Query(value = "select * from " + Goal.TABLE_NAME)
+    fun getAllGoals(): Single<List<GoalWithSavings>>
 
     @Insert(onConflict = REPLACE)
     fun saveGoal(goal: Goal): Long
 
-    @Query(
-        "delete from " + Goal.TABLE_NAME +
-            " where " + Goal.COLUMN_ID + " = :goalId"
-    )
+    @Query(value = "delete from " + Goal.TABLE_NAME +
+        " where " + Goal.COLUMN_ID + " = :goalId")
     fun deleteGoalById(goalId: Long): Int
 }

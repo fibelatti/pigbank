@@ -16,8 +16,6 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
     private val goalId = 1L
     private val goalDescription = "New MacBook Pro"
     private val goalCost = 2000F
-    private val goalSavingsBefore = 0F
-    private val goalSavingsAfter = 300F
     private val goalDeadline = Date(1546214400) // 2018/12/31
     private val goalCreationDate = Date(1517184000) // 2018/01/29
 
@@ -35,7 +33,7 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
         // Arrange
         val firstTestObserver = TestObserver<GoalWithSavings>()
 
-        insertGoal(goalSavingsAfter)
+        insertGoal()
         insertSavings()
 
         appDatabase.getGoalRepository()
@@ -45,7 +43,7 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
             .subscribe(firstTestObserver)
 
         assertSingleOnCompleteWithNoErrors(firstTestObserver)
-        assertGoal(firstTestObserver, goalSavingsAfter)
+        assertGoal(firstTestObserver)
         assertSavings(firstTestObserver)
 
         // Act
@@ -70,7 +68,6 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
             assertEquals(goalId, goal.id)
             assertEquals(goalDescription, goal.description)
             assertEquals(goalCost, goal.cost)
-            assertEquals(goalSavingsAfter, goal.savings)
             assertEquals(goalDeadline, goal.deadline)
 
             assertEquals(2, result.savings.size)
@@ -107,7 +104,7 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
     fun getGoalByIdWithItems() {
         // Arrange
         val testObserver = TestObserver<GoalWithSavings>()
-        insertGoal(goalSavingsAfter)
+        insertGoal()
         insertSavings()
 
         // Act
@@ -119,15 +116,15 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
 
         // Assert
         assertSingleOnCompleteWithNoErrors(testObserver)
-        assertGoal(testObserver, goalSavingsAfter)
+        assertGoal(testObserver)
         assertSavings(testObserver)
     }
 
     @Test
     fun deleteGoalById() {
         // Arrange
-        val testObserver = TestObserver<List<Goal>>()
-        insertGoal(goalSavingsAfter)
+        val testObserver = TestObserver<List<GoalWithSavings>>()
+        insertGoal()
         insertSavings()
 
         // Act
@@ -148,7 +145,7 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
     @Test
     fun getAllGoals() {
         // Arrange
-        val testObserver = TestObserver<List<Goal>>()
+        val testObserver = TestObserver<List<GoalWithSavings>>()
         insertGoal()
 
         // Act
@@ -163,25 +160,24 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
         assertTrue(testObserver.values()[0].isNotEmpty())
     }
 
-    private fun createGoal(savings: Float = goalSavingsBefore) = Goal(goalId, goalCreationDate, goalDescription, goalCost, savings, goalDeadline)
+    private fun createGoal() = Goal(goalId, goalCreationDate, goalDescription, goalCost, goalDeadline)
 
     private fun createSavings() = Savings(firstSavingsId, goalId, firstSavingsAmount, firstSavingsDate)
 
-    private fun insertGoal(savings: Float = goalSavingsBefore) {
-        appDatabase.getGoalRepository().saveGoal(createGoal(savings))
+    private fun insertGoal() {
+        appDatabase.getGoalRepository().saveGoal(createGoal())
     }
 
     private fun insertSavings() {
         appDatabase.getSavingsRepository().saveSavings(createSavings())
     }
 
-    private fun assertGoal(testObserver: TestObserver<GoalWithSavings>, goalSavings: Float = goalSavingsBefore) {
+    private fun assertGoal(testObserver: TestObserver<GoalWithSavings>) {
         val result = testObserver.values()[0]
         with(result) {
             assertEquals(goalId, goal.id)
             assertEquals(goalDescription, goal.description)
             assertEquals(goalCost, goal.cost)
-            assertEquals(goalSavings, goal.savings)
             assertEquals(goalDeadline, goal.deadline)
         }
     }
