@@ -1,29 +1,38 @@
 package com.fibelatti.pigbank.presentation.addgoal
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
+import android.content.DialogInterface.OnClickListener
+import android.content.DialogInterface.OnShowListener
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.EditText
 import com.fibelatti.pigbank.R
+import com.fibelatti.pigbank.common.intPartsAsDate
+import com.fibelatti.pigbank.common.intPartsAsDateString
 import com.fibelatti.pigbank.presentation.base.BaseDialogFragment
 import com.fibelatti.pigbank.presentation.common.DecimalDigitsInputFilter
 import com.fibelatti.pigbank.presentation.common.ObservableView
+import com.fibelatti.pigbank.presentation.common.extensions.alert
 import com.fibelatti.pigbank.presentation.common.extensions.hideKeyboard
+import com.fibelatti.pigbank.presentation.common.extensions.negativeButton
+import com.fibelatti.pigbank.presentation.common.extensions.negativeButtonColor
+import com.fibelatti.pigbank.presentation.common.extensions.positiveButton
+import com.fibelatti.pigbank.presentation.common.extensions.positiveButtonColor
 import com.fibelatti.pigbank.presentation.common.extensions.requestUserFocus
+import com.fibelatti.pigbank.presentation.common.extensions.showListener
 import com.fibelatti.pigbank.presentation.common.extensions.textAsString
 import com.fibelatti.pigbank.presentation.common.extensions.toast
+import com.fibelatti.pigbank.presentation.common.extensions.view
 import com.fibelatti.pigbank.presentation.models.Goal
 import java.util.Calendar
 import java.util.Date
-import java.util.GregorianCalendar
 import javax.inject.Inject
 
 class AddGoalDialogFragment :
@@ -49,7 +58,6 @@ class AddGoalDialogFragment :
 
     //region Private properties
     private var callback: Callback? = null
-    private var instance: AlertDialog? = null
 
     private var calendarYear: Int
     private var calendarMonth: Int
@@ -80,25 +88,41 @@ class AddGoalDialogFragment :
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = View.inflate(activity, R.layout.dialog_add_goal, null)
 
-        val dialog = AlertDialog.Builder(activity)
-            .setView(view)
-            .setTitle(getString(R.string.goal_add))
-            .setPositiveButton(R.string.hint_done, null)
-            .setNegativeButton(R.string.hint_cancel, null)
-            .create()
+        val dialog = activity.alert(dialogTitle = getString(R.string.goal_add))
+            .view(view)
+            .positiveButton(
+                buttonText = getString(R.string.hint_done),
+                onClickListener = OnClickListener { _, _ ->
+                    if (validateForm()) {
+                        createGoalClicked.emitNext(Triple(
+                            editTextDescription.textAsString(),
+                            editTextCost.textAsString().toFloat(),
+                            intPartsAsDate(calendarYear, calendarMonth, calendarDay)))
+                    }
+                }
+            )
+            .negativeButton(
+                buttonText = getString(R.string.hint_cancel),
+                onClickListener = OnClickListener { _, _ ->
+                    if (datePickerDeadline.visibility == View.VISIBLE) {
+                        datePickerDeadline.visibility = View.GONE
+                    } else {
+                        layoutRoot.hideKeyboard()
+                        dismiss()
+                    }
+                }
+            )
+            .showListener(OnShowListener { dialogInstance ->
+                (dialogInstance as? AlertDialog)?.apply {
+                    positiveButtonColor(ContextCompat.getColor(context, R.color.colorAccent))
+                    negativeButtonColor(ContextCompat.getColor(context, R.color.colorGray))
+                }
+            })
 
         bindViews(view)
-
         restoreInstance(savedInstanceState)
+        dialog.show()
 
-        dialog.setOnShowListener { dialogInstance: DialogInterface ->
-            (dialogInstance as? AlertDialog)?.apply {
-                setDialogPositiveButton(alertDialog = this)
-                setDialogNegativeButton(alertDialog = this)
-            }
-        }
-
-        instance = dialog
         return dialog
     }
 
@@ -144,14 +168,14 @@ class AddGoalDialogFragment :
             calendarMonth = month
             calendarDay = dayOfMonth
 
-            editTextDeadline.setText("$calendarDay/$calendarMonth/$calendarYear")
+            editTextDeadline.setText(intPartsAsDateString(calendarYear, calendarMonth, calendarDay))
             datePickerDeadline.visibility = View.GONE
         }
     }
 
     override fun onGoalCreated(goal: Goal) {
         callback?.onGoalCreated(goal)
-        instance?.dismiss()
+        dismiss()
     }
 
     override fun onErrorAddingGoal() {
@@ -182,36 +206,6 @@ class AddGoalDialogFragment :
             editTextDescription.setText(getString(BUNDLE_GOAL_DESCRIPTION))
             editTextCost.setText(getString(BUNDLE_GOAL_COST))
             editTextDeadline.setText(getString(BUNDLE_GOAL_DEADLINE))
-        }
-    }
-
-    private fun setDialogPositiveButton(alertDialog: AlertDialog) {
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)?.apply {
-            setTextColor(ContextCompat.getColor(activity, R.color.colorAccent))
-            setOnClickListener({
-                if (validateForm()) {
-                    val deadline = GregorianCalendar(calendarYear, calendarMonth, calendarDay).timeInMillis
-
-                    createGoalClicked.emitNext(Triple(
-                        editTextDescription.textAsString(),
-                        editTextCost.textAsString().toFloat(),
-                        Date(deadline)))
-                }
-            })
-        }
-    }
-
-    private fun setDialogNegativeButton(alertDialog: AlertDialog) {
-        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE)?.apply {
-            setTextColor(ContextCompat.getColor(activity, R.color.colorGray))
-            setOnClickListener {
-                if (datePickerDeadline.visibility == View.VISIBLE) {
-                    datePickerDeadline.visibility = View.GONE
-                } else {
-                    layoutRoot.hideKeyboard()
-                    instance?.dismiss()
-                }
-            }
         }
     }
 

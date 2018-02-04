@@ -59,7 +59,7 @@ class GoalDetailPresenter(
         view.deleteGoalConfirmed
             .getObservable()
             .observeOn(schedulerProvider.io())
-            .flatMapCompletable { deleteGoalUseCase.deleteGoal(goal = it) }
+            .flatMap { deleteGoalUseCase.deleteGoal(goal = it).toObservable() }
             .observeOn(schedulerProvider.mainThread())
             .subscribeUntilDetached(
                 { view.onGoalDeleted() },
