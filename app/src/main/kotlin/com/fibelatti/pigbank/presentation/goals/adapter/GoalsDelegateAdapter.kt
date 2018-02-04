@@ -34,6 +34,7 @@ class GoalsDelegateAdapter :
         fun bind(item: Goal?) = apply {
             item?.apply {
                 itemView.layoutClickableGoal.setOnClickListener { itemClickObservable.emitNext(this) }
+                itemView.progressBarPercent.setOnClickListener { itemClickObservable.emitNext(this) }
                 itemView.imageViewSaveToGoal.setOnClickListener { saveToGoalClickObservable.emitNext(this) }
 
                 itemView.textViewDescription.text = description

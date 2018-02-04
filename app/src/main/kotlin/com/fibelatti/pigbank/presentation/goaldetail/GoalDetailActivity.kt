@@ -41,7 +41,7 @@ class GoalDetailActivity :
     companion object {
         val TAG: String = GoalDetailActivity::class.java.simpleName
         private const val BUNDLE_GOAL = "GOAL"
-        private const val DATEPICKER_ELEVATION = 20F
+        private const val DATE_PICKER_ELEVATION = 20F
     }
     //endregion
 
@@ -128,7 +128,7 @@ class GoalDetailActivity :
             editTextDeadline.setText("$dayOfMonth/$month/$year")
             datePickerDeadline.visibility = View.GONE
         }
-        ViewCompat.setTranslationZ(datePickerDeadline, DATEPICKER_ELEVATION)
+        ViewCompat.setTranslationZ(datePickerDeadline, DATE_PICKER_ELEVATION)
     }
 
     override fun showAddSavingsDialog(goal: Goal) {
@@ -166,8 +166,14 @@ class GoalDetailActivity :
             title = ""
             setDisplayHomeAsUpEnabled(true)
         }
-        editTextDeadline.setOnClickListener { goalDeadlineClicked.emitNext(Unit) }
-        buttonSaveToGoal.setOnClickListener { addSavingsToGoalClicked.emitNext(goal) }
+        editTextDeadline.setOnClickListener {
+            layoutRoot.hideKeyboard()
+            goalDeadlineClicked.emitNext(Unit)
+        }
+        buttonSaveToGoal.setOnClickListener {
+            layoutRoot.hideKeyboard()
+            addSavingsToGoalClicked.emitNext(goal)
+        }
     }
 
     private fun setupRecyclerView() {
