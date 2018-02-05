@@ -11,4 +11,10 @@ class ExtensionsTest {
         assertTrue("0.00".isFloat())
         assertFalse("".isFloat())
     }
+
+    @Test
+    fun testIsDate() {
+        assertTrue("20/08/1991".isDate())
+        assertFalse("".isDate())
+    }
 }
