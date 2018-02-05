@@ -8,3 +8,10 @@ fun String.isFloat(): Boolean = try {
 } catch (e: Exception) {
     false
 }
+
+fun String.isDate(): Boolean = try {
+    stringAsDate(this)
+    true
+} catch (e: Exception) {
+    false
+}
