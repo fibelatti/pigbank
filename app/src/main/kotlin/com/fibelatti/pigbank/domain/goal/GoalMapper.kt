@@ -1,52 +1,37 @@
 package com.fibelatti.pigbank.domain.goal
 
+import com.fibelatti.pigbank.common.sumByFloat
 import com.fibelatti.pigbank.data.goal.Goal
 import com.fibelatti.pigbank.data.goal.GoalWithSavings
 import java.util.Date
 import com.fibelatti.pigbank.presentation.models.Goal as PresentationModel
 
 object GoalMapper {
+    private const val oneHundredPercent = 100F
     private const val weekDays = 7
     private const val monthDays = 30
     private const val minRelativeDaysToAlert = 0.10F
     private const val oneDayInMilliseconds = 1000 * 60 * 60 * 24
 
-    fun toPresentationModel(goal: Goal) = with(goal) {
-        val remainingCost = cost - savings
-        val daysUntilDeadline = (deadline.time - Date().time) / oneDayInMilliseconds
-
-        PresentationModel(
-            id = id,
-            creationDate = creationDate,
-            description = description,
-            cost = cost,
-            totalSaved = savings,
-            remainingCost = remainingCost,
-            percentSaved = savings / cost,
-            deadline = deadline,
-            daysUntilDeadline = daysUntilDeadline,
-            emphasizeRemainingDays = shouldEmphasizeRemainingDays(goal = this, daysUntilDeadline = daysUntilDeadline),
-            suggestedSavingsPerDay = remainingCost / daysUntilDeadline,
-            suggestedSavingsPerWeek = if (daysUntilDeadline >= weekDays) remainingCost / (daysUntilDeadline / weekDays) else 0F,
-            suggestedSavingsPerMonth = if (daysUntilDeadline >= monthDays) remainingCost / (daysUntilDeadline / monthDays) else 0F,
-            savings = emptyList())
-    }
-
     fun toPresentationModel(goalWithSavings: GoalWithSavings) = with(goalWithSavings) {
-        val remainingCost = goal.cost - goal.savings
+        val totalSaved = savings.sumByFloat { it.amount }
+        val remainingCost = goal.cost - totalSaved
         val daysUntilDeadline = (goal.deadline.time - Date().time) / oneDayInMilliseconds
+        val percentSaved = (totalSaved / goal.cost) * oneHundredPercent
 
         PresentationModel(
             id = goal.id,
             creationDate = goal.creationDate,
             description = goal.description,
             cost = goal.cost,
-            totalSaved = goal.savings,
+            totalSaved = totalSaved,
             remainingCost = remainingCost,
-            percentSaved = goal.savings / goal.cost,
+            percentSaved = percentSaved,
+            isAchieved = percentSaved >= oneHundredPercent,
             deadline = goal.deadline,
             daysUntilDeadline = daysUntilDeadline,
             emphasizeRemainingDays = shouldEmphasizeRemainingDays(goal = goal, daysUntilDeadline = daysUntilDeadline),
+            isOverdue = daysUntilDeadline < 0,
             suggestedSavingsPerDay = remainingCost / daysUntilDeadline,
             suggestedSavingsPerWeek = if (daysUntilDeadline >= weekDays) remainingCost / (daysUntilDeadline / weekDays) else 0F,
             suggestedSavingsPerMonth = if (daysUntilDeadline >= monthDays) remainingCost / (daysUntilDeadline / monthDays) else 0F,
@@ -55,7 +40,7 @@ object GoalMapper {
     }
 
     fun toDataModel(goal: PresentationModel) = with(goal) {
-        Goal(id, creationDate, description, cost, totalSaved, deadline)
+        Goal(id, creationDate, description, cost, deadline)
     }
 
     private fun shouldEmphasizeRemainingDays(goal: Goal, daysUntilDeadline: Long) =

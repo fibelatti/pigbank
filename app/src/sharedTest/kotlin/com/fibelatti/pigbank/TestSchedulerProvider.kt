@@ -1,6 +1,6 @@
 package com.fibelatti.pigbank
 
-import com.fibelatti.pigbank.presentation.common.providers.SchedulerProvider
+import com.fibelatti.pigbank.external.providers.SchedulerProvider
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 

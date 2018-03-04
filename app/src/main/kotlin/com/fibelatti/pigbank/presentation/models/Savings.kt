@@ -13,13 +13,18 @@ data class Savings(
     val goalId: Long,
     val amount: Float,
     val date: Date
-) : Parcelable {
+) : Parcelable, ViewType {
     constructor(source: Parcel) : this(
         source.readLong(),
         source.readLong(),
         source.readFloat(),
         source.readDate()
     )
+
+    companion object {
+        @JvmField
+        val CREATOR = createParcel { Savings(it) }
+    }
 
     override fun describeContents() = 0
 
@@ -30,8 +35,5 @@ data class Savings(
         writeDate(date)
     }
 
-    companion object {
-        @JvmField
-        val CREATOR = createParcel { Savings(it) }
-    }
+    override fun getViewType(): Int = ViewType.SAVINGS
 }

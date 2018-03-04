@@ -2,68 +2,83 @@ package com.fibelatti.pigbank.presentation.goaldetail
 
 import com.fibelatti.pigbank.domain.goal.AddGoalUseCase
 import com.fibelatti.pigbank.domain.goal.DeleteGoalUseCase
-import com.fibelatti.pigbank.domain.goal.GetGoalsUseCase
+import com.fibelatti.pigbank.domain.goal.GetGoalUseCase
 import com.fibelatti.pigbank.domain.goal.SaveForGoalUseCase
+import com.fibelatti.pigbank.domain.goal.ValidateGoalUseCase
+import com.fibelatti.pigbank.external.providers.ResourceProvider
+import com.fibelatti.pigbank.external.providers.SchedulerProvider
 import com.fibelatti.pigbank.presentation.base.BasePresenter
-import com.fibelatti.pigbank.presentation.common.providers.ResourceProvider
-import com.fibelatti.pigbank.presentation.common.providers.SchedulerProvider
-import io.reactivex.Observable
+import com.fibelatti.pigbank.presentation.goaldetail.GoalDetailContract.View
+import com.fibelatti.pigbank.presentation.models.Goal
+import com.fibelatti.pigbank.presentation.models.GoalCandidate
+import java.util.Date
 
 class GoalDetailPresenter(
     schedulerProvider: SchedulerProvider,
     resourceProvider: ResourceProvider,
-    private val getGoalsUseCase: GetGoalsUseCase,
+    private val getGoalsUseCase: GetGoalUseCase,
+    private val validateGoalUseCase: ValidateGoalUseCase,
     private val addGoalUseCase: AddGoalUseCase,
     private val deleteGoalUseCase: DeleteGoalUseCase,
     private val saveForGoalUseCase: SaveForGoalUseCase
 ) : GoalDetailContract.Presenter, BasePresenter<GoalDetailContract.View>(schedulerProvider, resourceProvider) {
 
-    override fun bind(view: GoalDetailContract.View) {
-        super.bind(view)
+    private var view: GoalDetailContract.View? = null
 
-        view.detailViewResumed
-            .getObservable()
-            .subscribeUntilDetached { view.showGoalDetails(goal = it) }
-        view.goalDeadlineClicked
-            .getObservable()
-            .subscribeUntilDetached({ view.showDatePicker() })
-        view.addSavingsToGoalClicked
-            .getObservable()
-            .subscribeUntilDetached { view.showAddSavingsDialog(goal = it) }
-        view.addSavingsToGoal
-            .getObservable()
-            .observeOn(schedulerProvider.io())
-            .flatMap {
-                saveForGoalUseCase.saveForGoal(goal = it.first, amount = it.second)
-                return@flatMap Observable.just(it.first)
-            }
-            .flatMap { getGoalsUseCase.getGoalById(it.id).toObservable() }
+    override fun attachView(view: View) {
+        super.attachView(view)
+        this.view = view
+    }
+
+    override fun goalSet(goal: Goal) {
+        getGoalsUseCase.getGoalById(id = goal.id)
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.mainThread())
+            .subscribeUntilDetached { view?.showGoalDetails(goal = it) }
+    }
+
+    override fun editDeadline() {
+        view?.showDatePicker()
+    }
+
+    override fun addSavings(goal: Goal) {
+        view?.showAddSavingsDialog(goal)
+    }
+
+    override fun saveToGoal(goal: Goal, amount: Float) {
+        saveForGoalUseCase.saveForGoal(goal, amount)
+            .flatMap { getGoalsUseCase.getGoalById(id = it.first()) }
+            .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.mainThread())
             .subscribeUntilDetached(
-                { view.onGoalSaved(goal = it) },
-                { view.onSaveError() }
+                { view?.onGoalSaved(goal = it) },
+                { view?.onSaveError() }
             )
-        view.saveGoalClicked
-            .getObservable()
-            .observeOn(schedulerProvider.io())
-            .flatMap { addGoalUseCase.addGoal(goal = it).toObservable() }
-            .flatMap { goalId -> getGoalsUseCase.getGoalById(goalId).toObservable() }
+    }
+
+    override fun saveGoal(goal: Goal, goalCandidate: GoalCandidate) {
+        validateGoalUseCase.validateGoal(originalGoal = goal, goalCandidate = goalCandidate, now = Date())
+            .flatMap { addGoalUseCase.addGoal(goal = it) }
+            .flatMap { getGoalsUseCase.getGoalById(id = it) }
+            .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.mainThread())
             .subscribeUntilDetached(
-                { view.onGoalSaved(goal = it) },
-                { view.onSaveError() }
+                { view?.onGoalSaved(goal = it) },
+                { view?.onSaveError() }
             )
-        view.deleteGoalClicked
-            .getObservable()
-            .subscribeUntilDetached { view.showDeleteConfirmationDialog(goal = it) }
-        view.deleteGoalConfirmed
-            .getObservable()
-            .observeOn(schedulerProvider.io())
-            .flatMap { deleteGoalUseCase.deleteGoal(goal = it).toObservable() }
+    }
+
+    override fun deleteGoal(goal: Goal) {
+        view?.showDeleteConfirmationDialog(goal)
+    }
+
+    override fun confirmDeletion(goal: Goal) {
+        deleteGoalUseCase.deleteGoal(goal)
+            .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.mainThread())
             .subscribeUntilDetached(
-                { view.onGoalDeleted() },
-                { view.onDeleteError() }
+                { view?.onGoalDeleted() },
+                { view?.onDeleteError() }
             )
     }
 }

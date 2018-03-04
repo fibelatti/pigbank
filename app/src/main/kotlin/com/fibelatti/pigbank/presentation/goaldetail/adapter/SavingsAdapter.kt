@@ -1,4 +1,4 @@
-package com.fibelatti.pigbank.presentation.goals.adapter
+package com.fibelatti.pigbank.presentation.goaldetail.adapter
 
 import android.support.v4.util.SparseArrayCompat
 import android.support.v7.widget.RecyclerView
@@ -9,30 +9,19 @@ import javax.inject.Inject
 
 interface ViewType : BaseViewType {
     companion object {
-        const val LOADING = 0
-        const val GOAL = 1
+        const val SAVINGS = 0
     }
 }
 
-class GoalsAdapter @Inject constructor(
-    private val goalsDelegateAdapter: GoalsDelegateAdapter,
-    loadingDelegateAdapter: LoadingDelegateAdapter
+class SavingsAdapter @Inject constructor(
+    savingsDelegateAdapter: SavingsDelegateAdapter
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    interface Callback : GoalsDelegateAdapter.Callback
-
     private var items: MutableList<BaseViewType> = ArrayList()
 
     private val delegateAdapters = SparseArrayCompat<BaseDelegateAdapter>()
 
-    var callback: Callback? = null
-        set(value) {
-            goalsDelegateAdapter.callback = value
-        }
-
     init {
-        delegateAdapters.put(ViewType.LOADING, loadingDelegateAdapter)
-        delegateAdapters.put(ViewType.GOAL, goalsDelegateAdapter)
+        delegateAdapters.put(ViewType.SAVINGS, savingsDelegateAdapter)
     }
 
     override fun getItemCount() = items.size

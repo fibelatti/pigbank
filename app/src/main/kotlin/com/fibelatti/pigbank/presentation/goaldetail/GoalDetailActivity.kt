@@ -16,28 +16,33 @@ import com.fibelatti.pigbank.R.color
 import com.fibelatti.pigbank.common.asString
 import com.fibelatti.pigbank.common.ifNotNullThisElseThat
 import com.fibelatti.pigbank.common.intPartsAsDate
-import com.fibelatti.pigbank.common.stringAsDate
+import com.fibelatti.pigbank.presentation.addgoal.AddGoalDialogFragment
+import com.fibelatti.pigbank.presentation.addsavings.AddSavingsDialogFragment
 import com.fibelatti.pigbank.presentation.base.BaseActivity
 import com.fibelatti.pigbank.presentation.base.BaseIntentBuilder
-import com.fibelatti.pigbank.presentation.common.ObservableView
 import com.fibelatti.pigbank.presentation.common.extensions.alert
+import com.fibelatti.pigbank.presentation.common.extensions.gone
 import com.fibelatti.pigbank.presentation.common.extensions.hideKeyboard
 import com.fibelatti.pigbank.presentation.common.extensions.negativeButton
-import com.fibelatti.pigbank.presentation.common.extensions.negativeButtonColor
 import com.fibelatti.pigbank.presentation.common.extensions.positiveButton
-import com.fibelatti.pigbank.presentation.common.extensions.positiveButtonColor
 import com.fibelatti.pigbank.presentation.common.extensions.showListener
 import com.fibelatti.pigbank.presentation.common.extensions.snackbar
 import com.fibelatti.pigbank.presentation.common.extensions.textAsString
 import com.fibelatti.pigbank.presentation.common.extensions.toast
+import com.fibelatti.pigbank.presentation.common.extensions.updateNegativeButton
+import com.fibelatti.pigbank.presentation.common.extensions.updatePositiveButton
+import com.fibelatti.pigbank.presentation.common.extensions.visible
 import com.fibelatti.pigbank.presentation.goaldetail.adapter.SavingsAdapter
 import com.fibelatti.pigbank.presentation.models.Goal
+import com.fibelatti.pigbank.presentation.models.GoalCandidate
 import kotlinx.android.synthetic.main.activity_goal_details.buttonSaveToGoal
 import kotlinx.android.synthetic.main.activity_goal_details.datePickerDeadline
 import kotlinx.android.synthetic.main.activity_goal_details.editTextCost
 import kotlinx.android.synthetic.main.activity_goal_details.editTextDeadline
 import kotlinx.android.synthetic.main.activity_goal_details.editTextDescription
+import kotlinx.android.synthetic.main.activity_goal_details.layoutAchieved
 import kotlinx.android.synthetic.main.activity_goal_details.layoutRoot
+import kotlinx.android.synthetic.main.activity_goal_details.layoutSummary
 import kotlinx.android.synthetic.main.activity_goal_details.recyclerViewSavings
 import kotlinx.android.synthetic.main.activity_goal_details.textViewDaysUntilDeadline
 import kotlinx.android.synthetic.main.activity_goal_details.textViewSavingsPerDay
@@ -46,7 +51,6 @@ import kotlinx.android.synthetic.main.activity_goal_details.textViewSavingsPerWe
 import kotlinx.android.synthetic.main.activity_goal_details.textViewTotalSaved
 import kotlinx.android.synthetic.main.layout_toolbar_default.toolbar
 import java.util.Calendar
-import java.util.GregorianCalendar
 import javax.inject.Inject
 
 //region Top level declarations
@@ -54,7 +58,8 @@ import javax.inject.Inject
 
 class GoalDetailActivity :
     BaseActivity(),
-    GoalDetailContract.View {
+    GoalDetailContract.View,
+    AddSavingsDialogFragment.Callback {
     //region Companion objects and interfaces
     companion object {
         val TAG: String = GoalDetailActivity::class.java.simpleName
@@ -71,18 +76,11 @@ class GoalDetailActivity :
     //endregion
 
     //region Private properties
-    private lateinit var goal: Goal
-    private var calendar = GregorianCalendar()
+    private var goal: Goal? = null
+    private var calendar = Calendar.getInstance()
     //endregion
 
     //region Override properties
-    override val detailViewResumed = ObservableView<Goal>()
-    override val goalDeadlineClicked = ObservableView<Unit>()
-    override val addSavingsToGoalClicked = ObservableView<Goal>()
-    override val addSavingsToGoal = ObservableView<Pair<Goal, Float>>()
-    override val saveGoalClicked = ObservableView<Goal>()
-    override val deleteGoalClicked = ObservableView<Goal>()
-    override val deleteGoalConfirmed = ObservableView<Goal>()
     //endregion
 
     //region Override Lifecycle methods
@@ -92,17 +90,14 @@ class GoalDetailActivity :
         setUpLayout()
         setupRecyclerView()
         savedInstanceState.ifNotNullThisElseThat({ restoreFromState(it) }, { parseIntent(intent) })
+
+        presenter.attachView(this)
+        goal?.let { presenter.goalSet(it) }
     }
 
-    override fun onResume() {
-        super.onResume()
-        presenter.bind(this)
-        detailViewResumed.emitNext(goal)
-    }
-
-    override fun onPause() {
-        presenter.unbind()
-        super.onPause()
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.detachView()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -124,7 +119,7 @@ class GoalDetailActivity :
             }
             R.id.menuItemDelete -> {
                 layoutRoot.hideKeyboard()
-                deleteGoalClicked.emitNext(goal)
+                goal?.let { presenter.deleteGoal(it) }
                 return true
             }
         }
@@ -145,19 +140,31 @@ class GoalDetailActivity :
             editTextDescription.setText(description)
             editTextCost.setText(String.format("%.2f", cost))
             editTextDeadline.setText(calendar.time.asString())
-            textViewDaysUntilDeadline.text = resources.getQuantityString(R.plurals.goal_deadline_remaining, daysUntilDeadline.toInt(), daysUntilDeadline)
-            textViewTotalSaved.text = getString(R.string.goal_total_saved, totalSaved)
-            textViewSavingsPerDay.text = getString(R.string.goal_savings_per_day, suggestedSavingsPerDay)
-            textViewSavingsPerWeek.visibility = if (suggestedSavingsPerWeek > 0) View.VISIBLE else View.GONE
-            textViewSavingsPerWeek.text = getString(R.string.goal_savings_per_week, suggestedSavingsPerWeek)
-            textViewSavingsPerMonth.visibility = if (suggestedSavingsPerMonth > 0) View.VISIBLE else View.GONE
-            textViewSavingsPerMonth.text = getString(R.string.goal_savings_per_month, suggestedSavingsPerMonth)
+
+            if (!isAchieved) {
+                layoutSummary.visible()
+                buttonSaveToGoal.visible()
+                layoutAchieved.gone()
+
+                textViewDaysUntilDeadline.text = resources.getQuantityString(R.plurals.goal_deadline_remaining, daysUntilDeadline.toInt(), daysUntilDeadline)
+                textViewTotalSaved.text = getString(R.string.goal_total_saved, totalSaved)
+                textViewSavingsPerDay.text = getString(R.string.goal_savings_per_day, suggestedSavingsPerDay)
+                textViewSavingsPerWeek.visibility = if (suggestedSavingsPerWeek > 0) View.VISIBLE else View.GONE
+                textViewSavingsPerWeek.text = getString(R.string.goal_savings_per_week, suggestedSavingsPerWeek)
+                textViewSavingsPerMonth.visibility = if (suggestedSavingsPerMonth > 0) View.VISIBLE else View.GONE
+                textViewSavingsPerMonth.text = getString(R.string.goal_savings_per_month, suggestedSavingsPerMonth)
+            } else {
+                layoutSummary.gone()
+                buttonSaveToGoal.gone()
+                layoutAchieved.visible()
+            }
+
             adapter.addManyToList(savings)
         }
     }
 
     override fun showDatePicker() {
-        datePickerDeadline.visibility = View.VISIBLE
+        datePickerDeadline.visible()
         datePickerDeadline.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)) { _, year, month, dayOfMonth ->
             val newDate = intPartsAsDate(year, month, dayOfMonth)
             calendar.time = newDate
@@ -168,7 +175,8 @@ class GoalDetailActivity :
     }
 
     override fun showAddSavingsDialog(goal: Goal) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val addSavingsDialogFragment = AddSavingsDialogFragment.newInstance(goal)
+        addSavingsDialogFragment.show(fragmentManager, AddGoalDialogFragment.TAG)
     }
 
     override fun onGoalSaved(goal: Goal) {
@@ -186,14 +194,14 @@ class GoalDetailActivity :
             .positiveButton(
                 buttonText = getString(R.string.hint_yes),
                 onClickListener = DialogInterface.OnClickListener { _, _ ->
-                    deleteGoalConfirmed.emitNext(goal)
+                    presenter.confirmDeletion(goal)
                 }
             )
             .negativeButton(buttonText = getString(R.string.hint_cancel))
             .showListener(DialogInterface.OnShowListener { dialogInstance ->
                 (dialogInstance as? AlertDialog)?.apply {
-                    positiveButtonColor(ContextCompat.getColor(context, color.colorGray))
-                    negativeButtonColor(ContextCompat.getColor(context, color.colorAccent))
+                    updatePositiveButton(ContextCompat.getColor(context, color.colorGray))
+                    updateNegativeButton(ContextCompat.getColor(context, color.colorAccent))
                 }
             })
 
@@ -207,6 +215,10 @@ class GoalDetailActivity :
 
     override fun onDeleteError() {
         layoutRoot.snackbar(getString(R.string.goal_delete_error))
+    }
+
+    override fun onSavingsAdded(goal: Goal) {
+        presenter.goalSet(goal)
     }
     //endregion
 
@@ -222,11 +234,11 @@ class GoalDetailActivity :
         }
         editTextDeadline.setOnClickListener {
             layoutRoot.hideKeyboard()
-            goalDeadlineClicked.emitNext(Unit)
+            presenter.editDeadline()
         }
         buttonSaveToGoal.setOnClickListener {
             layoutRoot.hideKeyboard()
-            addSavingsToGoalClicked.emitNext(goal)
+            goal?.let { presenter.addSavings(goal = it) }
         }
     }
 
@@ -244,12 +256,12 @@ class GoalDetailActivity :
     }
 
     private fun saveGoal() {
-        val updatedGoal = goal.deepCopy(
+        val goalCandidate = GoalCandidate(
             description = editTextDescription.textAsString(),
-            cost = editTextCost.textAsString().toFloat(),
-            deadline = stringAsDate(editTextDeadline.textAsString()))
+            cost = editTextCost.textAsString(),
+            deadline = editTextDeadline.textAsString())
 
-        saveGoalClicked.emitNext(updatedGoal)
+        goal?.let { presenter.saveGoal(it, goalCandidate) }
     }
     //endregion
 

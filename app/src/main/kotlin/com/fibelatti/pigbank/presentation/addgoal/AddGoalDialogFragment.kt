@@ -2,8 +2,7 @@ package com.fibelatti.pigbank.presentation.addgoal
 
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface.OnClickListener
-import android.content.DialogInterface.OnShowListener
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.support.v4.content.ContextCompat
@@ -14,25 +13,26 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.EditText
 import com.fibelatti.pigbank.R
+import com.fibelatti.pigbank.R.color
+import com.fibelatti.pigbank.common.asString
 import com.fibelatti.pigbank.common.intPartsAsDate
-import com.fibelatti.pigbank.common.intPartsAsDateString
 import com.fibelatti.pigbank.presentation.base.BaseDialogFragment
 import com.fibelatti.pigbank.presentation.common.DecimalDigitsInputFilter
-import com.fibelatti.pigbank.presentation.common.ObservableView
 import com.fibelatti.pigbank.presentation.common.extensions.alert
 import com.fibelatti.pigbank.presentation.common.extensions.hideKeyboard
 import com.fibelatti.pigbank.presentation.common.extensions.negativeButton
-import com.fibelatti.pigbank.presentation.common.extensions.negativeButtonColor
+import com.fibelatti.pigbank.presentation.common.extensions.notCancelable
 import com.fibelatti.pigbank.presentation.common.extensions.positiveButton
-import com.fibelatti.pigbank.presentation.common.extensions.positiveButtonColor
 import com.fibelatti.pigbank.presentation.common.extensions.requestUserFocus
 import com.fibelatti.pigbank.presentation.common.extensions.showListener
 import com.fibelatti.pigbank.presentation.common.extensions.textAsString
 import com.fibelatti.pigbank.presentation.common.extensions.toast
+import com.fibelatti.pigbank.presentation.common.extensions.updateNegativeButton
+import com.fibelatti.pigbank.presentation.common.extensions.updatePositiveButton
 import com.fibelatti.pigbank.presentation.common.extensions.view
 import com.fibelatti.pigbank.presentation.models.Goal
+import com.fibelatti.pigbank.presentation.models.GoalCandidate
 import java.util.Calendar
-import java.util.Date
 import javax.inject.Inject
 
 class AddGoalDialogFragment :
@@ -58,10 +58,7 @@ class AddGoalDialogFragment :
 
     //region Private properties
     private var callback: Callback? = null
-
-    private var calendarYear: Int
-    private var calendarMonth: Int
-    private var calendarDay: Int
+    private var calendar = Calendar.getInstance()
 
     private lateinit var layoutRoot: ViewGroup
     private lateinit var editTextDescription: EditText
@@ -73,51 +70,42 @@ class AddGoalDialogFragment :
     //endregion
 
     //region Override properties
-    override val goalDeadlineClicked = ObservableView<Unit>()
-    override val createGoalClicked = ObservableView<Triple<String, Float, Date>>()
     //endregion
-
-    init {
-        val calendar = Calendar.getInstance()
-        calendarYear = calendar.get(Calendar.YEAR)
-        calendarMonth = calendar.get(Calendar.MONTH)
-        calendarDay = calendar.get(Calendar.DAY_OF_MONTH)
-    }
 
     //region Override Lifecycle methods
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = View.inflate(activity, R.layout.dialog_add_goal, null)
 
-        val dialog = activity.alert(dialogTitle = getString(R.string.goal_add))
-            .view(view)
-            .positiveButton(
-                buttonText = getString(R.string.hint_done),
-                onClickListener = OnClickListener { _, _ ->
-                    if (validateForm()) {
-                        createGoalClicked.emitNext(Triple(
-                            editTextDescription.textAsString(),
-                            editTextCost.textAsString().toFloat(),
-                            intPartsAsDate(calendarYear, calendarMonth, calendarDay)))
-                    }
-                }
-            )
-            .negativeButton(
-                buttonText = getString(R.string.hint_cancel),
-                onClickListener = OnClickListener { _, _ ->
-                    if (datePickerDeadline.visibility == View.VISIBLE) {
-                        datePickerDeadline.visibility = View.GONE
-                    } else {
-                        layoutRoot.hideKeyboard()
-                        dismiss()
-                    }
-                }
-            )
-            .showListener(OnShowListener { dialogInstance ->
+        val dialog = activity.alert(dialogTitle = getString(R.string.goal_add)).apply {
+            view(view)
+            positiveButton(buttonText = getString(R.string.hint_done))
+            negativeButton(buttonText = getString(R.string.hint_cancel))
+            notCancelable()
+            showListener(DialogInterface.OnShowListener { dialogInstance ->
                 (dialogInstance as? AlertDialog)?.apply {
-                    positiveButtonColor(ContextCompat.getColor(context, R.color.colorAccent))
-                    negativeButtonColor(ContextCompat.getColor(context, R.color.colorGray))
+                    updatePositiveButton(
+                        buttonColor = ContextCompat.getColor(context, color.colorAccent),
+                        onClickListener = View.OnClickListener { _ ->
+                            presenter.createGoals(GoalCandidate(
+                                editTextDescription.textAsString(),
+                                editTextCost.textAsString(),
+                                editTextDeadline.textAsString()))
+                        }
+                    )
+                    updateNegativeButton(
+                        buttonColor = ContextCompat.getColor(context, color.colorGray),
+                        onClickListener = View.OnClickListener { _ ->
+                            if (datePickerDeadline.visibility == View.VISIBLE) {
+                                datePickerDeadline.visibility = View.GONE
+                            } else {
+                                layoutRoot.hideKeyboard()
+                                dismiss()
+                            }
+                        }
+                    )
                 }
             })
+        }
 
         bindViews(view)
         restoreInstance(savedInstanceState)
@@ -130,19 +118,15 @@ class AddGoalDialogFragment :
         super.onAttach(context)
         try {
             callback = context as? Callback
+            presenter.attachView(this)
         } catch (castException: ClassCastException) {
             Log.d(TAG, "The activity does not implement Callback")
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        presenter.bind(this)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        presenter.unbind()
+    override fun onDetach() {
+        super.onDetach()
+        presenter.detachView()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -163,25 +147,35 @@ class AddGoalDialogFragment :
         layoutRoot.hideKeyboard()
 
         datePickerDeadline.visibility = View.VISIBLE
-        datePickerDeadline.init(calendarYear, calendarMonth, calendarDay) { _, year, month, dayOfMonth ->
-            calendarYear = year
-            calendarMonth = month
-            calendarDay = dayOfMonth
-
-            editTextDeadline.setText(intPartsAsDateString(calendarYear, calendarMonth, calendarDay))
+        datePickerDeadline.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)) { _, year, month, dayOfMonth ->
+            editTextDeadline.setText(intPartsAsDate(year, month, dayOfMonth).asString())
             datePickerDeadline.visibility = View.GONE
         }
     }
 
-    override fun onGoalCreated(goal: Goal) {
-        callback?.onGoalCreated(goal)
-        dismiss()
+    override fun onInvalidDescription(error: String) {
+        editTextDescription.error = error
+        editTextDescription.requestUserFocus(activity)
+    }
+
+    override fun onInvalidCost(error: String) {
+        inputLayoutCost.error = error
+        editTextCost.requestUserFocus(activity)
+    }
+
+    override fun onInvalidDeadline(error: String) {
+        inputLayoutDeadline.error = error
+        editTextDeadline.requestUserFocus(activity)
     }
 
     override fun onErrorAddingGoal() {
         activity.toast(getString(R.string.generic_msg_error))
     }
 
+    override fun onGoalCreated(goal: Goal) {
+        callback?.onGoalCreated(goal)
+        dismiss()
+    }
     //endregion
 
     //region Public methods
@@ -198,7 +192,7 @@ class AddGoalDialogFragment :
         datePickerDeadline = view.findViewById(R.id.datePickerDeadline)
 
         editTextCost.filters = arrayOf(DecimalDigitsInputFilter())
-        editTextDeadline.setOnClickListener { goalDeadlineClicked.emitNext(Unit) }
+        editTextDeadline.setOnClickListener { presenter.editDeadline() }
     }
 
     private fun restoreInstance(savedInstanceState: Bundle?) {
@@ -207,46 +201,6 @@ class AddGoalDialogFragment :
             editTextCost.setText(getString(BUNDLE_GOAL_COST))
             editTextDeadline.setText(getString(BUNDLE_GOAL_DEADLINE))
         }
-    }
-
-    private fun validateForm(): Boolean = validateDescription() && validateCost() && validateDeadline()
-
-    private fun validateDescription(): Boolean {
-        if (editTextDescription.text.isBlank()) {
-            editTextDescription.error = getString(R.string.goal_add_invalid_description)
-            editTextDescription.requestUserFocus(activity)
-            return false
-        } else {
-            editTextDescription.error = null
-        }
-
-        return true
-    }
-
-    private fun validateCost(): Boolean {
-        if (editTextCost.text.isBlank()) {
-            inputLayoutCost.error = getString(R.string.goal_add_invalid_cost)
-            editTextCost.requestUserFocus(activity)
-            return false
-        } else {
-            inputLayoutCost.error = null
-            inputLayoutCost.isErrorEnabled = false
-        }
-
-        return true
-    }
-
-    private fun validateDeadline(): Boolean {
-        if (editTextDeadline.text.isBlank()) {
-            inputLayoutDeadline.error = getString(R.string.goal_add_invalid_deadline)
-            editTextDeadline.requestUserFocus(activity)
-            return false
-        } else {
-            inputLayoutDeadline.error = null
-            inputLayoutDeadline.isErrorEnabled = false
-        }
-
-        return true
     }
     //endregion
 }

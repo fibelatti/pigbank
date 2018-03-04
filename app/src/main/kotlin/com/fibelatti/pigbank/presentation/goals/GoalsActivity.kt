@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.fibelatti.pigbank.R
 import com.fibelatti.pigbank.presentation.addgoal.AddGoalDialogFragment
+import com.fibelatti.pigbank.presentation.addsavings.AddSavingsDialogFragment
 import com.fibelatti.pigbank.presentation.base.BaseActivity
 import com.fibelatti.pigbank.presentation.base.BaseIntentBuilder
 import com.fibelatti.pigbank.presentation.common.LinearLayoutManagerOffsetDecoration
-import com.fibelatti.pigbank.presentation.common.ObservableView
 import com.fibelatti.pigbank.presentation.common.extensions.toast
 import com.fibelatti.pigbank.presentation.goaldetail.GoalDetailActivity
 import com.fibelatti.pigbank.presentation.goals.adapter.GoalsAdapter
@@ -22,7 +22,9 @@ import javax.inject.Inject
 class GoalsActivity :
     BaseActivity(),
     GoalsContract.View,
-    AddGoalDialogFragment.Callback {
+    AddGoalDialogFragment.Callback,
+    AddSavingsDialogFragment.Callback,
+    GoalsAdapter.Callback {
     //region Companion objects and interfaces
     companion object {
         val TAG: String = GoalsActivity::class.java.simpleName
@@ -37,10 +39,6 @@ class GoalsActivity :
     //endregion
 
     //region Private properties
-    override val preferencesClicked = ObservableView<Unit>()
-    override val addGoalClicked = ObservableView<Unit>()
-    override val addSavingsToGoal = ObservableView<Pair<Goal, Float>>()
-    override val newGoalAdded = ObservableView<Goal>()
     //endregion
 
     //region Override properties
@@ -53,27 +51,25 @@ class GoalsActivity :
 
         setUpLayout()
         setupRecyclerView()
+        presenter.attachView(this)
     }
 
     override fun onResume() {
         super.onResume()
-        presenter.bind(this)
+        presenter.goalsUpdated()
     }
 
-    override fun onPause() {
-        presenter.unbind()
-        super.onPause()
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.detachView()
     }
+
     //endregion
 
     //region Override methods
     override fun handleError(errorMessage: String?) {
         toast(errorMessage ?: getString(R.string.generic_msg_error))
     }
-
-    override fun goalClicked(): ObservableView<Goal> = adapter.onGoalClicked()
-
-    override fun addSavingsClicked(): ObservableView<Goal> = adapter.onSaveToGoalClicked()
 
     override fun goToPreferences() {
         startActivity(PreferencesActivity.IntentBuilder(this).build())
@@ -89,7 +85,8 @@ class GoalsActivity :
     }
 
     override fun showAddSavingsDialog(goal: Goal) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val addSavingsDialogFragment = AddSavingsDialogFragment.newInstance(goal)
+        addSavingsDialogFragment.show(fragmentManager, AddGoalDialogFragment.TAG)
     }
 
     override fun updateGoals(goals: List<Goal>) {
@@ -97,9 +94,20 @@ class GoalsActivity :
     }
 
     override fun onGoalCreated(goal: Goal) {
-        newGoalAdded.emitNext(goal)
+        presenter.newGoalAdded(goal)
     }
 
+    override fun onSavingsAdded(goal: Goal) {
+        presenter.goalsUpdated()
+    }
+
+    override fun goalClicked(goal: Goal) {
+        presenter.goalDetails(goal)
+    }
+
+    override fun saveToGoalClicked(goal: Goal) {
+        presenter.addSavings(goal)
+    }
     //endregion
 
     //region Public methods
@@ -111,13 +119,15 @@ class GoalsActivity :
         supportActionBar?.apply {
             title = getString(R.string.goal_title)
         }
-        buttonAddGoal.setOnClickListener { addGoalClicked.emitNext(Unit) }
+        buttonAddGoal.setOnClickListener { presenter.addGoal() }
     }
 
     private fun setupRecyclerView() {
         recyclerViewGoals.addItemDecoration(LinearLayoutManagerOffsetDecoration(recyclerViewGoals.context, R.dimen.margin_small))
         recyclerViewGoals.adapter = adapter
         recyclerViewGoals.layoutManager = LinearLayoutManager(this)
+
+        adapter.callback = this
     }
 
     //endregion

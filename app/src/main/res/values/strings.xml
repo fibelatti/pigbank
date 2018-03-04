@@ -30,6 +30,7 @@
         <item quantity="one">Last day to achieve your goal!</item>
         <item quantity="other">%d days until deadline</item>
     </plurals>
+    <string name="goal_deadline_overdue">This goal is overdue</string>
     <string name="goal_saved_percent">%d%% saved</string>
     <string name="goal_description">Description</string>
     <string name="goal_cost">Cost</string>
@@ -43,15 +44,20 @@
     <string name="goal_add_invalid_description">Please give a short description to your goal</string>
     <string name="goal_add_invalid_cost">How much do you need to save?</string>
     <string name="goal_add_invalid_deadline">When do you expect to achieve your goal?</string>
+    <string name="goal_add_past_deadline">You can\'t achieve your goal in the past</string>
     <string name="goal_save_success">Changes saved successfully!</string>
     <string name="goal_save_error">There was a problem saving your changes. Please try again.</string>
     <string name="goal_delete_title">Deleting goal</string>
     <string name="goal_delete_message">You are about to delete %s.\n\nThis cannot be undone. Do you want to continue?</string>
     <string name="goal_delete_success">Goal deleted.</string>
     <string name="goal_delete_error">There was a problem deleting this goal. Please try again.</string>
+    <string name="goal_achieved">You achieved this goal! If you want to continue saving money for it consider increasing the cost.</string>
 
     <!-- Savings -->
+    <string name="savings_description">Saving money for %s</string>
+    <string name="savings_amount">Savings amount</string>
     <string name="savings_saved">%.2f saved in %s</string>
+    <string name="savings_invalid_amount">Are you sure you are saving money?</string>
 
     <!-- Preferences -->
     <string name="preferences_changes_saved">Changes saved</string>

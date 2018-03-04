@@ -1,9 +1,10 @@
 package com.fibelatti.pigbank.presentation.base
 
 import android.support.annotation.CallSuper
-import com.fibelatti.pigbank.presentation.common.providers.SchedulerProvider
-import com.fibelatti.pigbank.presentation.common.providers.ResourceProvider
+import com.fibelatti.pigbank.external.providers.ResourceProvider
+import com.fibelatti.pigbank.external.providers.SchedulerProvider
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -29,6 +30,18 @@ abstract class BasePresenter<in V : BaseContract.View>(
                                                            onComplete: () -> Unit):
         Disposable = subscribe(onNext, onError, onComplete).apply { disposeOnDetach(disposable = this) }
 
+    protected fun <T> Flowable<T>.subscribeUntilDetached(onNext: (T) -> Unit):
+        Disposable = subscribe(onNext).apply { disposeOnDetach(disposable = this) }
+
+    protected fun <T> Flowable<T>.subscribeUntilDetached(onNext: (T) -> Unit,
+                                                         onError: (Throwable) -> Unit):
+        Disposable = subscribe(onNext, onError).apply { disposeOnDetach(disposable = this) }
+
+    protected fun <T> Flowable<T>.subscribeUntilDetached(onNext: (T) -> Unit,
+                                                         onError: (Throwable) -> Unit,
+                                                         onComplete: () -> Unit):
+        Disposable = subscribe(onNext, onError, onComplete).apply { disposeOnDetach(disposable = this) }
+
     protected fun <T> Single<T>.subscribeUntilDetached(onComplete: (T) -> Unit):
         Disposable = subscribe(onComplete).apply { disposeOnDetach(disposable = this) }
 
@@ -42,11 +55,12 @@ abstract class BasePresenter<in V : BaseContract.View>(
     //endregion
 
     @CallSuper
-    override fun bind(view: V) {
+    override fun attachView(view: V) {
         viewDisposables = CompositeDisposable()
     }
 
-    override fun unbind() {
+    @CallSuper
+    override fun detachView() {
         viewDisposables.dispose()
     }
 

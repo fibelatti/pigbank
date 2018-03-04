@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusableInTouchMode="true"
+    android:padding="@dimen/padding_regular">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textViewDescription"
+        style="@style/TextPrimary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Saving money for Trip to Japan"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/inputLayoutSavingAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/savings_amount"
+        android:theme="@style/Custom.InputLayoutPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDescription">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/editTextSavingsAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal"
+            android:singleLine="true"
+            android:textColor="@color/textPrimary"
+            android:textSize="@dimen/text_size_regular"/>
+    </android.support.design.widget.TextInputLayout>
+</android.support.constraint.ConstraintLayout>

@@ -71,111 +71,153 @@
             android:textSize="@dimen/text_size_regular"/>
     </android.support.design.widget.TextInputLayout>
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/layoutSummary"
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineSummary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.35"/>
+
+    <LinearLayout
+        android:id="@+id/layoutConditionalContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_large"
-        android:background="@drawable/selector_background_savings"
-        android:padding="@dimen/padding_regular"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayoutDeadline">
+        app:layout_constraintTop_toBottomOf="@+id/guidelineSummary">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/textViewTotalSaved"
-            style="@style/TextPrimary"
-            android:layout_width="0dp"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/layoutSummary"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/dividerSuggestions"
-            app:layout_constraintEnd_toStartOf="@+id/textViewDaysUntilDeadline"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:text="200 days until deadline"/>
+            android:background="@drawable/selector_background_savings"
+            android:padding="@dimen/padding_regular">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/textViewDaysUntilDeadline"
-            style="@style/TextPrimary"
-            android:layout_width="wrap_content"
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewTotalSaved"
+                style="@style/TextPrimary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/dividerSuggestions"
+                app:layout_constraintEnd_toStartOf="@+id/textViewDaysUntilDeadline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="200 days until deadline"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewDaysUntilDeadline"
+                style="@style/TextPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textViewTotalSaved"
+                app:layout_constraintBottom_toTopOf="@+id/dividerSuggestions"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textViewTotalSaved"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="200.00 saved"/>
+
+            <include
+                android:id="@+id/dividerSuggestions"
+                style="@style/EdgeToEdgeDivider"
+                layout="@layout/layout_divider_default"
+                app:layout_constraintBottom_toTopOf="@+id/textViewSavingsPerDay"
+                app:layout_constraintTop_toBottomOf="@+id/textViewTotalSaved"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewSavingsPerDay"
+                style="@style/TextPrimary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/textViewSavingsPerWeek"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dividerSuggestions"
+                tools:text="10.00 per day"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewSavingsPerWeek"
+                style="@style/TextPrimary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/textViewSavingsPerMonth"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewSavingsPerDay"
+                tools:text="70.00 per week"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewSavingsPerMonth"
+                style="@style/TextPrimary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewSavingsPerWeek"
+                tools:text="300.00 per month"/>
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/buttonSaveToGoal"
+            style="@style/AppButton.Primary"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:drawableEnd="@drawable/ic_pig"
+            android:text="@string/goal_save_money"/>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/layoutAchieved"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:textStyle="bold"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textViewTotalSaved"
-            app:layout_constraintBottom_toTopOf="@+id/dividerSuggestions"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textViewTotalSaved"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="200.00 saved"/>
+            android:layout_marginTop="@dimen/margin_large"
+            android:background="@drawable/selector_background_savings"
+            android:padding="@dimen/padding_regular"
+            android:visibility="gone">
 
-        <include
-            android:id="@+id/dividerSuggestions"
-            style="@style/EdgeToEdgeDivider"
-            layout="@layout/layout_divider_default"
-            app:layout_constraintBottom_toTopOf="@+id/textViewSavingsPerDay"
-            app:layout_constraintTop_toBottomOf="@+id/textViewTotalSaved"/>
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textViewGoalAchieved"
+                style="@style/TextPrimary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/goal_achieved"
+                app:layout_constraintEnd_toStartOf="@+id/imageViewGoalAchieved"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/textViewSavingsPerDay"
-            style="@style/TextPrimary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/textViewSavingsPerWeek"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dividerSuggestions"
-            tools:text="10.00 per day"/>
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/textViewSavingsPerWeek"
-            style="@style/TextPrimary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/textViewSavingsPerMonth"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewSavingsPerDay"
-            tools:text="70.00 per week"/>
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/textViewSavingsPerMonth"
-            style="@style/TextPrimary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewSavingsPerWeek"
-            tools:text="300.00 per month"/>
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/buttonSaveToGoal"
-        style="@style/AppButton.Primary"
-        android:layout_marginTop="@dimen/margin_large"
-        android:drawableEnd="@drawable/ic_pig"
-        android:text="@string/goal_save_money"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutSummary"/>
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/imageViewGoalAchieved"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textViewGoalAchieved"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_achieved"/>
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textViewSavingsTitle"
         style="@style/TextPrimary.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_large"
+        android:gravity="center"
         android:text="@string/goal_savings"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerViewSavings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonSaveToGoal"/>
+        app:layout_constraintTop_toBottomOf="@+id/layoutConditionalContent"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewSavings"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewSavingsTitle"/>

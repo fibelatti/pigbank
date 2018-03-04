@@ -23,8 +23,11 @@ fun AlertDialog.positiveButton(buttonText: String, onClickListener: DialogInterf
     return this
 }
 
-fun AlertDialog.positiveButtonColor(buttonColor: Int): AlertDialog {
-    getButton(DialogInterface.BUTTON_POSITIVE)?.apply { setTextColor(buttonColor) }
+fun AlertDialog.updatePositiveButton(buttonColor: Int? = null, onClickListener: View.OnClickListener? = null): AlertDialog {
+    getButton(DialogInterface.BUTTON_POSITIVE)?.apply {
+        if (buttonColor != null) setTextColor(buttonColor)
+        if (onClickListener != null) setOnClickListener(onClickListener)
+    }
     return this
 }
 
@@ -33,12 +36,21 @@ fun AlertDialog.negativeButton(buttonText: String, onClickListener: DialogInterf
     return this
 }
 
-fun AlertDialog.negativeButtonColor(buttonColor: Int): AlertDialog {
-    getButton(DialogInterface.BUTTON_NEGATIVE)?.apply { setTextColor(buttonColor) }
+fun AlertDialog.updateNegativeButton(buttonColor: Int? = null, onClickListener: View.OnClickListener? = null): AlertDialog {
+    getButton(DialogInterface.BUTTON_NEGATIVE)?.apply {
+        if (buttonColor != null) setTextColor(buttonColor)
+        if (onClickListener != null) setOnClickListener(onClickListener)
+    }
     return this
 }
 
 fun AlertDialog.showListener(listener: OnShowListener): AlertDialog {
     setOnShowListener(listener)
+    return this
+}
+
+fun AlertDialog.notCancelable(): AlertDialog {
+    setCancelable(false)
+    setCanceledOnTouchOutside(false)
     return this
 }

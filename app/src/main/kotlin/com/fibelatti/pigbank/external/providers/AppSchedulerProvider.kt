@@ -1,4 +1,4 @@
-package com.fibelatti.pigbank.presentation.common.providers
+package com.fibelatti.pigbank.external.providers
 
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers

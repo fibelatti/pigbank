@@ -1,29 +1,26 @@
 package com.fibelatti.pigbank.presentation.goals
 
 import com.fibelatti.pigbank.presentation.base.BaseContract
-import com.fibelatti.pigbank.presentation.common.ObservableView
 import com.fibelatti.pigbank.presentation.models.Goal
 
 interface GoalsContract {
-    interface Presenter : BaseContract.Presenter<View>
+    interface Presenter : BaseContract.Presenter<View> {
+        fun preferences()
 
-    interface View : BaseContract.View, Producer, Consumer
+        fun addGoal()
 
-    interface Producer {
-        val preferencesClicked: ObservableView<Unit>
+        fun saveToGoal(goal: Goal, amount: Float)
 
-        val addGoalClicked: ObservableView<Unit>
+        fun newGoalAdded(goal: Goal)
 
-        val addSavingsToGoal: ObservableView<Pair<Goal, Float>>
+        fun goalsUpdated()
 
-        val newGoalAdded: ObservableView<Goal>
+        fun goalDetails(goal: Goal)
 
-        fun goalClicked(): ObservableView<Goal>
-
-        fun addSavingsClicked(): ObservableView<Goal>
+        fun addSavings(goal: Goal)
     }
 
-    interface Consumer {
+    interface View : BaseContract.View {
         fun goToPreferences()
 
         fun createGoal()

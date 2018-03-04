@@ -1,29 +1,27 @@
 package com.fibelatti.pigbank.presentation.goaldetail
 
 import com.fibelatti.pigbank.presentation.base.BaseContract
-import com.fibelatti.pigbank.presentation.common.ObservableView
 import com.fibelatti.pigbank.presentation.models.Goal
+import com.fibelatti.pigbank.presentation.models.GoalCandidate
 
 interface GoalDetailContract {
-    interface Presenter : BaseContract.Presenter<View>
+    interface Presenter : BaseContract.Presenter<View> {
+        fun goalSet(goal: Goal)
+
+        fun editDeadline()
+
+        fun addSavings(goal: Goal)
+
+        fun saveToGoal(goal: Goal, amount: Float)
+
+        fun saveGoal(goal: Goal, goalCandidate: GoalCandidate)
+
+        fun deleteGoal(goal: Goal)
+
+        fun confirmDeletion(goal: Goal)
+    }
 
     interface View : BaseContract.View {
-        val detailViewResumed: ObservableView<Goal>
-
-        val goalDeadlineClicked: ObservableView<Unit>
-
-        val addSavingsToGoalClicked: ObservableView<Goal>
-
-        val addSavingsToGoal: ObservableView<Pair<Goal, Float>>
-
-        val saveGoalClicked: ObservableView<Goal>
-
-        val deleteGoalClicked: ObservableView<Goal>
-
-        val deleteGoalConfirmed: ObservableView<Goal>
-        //endregion
-
-        //region Consumes
         fun showGoalDetails(goal: Goal)
 
         fun showDatePicker()
@@ -39,6 +37,5 @@ interface GoalDetailContract {
         fun onGoalDeleted()
 
         fun onDeleteError()
-        //endregion
     }
 }

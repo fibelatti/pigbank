@@ -19,8 +19,10 @@ data class Goal(
     val totalSaved: Float = 0F,
     val remainingCost: Float = 0F,
     val percentSaved: Float = 0F,
+    val isAchieved: Boolean = false,
     val daysUntilDeadline: Long = 0,
     val emphasizeRemainingDays: Boolean = false,
+    val isOverdue: Boolean = false,
     val suggestedSavingsPerDay: Float = 0F,
     val suggestedSavingsPerWeek: Float = 0F,
     val suggestedSavingsPerMonth: Float = 0F,
@@ -35,7 +37,9 @@ data class Goal(
         source.readFloat(),
         source.readFloat(),
         source.readFloat(),
+        source.readBoolean(),
         source.readLong(),
+        source.readBoolean(),
         source.readBoolean(),
         source.readFloat(),
         source.readFloat(),
@@ -59,8 +63,10 @@ data class Goal(
         writeFloat(totalSaved)
         writeFloat(remainingCost)
         writeFloat(percentSaved)
+        writeBoolean(isAchieved)
         writeLong(daysUntilDeadline)
         writeBoolean(emphasizeRemainingDays)
+        writeBoolean(isOverdue)
         writeFloat(suggestedSavingsPerDay)
         writeFloat(suggestedSavingsPerWeek)
         writeFloat(suggestedSavingsPerMonth)
@@ -78,13 +84,15 @@ data class Goal(
         totalSaved: Float = this.totalSaved,
         remainingCost: Float = this.remainingCost,
         percentSaved: Float = this.percentSaved,
+        isAchieved: Boolean = this.isOverdue,
         daysUntilDeadline: Long = this.daysUntilDeadline,
         emphasizeRemainingDays: Boolean = this.emphasizeRemainingDays,
+        isOverdue: Boolean = this.isOverdue,
         suggestedSavingsPerDay: Float = this.suggestedSavingsPerDay,
         suggestedSavingsPerWeek: Float = this.suggestedSavingsPerWeek,
         suggestedSavingsPerMonth: Float = this.suggestedSavingsPerMonth,
         savings: List<Savings> = this.savings.map { it.copy() }
     ) = Goal(description, cost, deadline, id, creationDate, totalSaved, remainingCost, percentSaved,
-        daysUntilDeadline, emphasizeRemainingDays, suggestedSavingsPerDay, suggestedSavingsPerWeek,
-        suggestedSavingsPerMonth, savings)
+        isAchieved, daysUntilDeadline, emphasizeRemainingDays, isOverdue, suggestedSavingsPerDay,
+        suggestedSavingsPerWeek, suggestedSavingsPerMonth, savings)
 }

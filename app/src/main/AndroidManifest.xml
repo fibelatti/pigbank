@@ -34,7 +34,8 @@
             android:configChanges="orientation"
             android:parentActivityName=".presentation.goals.GoalsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustNothing">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.goals.GoalsActivity"/>

@@ -1,25 +1,27 @@
 package com.fibelatti.pigbank.presentation.addgoal
 
 import com.fibelatti.pigbank.presentation.base.BaseContract
-import com.fibelatti.pigbank.presentation.common.ObservableView
 import com.fibelatti.pigbank.presentation.models.Goal
-import java.util.Date
+import com.fibelatti.pigbank.presentation.models.GoalCandidate
 
 interface AddGoalContract {
-    interface Presenter : BaseContract.Presenter<View>
+    interface Presenter : BaseContract.Presenter<View> {
+        fun editDeadline()
+
+        fun createGoals(goal: GoalCandidate)
+    }
 
     interface View : BaseContract.View {
-        val goalDeadlineClicked: ObservableView<Unit>
-
-        val createGoalClicked: ObservableView<Triple<String, Float, Date>>
-        //endregion
-
-        //region Consumes
         fun showDatePicker()
 
-        fun onGoalCreated(goal: Goal)
+        fun onInvalidDescription(error: String)
+
+        fun onInvalidCost(error: String)
+
+        fun onInvalidDeadline(error: String)
 
         fun onErrorAddingGoal()
-        //endregion
+
+        fun onGoalCreated(goal: Goal)
     }
 }

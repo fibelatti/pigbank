@@ -7,8 +7,9 @@ import io.reactivex.Single
 import javax.inject.Inject
 
 class DeleteGoalUseCase @Inject constructor(private val database: AppDatabase) {
-    fun deleteGoal(goal: Goal): Single<Int> {
+    fun deleteGoal(goal: Goal): Single<Int> = Single.create {
         val affectedRows = database.getGoalRepository().deleteGoalById(goal.id)
-        return if (affectedRows == 1) Single.just(affectedRows) else Single.error(Throwable(DATABASE_GENERIC_ERROR_MESSAGE))
+
+        if (affectedRows == 1) it.onSuccess(affectedRows) else it.onError(Throwable(DATABASE_GENERIC_ERROR_MESSAGE))
     }
 }

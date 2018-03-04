@@ -6,8 +6,8 @@ interface BaseContract {
     }
 
     interface Presenter<in V : View> {
-        fun bind(view: V)
+        fun attachView(view: V)
 
-        fun unbind()
+        fun detachView()
     }
 }
