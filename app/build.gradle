@@ -4,6 +4,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'io.fabric'
+apply from: 'coverage-report.gradle'
 
 android {
     compileSdkVersion versions.compileSdkVersion
@@ -26,6 +27,7 @@ android {
             applicationIdSuffix ".debug"
             resValue "string", "app_name", appInfo.appName + " Dev"
 
+            testCoverageEnabled = true
             minifyEnabled false
         }
         release {
@@ -49,6 +51,14 @@ android {
         androidTest {
             java.srcDir sharedTestDir
             java.srcDirs += 'src/androidTest/kotlin'
+        }
+    }
+    testOptions {
+        animationsDisabled true
+
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
         }
     }
 }
