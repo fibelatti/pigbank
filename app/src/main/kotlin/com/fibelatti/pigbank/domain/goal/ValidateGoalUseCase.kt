@@ -19,33 +19,32 @@ enum class InvalidGoalField {
 
 class GoalValidationError(val field: InvalidGoalField) : Throwable()
 
-class ValidateGoalUseCase @Inject constructor() {
-    fun validateGoal(goalCandidate: GoalCandidate, now: Date): Single<Goal> = Single.create {
-        when {
-            goalCandidate.description.isBlank() -> it.onError(GoalValidationError(DESCRIPTION))
-            goalCandidate.cost.isBlank() || !goalCandidate.cost.isFloat() -> it.onError(GoalValidationError(COST))
-            goalCandidate.deadline.isBlank() || !goalCandidate.deadline.isDate() -> it.onError(GoalValidationError(DEADLINE))
-            stringAsDate(goalCandidate.deadline).time - now.time < 0 -> it.onError(GoalValidationError(PAST_DEADLINE))
-            else -> {
-                it.onSuccess(Goal(
-                    description = goalCandidate.description,
-                    cost = goalCandidate.cost.toFloat(),
-                    deadline = stringAsDate(goalCandidate.deadline)))
+class ValidateGoalUseCase @Inject constructor(private val goalMapper: GoalMapper) {
+    fun validateGoal(goalCandidate: GoalCandidate, now: Date): Single<Goal> = Single.create { emitter ->
+        with(goalCandidate) {
+            when {
+                description.isBlank() -> emitter.onError(GoalValidationError(DESCRIPTION))
+                cost.isBlank() || !cost.isFloat() -> emitter.onError(GoalValidationError(COST))
+                deadline.isBlank() || !deadline.isDate() -> emitter.onError(GoalValidationError(DEADLINE))
+                stringAsDate(deadline).time - now.time < 0 -> emitter.onError(GoalValidationError(PAST_DEADLINE))
+                else -> {
+                    emitter.onSuccess(goalMapper.toPresentationModel(goalCandidate = this))
+                }
             }
         }
     }
 
-    fun validateGoal(originalGoal: Goal, goalCandidate: GoalCandidate, now: Date): Single<Goal> = Single.create {
-        when {
-            goalCandidate.description.isBlank() -> it.onError(GoalValidationError(DESCRIPTION))
-            goalCandidate.cost.isBlank() || !goalCandidate.cost.isFloat() -> it.onError(GoalValidationError(COST))
-            goalCandidate.deadline.isBlank() || !goalCandidate.deadline.isDate() -> it.onError(GoalValidationError(DEADLINE))
-            stringAsDate(goalCandidate.deadline).time - now.time < 0 -> it.onError(GoalValidationError(PAST_DEADLINE))
-            else -> {
-                it.onSuccess(originalGoal.deepCopy(
-                    description = goalCandidate.description,
-                    cost = goalCandidate.cost.toFloat(),
-                    deadline = stringAsDate(goalCandidate.deadline)))
+    fun validateGoal(originalGoal: Goal, goalCandidate: GoalCandidate, now: Date): Single<Goal> = Single.create { emitter ->
+        with(goalCandidate) {
+            when {
+                description.isBlank() -> emitter.onError(GoalValidationError(DESCRIPTION))
+                cost.isBlank() || !cost.isFloat() -> emitter.onError(GoalValidationError(COST))
+                deadline.isBlank() || !deadline.isDate() -> emitter.onError(GoalValidationError(DEADLINE))
+                stringAsDate(deadline).time - now.time < 0 -> emitter.onError(GoalValidationError(PAST_DEADLINE))
+                else -> emitter.onSuccess(originalGoal.deepCopy(
+                    description = description,
+                    cost = cost.toFloat(),
+                    deadline = stringAsDate(deadline)))
             }
         }
     }

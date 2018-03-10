@@ -1,9 +1,10 @@
 package com.fibelatti.pigbank.domain.goal
 
+import javax.inject.Inject
 import com.fibelatti.pigbank.data.goal.Savings as DataModel
 import com.fibelatti.pigbank.presentation.models.Savings as PresentationModel
 
-object SavingsMapper {
+class SavingsMapper @Inject constructor() {
     fun toPresentationModel(savings: DataModel) = with(savings) {
         PresentationModel(id, goalId, amount, date)
     }
