@@ -27,6 +27,14 @@
         <item name="android:background">@color/colorDivider</item>
     </style>
 
+    <style name="CustomScrollbars">
+        <item name="android:fadeScrollbars">false</item>
+        <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
+        <item name="android:scrollbarStyle">outsideInset</item>
+        <item name="android:scrollbarThumbVertical">@drawable/shape_scrollbar</item>
+        <item name="android:scrollbars">vertical</item>
+    </style>
+
     <style name="Custom.InputLayoutPrimary" parent="AppTheme">
         <item name="android:textSize">@dimen/text_size_regular</item>
         <item name="android:textColor">@color/colorGray</item>
@@ -36,6 +44,7 @@
         <item name="colorControlActivated">@color/colorAccent</item>
     </style>
 
+    <!-- Buttons -->
     <style name="AppButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/button_height</item>
@@ -84,9 +93,14 @@
         <item name="android:textColor">@color/textSecondary</item>
     </style>
 
+    <!-- Texts -->
     <style name="TextPrimary">
         <item name="android:textColor">@color/textPrimary</item>
-        <item name="android:textSize">@dimen/text_size_regular</item>
+    </style>
+
+    <style name="TextPrimary.MainTitle" parent="TextPrimary">
+        <item name="android:textSize">@dimen/text_size_extra_large</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextPrimary.Title" parent="TextPrimary">
@@ -94,16 +108,19 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextPrimary.White" parent="TextPrimary">
-        <item name="android:textColor">@color/colorWhiteOpaque</item>
+    <style name="TextPrimary.BodyImportant" parent="TextPrimary">
+        <item name="android:textSize">@dimen/text_size_regular</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextPrimary.WhiteHighContrast" parent="TextPrimary">
-        <item name="android:shadowColor">@color/colorBlack</item>
-        <item name="android:shadowDx">1.5</item>
-        <item name="android:shadowDy">1.3</item>
-        <item name="android:shadowRadius">1.6</item>
-        <item name="android:textColor">@color/colorWhiteOpaque</item>
+    <style name="TextPrimary.Body" parent="TextPrimary">
+        <item name="android:textSize">@dimen/text_size_regular</item>
+    </style>
+
+    <style name="TextAlert">
+        <item name="android:textSize">@dimen/text_size_regular</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/alertRed</item>
     </style>
 
     <style name="PreferencesTitle">

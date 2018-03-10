@@ -69,7 +69,7 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/textViewAbout"
-                style="@style/TextPrimary"
+                style="@style/TextPrimary.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_smaller"
@@ -78,7 +78,7 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/textViewAppVersion"
-                style="@style/TextPrimary"
+                style="@style/TextPrimary.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_smaller"

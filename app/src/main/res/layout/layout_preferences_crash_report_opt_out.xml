@@ -32,7 +32,7 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/textViewCrashReportOptOut"
-            style="@style/TextPrimary"
+            style="@style/TextPrimary.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="fill"

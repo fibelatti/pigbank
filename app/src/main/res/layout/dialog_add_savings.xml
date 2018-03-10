@@ -11,7 +11,7 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textViewDescription"
-        style="@style/TextPrimary"
+        style="@style/TextPrimary.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

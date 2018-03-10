@@ -12,11 +12,10 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textViewTotalSaved"
-        style="@style/TextPrimary"
+        style="@style/TextPrimary.BodyImportant"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/dividerSuggestions"
         app:layout_constraintEnd_toStartOf="@+id/textViewDaysUntilDeadline"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,11 +24,10 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textViewDaysUntilDeadline"
-        style="@style/TextPrimary"
+        style="@style/TextPrimary.BodyImportant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="end"
-        android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@+id/textViewTotalSaved"
         app:layout_constraintBottom_toTopOf="@+id/dividerSuggestions"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +44,7 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textViewSavingsPerDay"
-        style="@style/TextPrimary"
+        style="@style/TextPrimary.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/textViewSavingsPerWeek"
@@ -57,7 +55,7 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textViewSavingsPerWeek"
-        style="@style/TextPrimary"
+        style="@style/TextPrimary.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/textViewSavingsPerMonth"
@@ -68,7 +66,7 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textViewSavingsPerMonth"
-        style="@style/TextPrimary"
+        style="@style/TextPrimary.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
