@@ -1,5 +1,7 @@
 package com.fibelatti.pigbank.presentation.common.extensions
 
+import android.animation.Animator
+import android.animation.Animator.AnimatorListener
 import android.app.Activity
 import android.content.Context
 import android.support.annotation.LayoutRes
@@ -18,6 +20,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
+import com.airbnb.lottie.LottieAnimationView
 
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
     beginTransaction().func().commitAllowingStateLoss()
@@ -103,5 +106,29 @@ fun EditText.textAsFloat(): Float = try {
     text.toString().toFloat()
 } catch (e: Exception) {
     0F
+}
+
+fun View.setElevated() {
+    ViewCompat.setTranslationZ(this, COMPONENT_ELEVATION)
+}
+
+fun LottieAnimationView.animateWithListener(onAnimationStart: () -> Unit, onAnimationEnd: () -> Unit) {
+    addAnimatorListener(object : AnimatorListener {
+        override fun onAnimationRepeat(animator: Animator?) {
+        }
+
+        override fun onAnimationEnd(animator: Animator?) {
+            onAnimationEnd()
+        }
+
+        override fun onAnimationCancel(animator: Animator?) {
+        }
+
+        override fun onAnimationStart(animator: Animator?) {
+            onAnimationStart()
+        }
+    })
+
+    playAnimation()
 }
 //endregion
