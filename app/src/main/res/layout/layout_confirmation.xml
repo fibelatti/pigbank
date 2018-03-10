@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutConfirmation"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/selector_background_confirmation"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_regular">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationTick"
+        android:layout_width="@dimen/animation_tick_size"
+        android:layout_height="@dimen/animation_tick_size"
+        app:lottie_fileName="tick.json"/>
+
+    <TextView
+        android:id="@+id/textViewConfirmation"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/text_size_regular"
+        android:textStyle="bold"/>
+</LinearLayout>

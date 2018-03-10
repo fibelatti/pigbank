@@ -8,7 +8,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:padding="@dimen/padding_small"
-    tools:layout_margin="@dimen/margin_small">
+    tools:layout_margin="@dimen/margin_small"
+    tools:showIn="@layout/activity_goal_details">
 
     <android.support.constraint.Guideline
         android:id="@+id/guidelineIcon"

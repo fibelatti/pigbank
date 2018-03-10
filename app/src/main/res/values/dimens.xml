@@ -36,4 +36,7 @@
     <dimen name="preferences_space_large">30dp</dimen>
 
     <dimen name="pig_icon_size">60dp</dimen>
+    <dimen name="animation_tick_size">200dp</dimen>
+
+    <dimen name="goal_details_save_to_goal_button_width">150dp</dimen>
 </resources>

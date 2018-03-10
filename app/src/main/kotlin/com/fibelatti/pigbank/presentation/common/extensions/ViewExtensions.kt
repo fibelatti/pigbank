@@ -11,6 +11,7 @@ import android.support.design.widget.TextInputLayout
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
+import android.support.v4.view.ViewCompat
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import com.airbnb.lottie.LottieAnimationView
+
+private const val COMPONENT_ELEVATION = 20F
 
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
     beginTransaction().func().commitAllowingStateLoss()
