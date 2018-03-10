@@ -7,15 +7,19 @@ import com.fibelatti.pigbank.presentation.models.Goal
 import io.reactivex.Single
 import javax.inject.Inject
 
-class AddGoalUseCase @Inject constructor(private val database: AppDatabase) {
+class AddGoalUseCase @Inject constructor(
+    private val database: AppDatabase,
+    private val goalMapper: GoalMapper,
+    private val savingsMapper: SavingsMapper
+) {
     fun addGoal(goal: Goal): Single<Long> = Single.create {
         var goalId = -1L
 
         database.runInTransaction({
             goalId = database.getGoalRepository()
-                .saveGoal(GoalMapper.toDataModel(goal))
+                .saveGoal(goalMapper.toDataModel(goal))
 
-            val updatedSavings: Array<Savings>? = goal.savings.map { SavingsMapper.toDataModel(it) }.toTypedArray()
+            val updatedSavings: Array<Savings>? = goal.savings.map { savingsMapper.toDataModel(it) }.toTypedArray()
 
             updatedSavings?.let {
                 database.getSavingsRepository()
