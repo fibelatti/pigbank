@@ -14,6 +14,7 @@ import com.fibelatti.pigbank.R.color
 import com.fibelatti.pigbank.common.asString
 import com.fibelatti.pigbank.common.ifNotNullThisElseThat
 import com.fibelatti.pigbank.common.intPartsAsDate
+import com.fibelatti.pigbank.common.toFormattedString
 import com.fibelatti.pigbank.presentation.addsavings.AddSavingsDialogFragment
 import com.fibelatti.pigbank.presentation.base.BaseActivity
 import com.fibelatti.pigbank.presentation.base.BaseIntentBuilder
@@ -268,7 +269,7 @@ class GoalDetailActivity :
             calendar.time = goal.deadline
 
             editTextDescription.setText(description)
-            editTextCost.setText(String.format("%.2f", cost))
+            editTextCost.setText(cost.toFormattedString())
             editTextDeadline.setText(calendar.time.asString())
 
             layoutSummary.gone()

@@ -34,3 +34,5 @@ fun Date.asString(format: String): String = asString(SimpleDateFormat(format, Lo
 fun Date.asString(): String = DateHelper.DATE_FORMAT_SIMPLE.get().format(this)
 
 fun Long.asDateString(): String = Date(this).asString()
+
+fun Float.toFormattedString(format: String = "%.2f"): String = String.format(format, this)
