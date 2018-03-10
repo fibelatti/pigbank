@@ -266,6 +266,8 @@ class GoalDetailActivity :
 
     private fun setGoalCommonDetails(goal: Goal) {
         with(goal) {
+            this@GoalDetailActivity.goal = this
+
             calendar.time = goal.deadline
 
             editTextDescription.setText(description)
