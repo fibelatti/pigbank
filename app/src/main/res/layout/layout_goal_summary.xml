@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutSummary"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_background_savings"
+    android:padding="@dimen/padding_regular"
+    tools:showIn="@layout/activity_goal_details">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textViewTotalSaved"
+        style="@style/TextPrimary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/dividerSuggestions"
+        app:layout_constraintEnd_toStartOf="@+id/textViewDaysUntilDeadline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="200 days until deadline"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textViewDaysUntilDeadline"
+        style="@style/TextPrimary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:textStyle="bold"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewTotalSaved"
+        app:layout_constraintBottom_toTopOf="@+id/dividerSuggestions"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewTotalSaved"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="200.00 saved"/>
+
+    <include
+        android:id="@+id/dividerSuggestions"
+        style="@style/EdgeToEdgeDivider"
+        layout="@layout/layout_divider_default"
+        app:layout_constraintBottom_toTopOf="@+id/textViewSavingsPerDay"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTotalSaved"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textViewSavingsPerDay"
+        style="@style/TextPrimary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/textViewSavingsPerWeek"
+        app:layout_constraintEnd_toStartOf="@+id/buttonSaveToGoal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dividerSuggestions"
+        tools:text="10.00 per day"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textViewSavingsPerWeek"
+        style="@style/TextPrimary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/textViewSavingsPerMonth"
+        app:layout_constraintEnd_toStartOf="@+id/buttonSaveToGoal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSavingsPerDay"
+        tools:text="70.00 per week"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textViewSavingsPerMonth"
+        style="@style/TextPrimary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonSaveToGoal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSavingsPerWeek"
+        tools:text="300.00 per month"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/buttonSaveToGoal"
+        style="@style/AppButton.Primary"
+        android:layout_width="@dimen/goal_details_save_to_goal_button_width"
+        android:drawableTop="@drawable/ic_pig"
+        android:text="@string/goal_save_money"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dividerSuggestions"/>
+</android.support.constraint.ConstraintLayout>

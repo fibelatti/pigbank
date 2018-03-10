@@ -36,23 +36,24 @@ import com.fibelatti.pigbank.presentation.goaldetail.adapter.SavingsAdapter
 import com.fibelatti.pigbank.presentation.models.Goal
 import com.fibelatti.pigbank.presentation.models.GoalCandidate
 import kotlinx.android.synthetic.main.activity_goal_details.animationAchieved
-import kotlinx.android.synthetic.main.activity_goal_details.buttonSaveToGoal
 import kotlinx.android.synthetic.main.activity_goal_details.datePickerDeadline
 import kotlinx.android.synthetic.main.activity_goal_details.layoutAchieved
+import kotlinx.android.synthetic.main.activity_goal_details.layoutOverdue
 import kotlinx.android.synthetic.main.activity_goal_details.layoutRoot
 import kotlinx.android.synthetic.main.activity_goal_details.layoutSummary
 import kotlinx.android.synthetic.main.activity_goal_details.recyclerViewSavings
-import kotlinx.android.synthetic.main.activity_goal_details.textViewDaysUntilDeadline
-import kotlinx.android.synthetic.main.activity_goal_details.textViewSavingsPerDay
-import kotlinx.android.synthetic.main.activity_goal_details.textViewSavingsPerMonth
-import kotlinx.android.synthetic.main.activity_goal_details.textViewSavingsPerWeek
-import kotlinx.android.synthetic.main.activity_goal_details.textViewTotalSaved
 import kotlinx.android.synthetic.main.layout_confirmation.animationTick
 import kotlinx.android.synthetic.main.layout_confirmation.layoutConfirmation
 import kotlinx.android.synthetic.main.layout_confirmation.textViewConfirmation
 import kotlinx.android.synthetic.main.layout_goal_basic_info.editTextCost
 import kotlinx.android.synthetic.main.layout_goal_basic_info.editTextDeadline
 import kotlinx.android.synthetic.main.layout_goal_basic_info.editTextDescription
+import kotlinx.android.synthetic.main.layout_goal_summary.buttonSaveToGoal
+import kotlinx.android.synthetic.main.layout_goal_summary.textViewDaysUntilDeadline
+import kotlinx.android.synthetic.main.layout_goal_summary.textViewSavingsPerDay
+import kotlinx.android.synthetic.main.layout_goal_summary.textViewSavingsPerMonth
+import kotlinx.android.synthetic.main.layout_goal_summary.textViewSavingsPerWeek
+import kotlinx.android.synthetic.main.layout_goal_summary.textViewTotalSaved
 import kotlinx.android.synthetic.main.layout_toolbar_default.toolbar
 import java.util.Calendar
 import javax.inject.Inject
@@ -158,20 +159,23 @@ class GoalDetailActivity :
         }
 
         layoutSummary.visible()
-        buttonSaveToGoal.visible()
         layoutAchieved.gone()
+        layoutOverdue.gone()
     }
 
     override fun showGoalAchievedDetails(goal: Goal) {
         setGoalCommonDetails(goal)
         layoutSummary.gone()
-        buttonSaveToGoal.gone()
+        layoutOverdue.gone()
         layoutAchieved.visible()
         showAchievedAnimation()
     }
 
     override fun showGoalOverdueDetails(goal: Goal) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        setGoalCommonDetails(goal)
+        layoutSummary.gone()
+        layoutAchieved.gone()
+        layoutOverdue.visible()
     }
 
     override fun showChangesSaved() {
@@ -273,10 +277,6 @@ class GoalDetailActivity :
             editTextDescription.setText(description)
             editTextCost.setText(cost.toFormattedString())
             editTextDeadline.setText(calendar.time.asString())
-
-            layoutSummary.gone()
-            buttonSaveToGoal.gone()
-            layoutAchieved.visible()
 
             adapter.addManyToList(savings)
         }
