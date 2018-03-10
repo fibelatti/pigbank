@@ -3,7 +3,7 @@ ext.versions = [
     gradleVersion            : '3.0.1',
 
     // Kotlin
-    kotlinVersion            : '1.2.20',
+    kotlinVersion            : '1.2.30',
 
     // Sdk and tools
     minSdkVersion            : 19,
