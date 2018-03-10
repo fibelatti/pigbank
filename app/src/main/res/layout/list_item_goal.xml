@@ -45,7 +45,7 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/textViewSavingsProgress"
-            style="@style/TextPrimary"
+            style="@style/TextPrimary.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +55,7 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/textViewDaysUntilDeadline"
-            style="@style/TextPrimary"
+            style="@style/TextPrimary.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:visibility="gone"
@@ -67,12 +67,10 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/textViewGoalOverdue"
-            style="@style/TextPrimary"
+            style="@style/TextAlert"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/goal_overdue_short"
-            android:textColor="@color/alertRed"
-            android:textStyle="bold"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -97,7 +95,7 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/textViewSavingsProgressPercent"
-            style="@style/TextPrimary"
+            style="@style/TextPrimary.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

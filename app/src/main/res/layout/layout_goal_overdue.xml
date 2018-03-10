@@ -11,12 +11,10 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textViewGoalOverdue"
-        style="@style/TextPrimary"
+        style="@style/TextAlert"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/goal_overdue"
-        android:textColor="@color/alertRed"
-        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/imageViewGoalOverdue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
