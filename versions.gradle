@@ -3,7 +3,7 @@ ext.versions = [
     gradleVersion            : '3.0.1',
 
     // Kotlin
-    kotlinVersion            : '1.2.20',
+    kotlinVersion            : '1.2.30',
 
     // Sdk and tools
     minSdkVersion            : 19,
@@ -23,6 +23,9 @@ ext.versions = [
     roomVersion              : '1.0.0',
     crashlyticsVersion       : '2.8.0',
     answersVersion           : '1.4.1',
+
+    // Custom dependencies
+    lottieVersion            : '2.5.0',
 
     // Test dependencies
     jUnitVersion             : '4.12',
@@ -64,6 +67,9 @@ ext.libraries = [
     // Fabric
     crashlytics          : "com.crashlytics.sdk.android:crashlytics:$versions.crashlyticsVersion@aar",
     answers              : "com.crashlytics.sdk.android:answers:$versions.answersVersion@aar",
+
+    // Custom
+    lottie               : "com.airbnb.android:lottie:$versions.lottieVersion",
 
     // Testing
     junit                : "junit:junit:$versions.jUnitVersion",

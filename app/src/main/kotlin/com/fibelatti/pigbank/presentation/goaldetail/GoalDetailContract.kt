@@ -12,8 +12,6 @@ interface GoalDetailContract {
 
         fun addSavings(goal: Goal)
 
-        fun saveToGoal(goal: Goal, amount: Float)
-
         fun saveGoal(goal: Goal, goalCandidate: GoalCandidate)
 
         fun deleteGoal(goal: Goal)
@@ -24,11 +22,15 @@ interface GoalDetailContract {
     interface View : BaseContract.View {
         fun showGoalDetails(goal: Goal)
 
+        fun showGoalAchievedDetails(goal: Goal)
+
+        fun showGoalOverdueDetails(goal: Goal)
+
+        fun showChangesSaved()
+
         fun showDatePicker()
 
         fun showAddSavingsDialog(goal: Goal)
-
-        fun onGoalSaved(goal: Goal)
 
         fun onSaveError()
 

@@ -19,6 +19,8 @@
 
     <string name="generic_msg_error">Oops! Something went wrong. Please try again.</string>
 
+    <string name="generic_changes_saved">Changes saved successfully!</string>
+
     <string name="menu_preferences">Preferences</string>
 
     <!-- Goal -->

@@ -5,26 +5,25 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.fibelatti.pigbank.R
 import com.fibelatti.pigbank.R.color
 import com.fibelatti.pigbank.common.asString
 import com.fibelatti.pigbank.common.ifNotNullThisElseThat
 import com.fibelatti.pigbank.common.intPartsAsDate
-import com.fibelatti.pigbank.presentation.addgoal.AddGoalDialogFragment
 import com.fibelatti.pigbank.presentation.addsavings.AddSavingsDialogFragment
 import com.fibelatti.pigbank.presentation.base.BaseActivity
 import com.fibelatti.pigbank.presentation.base.BaseIntentBuilder
 import com.fibelatti.pigbank.presentation.common.extensions.alert
+import com.fibelatti.pigbank.presentation.common.extensions.animateWithListener
 import com.fibelatti.pigbank.presentation.common.extensions.gone
 import com.fibelatti.pigbank.presentation.common.extensions.hideKeyboard
 import com.fibelatti.pigbank.presentation.common.extensions.negativeButton
 import com.fibelatti.pigbank.presentation.common.extensions.positiveButton
+import com.fibelatti.pigbank.presentation.common.extensions.setElevated
 import com.fibelatti.pigbank.presentation.common.extensions.showListener
 import com.fibelatti.pigbank.presentation.common.extensions.snackbar
 import com.fibelatti.pigbank.presentation.common.extensions.textAsString
@@ -35,11 +34,9 @@ import com.fibelatti.pigbank.presentation.common.extensions.visible
 import com.fibelatti.pigbank.presentation.goaldetail.adapter.SavingsAdapter
 import com.fibelatti.pigbank.presentation.models.Goal
 import com.fibelatti.pigbank.presentation.models.GoalCandidate
+import kotlinx.android.synthetic.main.activity_goal_details.animationAchieved
 import kotlinx.android.synthetic.main.activity_goal_details.buttonSaveToGoal
 import kotlinx.android.synthetic.main.activity_goal_details.datePickerDeadline
-import kotlinx.android.synthetic.main.activity_goal_details.editTextCost
-import kotlinx.android.synthetic.main.activity_goal_details.editTextDeadline
-import kotlinx.android.synthetic.main.activity_goal_details.editTextDescription
 import kotlinx.android.synthetic.main.activity_goal_details.layoutAchieved
 import kotlinx.android.synthetic.main.activity_goal_details.layoutRoot
 import kotlinx.android.synthetic.main.activity_goal_details.layoutSummary
@@ -49,11 +46,18 @@ import kotlinx.android.synthetic.main.activity_goal_details.textViewSavingsPerDa
 import kotlinx.android.synthetic.main.activity_goal_details.textViewSavingsPerMonth
 import kotlinx.android.synthetic.main.activity_goal_details.textViewSavingsPerWeek
 import kotlinx.android.synthetic.main.activity_goal_details.textViewTotalSaved
+import kotlinx.android.synthetic.main.layout_confirmation.animationTick
+import kotlinx.android.synthetic.main.layout_confirmation.layoutConfirmation
+import kotlinx.android.synthetic.main.layout_confirmation.textViewConfirmation
+import kotlinx.android.synthetic.main.layout_goal_basic_info.editTextCost
+import kotlinx.android.synthetic.main.layout_goal_basic_info.editTextDeadline
+import kotlinx.android.synthetic.main.layout_goal_basic_info.editTextDescription
 import kotlinx.android.synthetic.main.layout_toolbar_default.toolbar
 import java.util.Calendar
 import javax.inject.Inject
 
 //region Top level declarations
+private const val BUNDLE_GOAL = "GOAL"
 //endregion
 
 class GoalDetailActivity :
@@ -63,8 +67,6 @@ class GoalDetailActivity :
     //region Companion objects and interfaces
     companion object {
         val TAG: String = GoalDetailActivity::class.java.simpleName
-        private const val BUNDLE_GOAL = "GOAL"
-        private const val DATE_PICKER_ELEVATION = 20F
     }
     //endregion
 
@@ -134,33 +136,45 @@ class GoalDetailActivity :
     }
 
     override fun showGoalDetails(goal: Goal) {
+        setGoalCommonDetails(goal)
+
         with(goal) {
-            calendar.time = goal.deadline
-
-            editTextDescription.setText(description)
-            editTextCost.setText(String.format("%.2f", cost))
-            editTextDeadline.setText(calendar.time.asString())
-
-            if (!isAchieved) {
-                layoutSummary.visible()
-                buttonSaveToGoal.visible()
-                layoutAchieved.gone()
-
-                textViewDaysUntilDeadline.text = resources.getQuantityString(R.plurals.goal_deadline_remaining, daysUntilDeadline.toInt(), daysUntilDeadline)
-                textViewTotalSaved.text = getString(R.string.goal_total_saved, totalSaved)
-                textViewSavingsPerDay.text = getString(R.string.goal_savings_per_day, suggestedSavingsPerDay)
-                textViewSavingsPerWeek.visibility = if (suggestedSavingsPerWeek > 0) View.VISIBLE else View.GONE
+            textViewDaysUntilDeadline.text = resources.getQuantityString(R.plurals.goal_deadline_remaining, daysUntilDeadline.toInt(), daysUntilDeadline)
+            textViewTotalSaved.text = getString(R.string.goal_total_saved, totalSaved)
+            textViewSavingsPerDay.text = getString(R.string.goal_savings_per_day, suggestedSavingsPerDay)
+            if (suggestedSavingsPerWeek > 0) {
+                textViewSavingsPerWeek.visible()
                 textViewSavingsPerWeek.text = getString(R.string.goal_savings_per_week, suggestedSavingsPerWeek)
-                textViewSavingsPerMonth.visibility = if (suggestedSavingsPerMonth > 0) View.VISIBLE else View.GONE
+            } else {
+                textViewSavingsPerWeek.gone()
+            }
+            if (suggestedSavingsPerMonth > 0) {
+                textViewSavingsPerMonth.visible()
                 textViewSavingsPerMonth.text = getString(R.string.goal_savings_per_month, suggestedSavingsPerMonth)
             } else {
-                layoutSummary.gone()
-                buttonSaveToGoal.gone()
-                layoutAchieved.visible()
+                textViewSavingsPerMonth.gone()
             }
-
-            adapter.addManyToList(savings)
         }
+
+        layoutSummary.visible()
+        buttonSaveToGoal.visible()
+        layoutAchieved.gone()
+    }
+
+    override fun showGoalAchievedDetails(goal: Goal) {
+        setGoalCommonDetails(goal)
+        layoutSummary.gone()
+        buttonSaveToGoal.gone()
+        layoutAchieved.visible()
+        showAchievedAnimation()
+    }
+
+    override fun showGoalOverdueDetails(goal: Goal) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showChangesSaved() {
+        showConfirmationAnimation(getString(R.string.generic_changes_saved))
     }
 
     override fun showDatePicker() {
@@ -169,19 +183,13 @@ class GoalDetailActivity :
             val newDate = intPartsAsDate(year, month, dayOfMonth)
             calendar.time = newDate
             editTextDeadline.setText(newDate.asString())
-            datePickerDeadline.visibility = View.GONE
+            datePickerDeadline.gone()
         }
-        ViewCompat.setTranslationZ(datePickerDeadline, DATE_PICKER_ELEVATION)
+        datePickerDeadline.setElevated()
     }
 
     override fun showAddSavingsDialog(goal: Goal) {
-        val addSavingsDialogFragment = AddSavingsDialogFragment.newInstance(goal)
-        addSavingsDialogFragment.show(fragmentManager, AddGoalDialogFragment.TAG)
-    }
-
-    override fun onGoalSaved(goal: Goal) {
-        layoutRoot.snackbar(getString(R.string.goal_save_success))
-        showGoalDetails(goal)
+        AddSavingsDialogFragment.newInstance(goal).show(fragmentManager, AddSavingsDialogFragment.TAG)
     }
 
     override fun onSaveError() {
@@ -255,6 +263,22 @@ class GoalDetailActivity :
         goal = savedInstanceState.getParcelable(BUNDLE_GOAL)
     }
 
+    private fun setGoalCommonDetails(goal: Goal) {
+        with(goal) {
+            calendar.time = goal.deadline
+
+            editTextDescription.setText(description)
+            editTextCost.setText(String.format("%.2f", cost))
+            editTextDeadline.setText(calendar.time.asString())
+
+            layoutSummary.gone()
+            buttonSaveToGoal.gone()
+            layoutAchieved.visible()
+
+            adapter.addManyToList(savings)
+        }
+    }
+
     private fun saveGoal() {
         val goalCandidate = GoalCandidate(
             description = editTextDescription.textAsString(),
@@ -262,6 +286,31 @@ class GoalDetailActivity :
             deadline = editTextDeadline.textAsString())
 
         goal?.let { presenter.saveGoal(it, goalCandidate) }
+    }
+
+    private fun showConfirmationAnimation(confirmationText: String) {
+        textViewConfirmation.text = confirmationText
+
+        animationTick.animateWithListener(
+            onAnimationStart = {
+                layoutConfirmation.visible()
+                layoutConfirmation.setElevated()
+            },
+            onAnimationEnd = {
+                layoutConfirmation.gone()
+            }
+        )
+    }
+
+    private fun showAchievedAnimation() {
+        animationAchieved.animateWithListener(
+            onAnimationStart = {
+                animationAchieved.visible()
+                animationAchieved.setElevated()
+            },
+            onAnimationEnd = {
+                animationAchieved.gone()
+            })
     }
     //endregion
 

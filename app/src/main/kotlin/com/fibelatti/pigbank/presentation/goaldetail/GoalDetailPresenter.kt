@@ -3,7 +3,6 @@ package com.fibelatti.pigbank.presentation.goaldetail
 import com.fibelatti.pigbank.domain.goal.AddGoalUseCase
 import com.fibelatti.pigbank.domain.goal.DeleteGoalUseCase
 import com.fibelatti.pigbank.domain.goal.GetGoalUseCase
-import com.fibelatti.pigbank.domain.goal.SaveForGoalUseCase
 import com.fibelatti.pigbank.domain.goal.ValidateGoalUseCase
 import com.fibelatti.pigbank.external.providers.ResourceProvider
 import com.fibelatti.pigbank.external.providers.SchedulerProvider
@@ -19,8 +18,7 @@ class GoalDetailPresenter(
     private val getGoalsUseCase: GetGoalUseCase,
     private val validateGoalUseCase: ValidateGoalUseCase,
     private val addGoalUseCase: AddGoalUseCase,
-    private val deleteGoalUseCase: DeleteGoalUseCase,
-    private val saveForGoalUseCase: SaveForGoalUseCase
+    private val deleteGoalUseCase: DeleteGoalUseCase
 ) : GoalDetailContract.Presenter, BasePresenter<GoalDetailContract.View>(schedulerProvider, resourceProvider) {
 
     private var view: GoalDetailContract.View? = null
@@ -34,7 +32,13 @@ class GoalDetailPresenter(
         getGoalsUseCase.getGoalById(id = goal.id)
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.mainThread())
-            .subscribeUntilDetached { view?.showGoalDetails(goal = it) }
+            .subscribeUntilDetached { updatedGoal ->
+                when {
+                    updatedGoal.isAchieved -> view?.showGoalAchievedDetails(updatedGoal)
+                    updatedGoal.isOverdue -> view?.showGoalOverdueDetails(updatedGoal)
+                    else -> view?.showGoalDetails(updatedGoal)
+                }
+            }
     }
 
     override fun editDeadline() {
@@ -45,17 +49,6 @@ class GoalDetailPresenter(
         view?.showAddSavingsDialog(goal)
     }
 
-    override fun saveToGoal(goal: Goal, amount: Float) {
-        saveForGoalUseCase.saveForGoal(goal, amount)
-            .flatMap { getGoalsUseCase.getGoalById(id = it.first()) }
-            .subscribeOn(schedulerProvider.io())
-            .observeOn(schedulerProvider.mainThread())
-            .subscribeUntilDetached(
-                { view?.onGoalSaved(goal = it) },
-                { view?.onSaveError() }
-            )
-    }
-
     override fun saveGoal(goal: Goal, goalCandidate: GoalCandidate) {
         validateGoalUseCase.validateGoal(originalGoal = goal, goalCandidate = goalCandidate, now = Date())
             .flatMap { addGoalUseCase.addGoal(goal = it) }
@@ -63,7 +56,15 @@ class GoalDetailPresenter(
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.mainThread())
             .subscribeUntilDetached(
-                { view?.onGoalSaved(goal = it) },
+                { updatedGoal ->
+                    view?.showChangesSaved()
+
+                    when {
+                        updatedGoal.isAchieved -> view?.showGoalAchievedDetails(updatedGoal)
+                        updatedGoal.isOverdue -> view?.showGoalOverdueDetails(updatedGoal)
+                        else -> view?.showGoalDetails(updatedGoal)
+                    }
+                },
                 { view?.onSaveError() }
             )
     }

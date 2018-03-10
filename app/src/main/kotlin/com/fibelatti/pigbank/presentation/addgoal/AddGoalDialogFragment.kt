@@ -24,6 +24,8 @@ import com.fibelatti.pigbank.presentation.common.extensions.negativeButton
 import com.fibelatti.pigbank.presentation.common.extensions.notCancelable
 import com.fibelatti.pigbank.presentation.common.extensions.positiveButton
 import com.fibelatti.pigbank.presentation.common.extensions.requestUserFocus
+import com.fibelatti.pigbank.presentation.common.extensions.showError
+import com.fibelatti.pigbank.presentation.common.extensions.showKeyboard
 import com.fibelatti.pigbank.presentation.common.extensions.showListener
 import com.fibelatti.pigbank.presentation.common.extensions.textAsString
 import com.fibelatti.pigbank.presentation.common.extensions.toast
@@ -35,15 +37,16 @@ import com.fibelatti.pigbank.presentation.models.GoalCandidate
 import java.util.Calendar
 import javax.inject.Inject
 
+private const val BUNDLE_GOAL_DESCRIPTION = "GOAL_DESCRIPTION"
+private const val BUNDLE_GOAL_COST = "GOAL_COST"
+private const val BUNDLE_GOAL_DEADLINE = "GOAL_DEADLINE"
+
 class AddGoalDialogFragment :
     BaseDialogFragment(),
     AddGoalContract.View {
     //region Companion objects and interfaces
     companion object {
         val TAG: String = AddGoalDialogFragment::class.java.simpleName
-        private const val BUNDLE_GOAL_DESCRIPTION = "GOAL_DESCRIPTION"
-        private const val BUNDLE_GOAL_COST = "GOAL_COST"
-        private const val BUNDLE_GOAL_DEADLINE = "GOAL_DEADLINE"
     }
 
     interface Callback {
@@ -74,8 +77,9 @@ class AddGoalDialogFragment :
 
     //region Override Lifecycle methods
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val view = View.inflate(activity, R.layout.dialog_add_goal, null)
+        restoreInstance(savedInstanceState)
 
+        val view = View.inflate(activity, R.layout.dialog_add_goal, null)
         val dialog = activity.alert(dialogTitle = getString(R.string.goal_add)).apply {
             view(view)
             positiveButton(buttonText = getString(R.string.hint_done))
@@ -103,12 +107,12 @@ class AddGoalDialogFragment :
                             }
                         }
                     )
+                    editTextDescription.showKeyboard()
                 }
             })
         }
 
         bindViews(view)
-        restoreInstance(savedInstanceState)
         dialog.show()
 
         return dialog
@@ -159,13 +163,11 @@ class AddGoalDialogFragment :
     }
 
     override fun onInvalidCost(error: String) {
-        inputLayoutCost.error = error
-        editTextCost.requestUserFocus(activity)
+        inputLayoutCost.showError(error)
     }
 
     override fun onInvalidDeadline(error: String) {
-        inputLayoutDeadline.error = error
-        editTextDeadline.requestUserFocus(activity)
+        inputLayoutDeadline.showError(error)
     }
 
     override fun onErrorAddingGoal() {

@@ -2,7 +2,6 @@ package com.fibelatti.pigbank.presentation.addsavings
 
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface.OnClickListener
 import android.content.DialogInterface.OnShowListener
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
@@ -17,10 +16,10 @@ import com.fibelatti.pigbank.common.ifNotNullThisElseThat
 import com.fibelatti.pigbank.presentation.base.BaseDialogFragment
 import com.fibelatti.pigbank.presentation.common.DecimalDigitsInputFilter
 import com.fibelatti.pigbank.presentation.common.extensions.alert
-import com.fibelatti.pigbank.presentation.common.extensions.clearError
 import com.fibelatti.pigbank.presentation.common.extensions.negativeButton
 import com.fibelatti.pigbank.presentation.common.extensions.positiveButton
 import com.fibelatti.pigbank.presentation.common.extensions.showError
+import com.fibelatti.pigbank.presentation.common.extensions.showKeyboard
 import com.fibelatti.pigbank.presentation.common.extensions.showListener
 import com.fibelatti.pigbank.presentation.common.extensions.textAsString
 import com.fibelatti.pigbank.presentation.common.extensions.toast
@@ -30,18 +29,18 @@ import com.fibelatti.pigbank.presentation.common.extensions.view
 import com.fibelatti.pigbank.presentation.models.Goal
 import javax.inject.Inject
 
+private const val BUNDLE_GOAL = "GOAL"
+private const val BUNDLE_AMOUNT = "AMOUNT"
+
 class AddSavingsDialogFragment :
     BaseDialogFragment(),
     AddSavingsContract.View {
     //region Companion objects and interfaces
     companion object {
         val TAG: String = AddSavingsDialogFragment::class.java.simpleName
-        private const val BUNDLE_GOAL = "GOAL"
-        private const val BUNDLE_AMOUNT = "AMOUNT"
 
         fun newInstance(goal: Goal): AddSavingsDialogFragment {
             val fragment = AddSavingsDialogFragment()
-
             val args = Bundle()
             args.putParcelable(BUNDLE_GOAL, goal)
             fragment.arguments = args
@@ -76,32 +75,29 @@ class AddSavingsDialogFragment :
 
     //region Override Lifecycle methods
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val view = View.inflate(activity, R.layout.dialog_add_savings, null)
-
         savedInstanceState.ifNotNullThisElseThat({ restoreInstance(it) }, { parseArguments(arguments) })
 
-        val dialog = activity.alert(dialogMessage = getString(R.string.savings_description, goal?.description))
-            .view(view)
-            .positiveButton(
-                buttonText = getString(R.string.goal_save_money),
-                onClickListener = OnClickListener { _, _ ->
-                    if (validateAmount()) {
-                        goal?.let { presenter.addSavings(it, editTextSavingsAmount.textAsString().toFloat()) }
-                    }
-                }
-            )
-            .negativeButton(
-                buttonText = getString(R.string.hint_cancel),
-                onClickListener = OnClickListener { _, _ ->
-                    dismiss()
-                }
-            )
-            .showListener(OnShowListener { dialogInstance ->
+        val view = View.inflate(activity, R.layout.dialog_add_savings, null)
+        val dialog = activity.alert(dialogMessage = getString(R.string.savings_description, goal?.description)).apply {
+            view(view)
+            positiveButton(buttonText = getString(R.string.goal_save_money))
+            negativeButton(buttonText = getString(R.string.hint_cancel))
+            showListener(OnShowListener { dialogInstance ->
                 (dialogInstance as? AlertDialog)?.apply {
-                    updatePositiveButton(ContextCompat.getColor(context, R.color.colorAccent))
-                    updateNegativeButton(ContextCompat.getColor(context, R.color.colorGray))
+                    updatePositiveButton(
+                        buttonColor = ContextCompat.getColor(context, R.color.colorAccent),
+                        onClickListener = View.OnClickListener { _ ->
+                            goal?.let { presenter.addSavings(it, editTextSavingsAmount.textAsString()) }
+                        })
+                    updateNegativeButton(
+                        buttonColor = ContextCompat.getColor(context, R.color.colorGray),
+                        onClickListener = View.OnClickListener { _ ->
+                            dismiss()
+                        })
                 }
+                editTextSavingsAmount.showKeyboard()
             })
+        }
 
         bindViews(view)
         dialog.show()
@@ -143,6 +139,10 @@ class AddSavingsDialogFragment :
         dismiss()
     }
 
+    override fun onInvalidSavingsAmount() {
+        inputLayoutSavingsAmount.showError(getString(R.string.savings_invalid_amount))
+    }
+
     override fun onErrorAddingSavings() {
         activity?.toast(getString(R.string.generic_msg_error))
     }
@@ -171,17 +171,6 @@ class AddSavingsDialogFragment :
         with(arguments) {
             goal = getParcelable(BUNDLE_GOAL)
         }
-    }
-
-    private fun validateAmount(): Boolean {
-        if (editTextSavingsAmount.text.isBlank()) {
-            inputLayoutSavingsAmount.showError(getString(R.string.savings_invalid_amount))
-            return false
-        } else {
-            inputLayoutSavingsAmount.clearError()
-        }
-
-        return true
     }
     //endregion
 }

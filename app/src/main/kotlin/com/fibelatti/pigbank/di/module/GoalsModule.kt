@@ -24,10 +24,12 @@ class GoalsModule {
     }
 
     @Provides
-    fun provideGoalsPresenter(schedulerProvider: SchedulerProvider,
-                              resourceProvider: ResourceProvider,
-                              getGoalsUseCase: GetGoalUseCase,
-                              saveForGoalUseCase: SaveForGoalUseCase): GoalsContract.Presenter =
+    fun provideGoalsPresenter(
+        schedulerProvider: SchedulerProvider,
+        resourceProvider: ResourceProvider,
+        getGoalsUseCase: GetGoalUseCase,
+        saveForGoalUseCase: SaveForGoalUseCase
+    ): GoalsContract.Presenter =
         GoalsPresenter(schedulerProvider, resourceProvider, getGoalsUseCase, saveForGoalUseCase)
 
     @Provides

@@ -99,6 +99,9 @@ dependencies {
         transitive = true
     }
 
+    // Custom
+    implementation libraries.lottie
+
     // Testing
     testImplementation libraries.junit
     testImplementation libraries.mockitoCore
