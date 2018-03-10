@@ -2,6 +2,7 @@ package com.fibelatti.pigbank.di.module
 
 import com.fibelatti.pigbank.domain.goal.GetGoalUseCase
 import com.fibelatti.pigbank.domain.goal.SaveForGoalUseCase
+import com.fibelatti.pigbank.domain.goal.ValidateSavingsUseCase
 import com.fibelatti.pigbank.external.providers.ResourceProvider
 import com.fibelatti.pigbank.external.providers.SchedulerProvider
 import com.fibelatti.pigbank.presentation.addsavings.AddSavingsContract
@@ -13,9 +14,12 @@ import dagger.Provides
 class AddSavingsModule {
 
     @Provides
-    fun provideAddSavingsPresenter(schedulerProvider: SchedulerProvider,
-                                   resourceProvider: ResourceProvider,
-                                   saveForGoalUseCase: SaveForGoalUseCase,
-                                   getGoalsUseCase: GetGoalUseCase): AddSavingsContract.Presenter =
-        AddSavingsPresenter(schedulerProvider, resourceProvider, saveForGoalUseCase, getGoalsUseCase)
+    fun provideAddSavingsPresenter(
+        schedulerProvider: SchedulerProvider,
+        resourceProvider: ResourceProvider,
+        validateSavingsUseCase: ValidateSavingsUseCase,
+        saveForGoalUseCase: SaveForGoalUseCase,
+        getGoalsUseCase: GetGoalUseCase
+    ): AddSavingsContract.Presenter =
+        AddSavingsPresenter(schedulerProvider, resourceProvider, validateSavingsUseCase, saveForGoalUseCase, getGoalsUseCase)
 }

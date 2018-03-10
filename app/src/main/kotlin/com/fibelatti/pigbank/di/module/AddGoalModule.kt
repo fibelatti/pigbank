@@ -13,10 +13,12 @@ import dagger.Provides
 @Module
 class AddGoalModule {
     @Provides
-    fun provideAddGoalPresenter(schedulerProvider: SchedulerProvider,
-                                resourceProvider: ResourceProvider,
-                                validateGoalUseCase: ValidateGoalUseCase,
-                                addGoalUseCase: AddGoalUseCase,
-                                getGoalsUseCase: GetGoalUseCase): AddGoalContract.Presenter =
+    fun provideAddGoalPresenter(
+        schedulerProvider: SchedulerProvider,
+        resourceProvider: ResourceProvider,
+        validateGoalUseCase: ValidateGoalUseCase,
+        addGoalUseCase: AddGoalUseCase,
+        getGoalsUseCase: GetGoalUseCase
+    ): AddGoalContract.Presenter =
         AddGoalPresenter(schedulerProvider, resourceProvider, validateGoalUseCase, addGoalUseCase, getGoalsUseCase)
 }
