@@ -32,10 +32,9 @@
         <item quantity="one">Last day to achieve your goal!</item>
         <item quantity="other">%d days until deadline</item>
     </plurals>
-    <string name="goal_deadline_overdue">This goal is overdue</string>
     <string name="goal_saved_percent">%d%% saved</string>
     <string name="goal_description">Description</string>
-    <string name="goal_cost">Cost</string>
+    <string name="goal_cost">Amount to save</string>
     <string name="goal_deadline">Deadline</string>
     <string name="goal_savings">Savings</string>
     <string name="goal_total_saved">%.2f saved</string>
@@ -53,7 +52,9 @@
     <string name="goal_delete_message">You are about to delete %s.\n\nThis cannot be undone. Do you want to continue?</string>
     <string name="goal_delete_success">Goal deleted.</string>
     <string name="goal_delete_error">There was a problem deleting this goal. Please try again.</string>
-    <string name="goal_achieved">You achieved this goal! If you want to continue saving money for it consider increasing the cost.</string>
+    <string name="goal_achieved">You achieved this goal! If you want to continue saving money for it consider increasing the amount to save.</string>
+    <string name="goal_overdue_short">This goal is overdue!</string>
+    <string name="goal_overdue">This goal is overdue.\nUpdate the deadline to continue saving.</string>
 
     <!-- Savings -->
     <string name="savings_description">Saving money for %s</string>

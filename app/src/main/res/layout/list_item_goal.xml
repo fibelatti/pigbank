@@ -58,10 +58,26 @@
             style="@style/TextPrimary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewSavingsProgress"
-            tools:text="200 days until deadline"/>
+            tools:text="200 days until deadline"
+            tools:visibility="visible"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textViewGoalOverdue"
+            style="@style/TextPrimary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/goal_overdue_short"
+            android:textColor="@color/alertRed"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewSavingsProgress"
+            tools:visibility="visible"/>
     </android.support.constraint.ConstraintLayout>
 
     <FrameLayout
@@ -95,12 +111,14 @@
         android:layout_height="@dimen/pig_icon_size"
         android:clickable="true"
         android:focusable="true"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/textViewSaveToGoal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/guidelineAction"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/ic_pig"/>
+        app:srcCompat="@drawable/ic_pig"
+        tools:visibility="visible"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textViewSaveToGoal"
@@ -110,10 +128,12 @@
         android:text="@string/goal_save_money"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/text_size_small"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/guidelineProgress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/guidelineAction"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewSaveToGoal"/>
+        app:layout_constraintTop_toBottomOf="@+id/imageViewSaveToGoal"
+        tools:visibility="visible"/>
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imageViewGoalAchieved"
@@ -126,5 +146,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         app:srcCompat="@drawable/ic_achieved"
+        tools:visibility="visible"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imageViewGoalOverdue"
+        android:layout_width="@dimen/pig_icon_size"
+        android:layout_height="@dimen/pig_icon_size"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineProgress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guidelineAction"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:srcCompat="@drawable/ic_exclamation_mark"
         tools:visibility="visible"/>
 </android.support.constraint.ConstraintLayout>
