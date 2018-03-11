@@ -88,6 +88,7 @@
     <string name="preferences_reset_hints_title">App Hints</string>
     <string name="preferences_reset_hints_button">Show again</string>
     <string name="preferences_reset_hints_description">All the hints that you dismissed will be shown again</string>
+    <string name="preferences_reset_hints_confirm">The hints will be shown again</string>
 
     <string name="preferences_share">Share PigBank with a friend!</string>
     <string name="preferences_share_title">Sharing PigBank</string>

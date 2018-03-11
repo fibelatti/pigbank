@@ -1,6 +1,7 @@
 package com.fibelatti.pigbank.domain.userpreferences
 
 import com.fibelatti.pigbank.data.userpreferences.UserPreferencesRepositoryContract
+import com.fibelatti.pigbank.data.userpreferences.UserPreferencesType
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -33,6 +34,12 @@ class UserPreferencesUseCase @Inject constructor(
     fun setQuickSaveHintDismissed(): Single<Boolean> =
         Single.create { emitter ->
             val affectedRows = userPreferencesRepositoryContract.setQuickSaveHintDismissed()
+            if (affectedRows > 0) emitter.onSuccess(true) else emitter.onError(UserPreferencesError())
+        }
+
+    fun resetHints(): Single<Boolean> =
+        Single.create { emitter ->
+            val affectedRows = userPreferencesRepositoryContract.updateAllByType(UserPreferencesType.HINT.value, false.toString())
             if (affectedRows > 0) emitter.onSuccess(true) else emitter.onError(UserPreferencesError())
         }
 }
