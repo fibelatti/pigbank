@@ -56,6 +56,16 @@
     <string name="goal_overdue_short">This goal is overdue!</string>
     <string name="goal_overdue">This goal is overdue.\nUpdate the deadline to continue saving.</string>
 
+    <string name="goal_create_first_hint_title">Think of a goal and start saving!</string>
+    <string name="goal_create_first_hint">
+        Create a habit and keep track of your savings. PigBank will help you remember how much you saved to achieve your goals.
+        \n\nStart by clicking the button below to create your first goal.
+    </string>
+    <string name="goal_quick_save_hint">
+        Click any goal to check its details, get savings suggestions and check your savings log.
+        \n\nClick the pig icon to quickly save money to a goal.
+    </string>
+
     <!-- Savings -->
     <string name="savings_description">Saving money for %s</string>
     <string name="savings_amount">Savings amount</string>
