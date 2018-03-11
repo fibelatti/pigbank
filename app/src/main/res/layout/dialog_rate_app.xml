@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/padding_regular">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textViewTitle"
+        style="@style/TextPrimary.BodyImportant"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/padding_small"
+        android:text="@string/dialog_rate_header"
+        app:layout_constraintBottom_toTopOf="@+id/ratingBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <android.support.v7.widget.AppCompatRatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        app:layout_constraintBottom_toTopOf="@+id/layoutConditionalContent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"/>
+
+    <LinearLayout
+        android:id="@+id/layoutConditionalContent"
+        android:layout_width="0dp"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar">
+
+        <LinearLayout
+            android:id="@+id/layoutPositiveFeedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/TextPrimary.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/padding_small"
+                android:text="@string/dialog_rate_feedback_positive"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/buttonPlayStore"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/button_height"
+                android:text="@string/dialog_rate_play_store"
+                android:theme="@style/AppButton.About"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutNegativeFeedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/TextPrimary.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/padding_small"
+                android:text="@string/dialog_rate_feedback_negative"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/buttonEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/button_height"
+                android:text="@string/dialog_rate_send_email"
+                android:theme="@style/AppButton.About"/>
+        </LinearLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
