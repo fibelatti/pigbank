@@ -90,7 +90,7 @@ class AddGoalDialogFragment :
                     updatePositiveButton(
                         buttonColor = ContextCompat.getColor(context, color.colorAccent),
                         onClickListener = View.OnClickListener { _ ->
-                            presenter.createGoals(GoalCandidate(
+                            presenter.createGoal(GoalCandidate(
                                 editTextDescription.textAsString(),
                                 editTextCost.textAsString(),
                                 editTextDeadline.textAsString()))
