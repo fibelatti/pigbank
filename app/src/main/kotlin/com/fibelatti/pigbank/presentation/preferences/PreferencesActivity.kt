@@ -78,7 +78,7 @@ class PreferencesActivity :
     }
 
     override fun alertHintsReset() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        toast(getString(R.string.preferences_reset_hints_confirm))
     }
 
     override fun showShareMenu() {

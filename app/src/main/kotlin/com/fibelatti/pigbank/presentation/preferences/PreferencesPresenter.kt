@@ -52,7 +52,13 @@ class PreferencesPresenter(
     }
 
     override fun resetHints() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        userPreferencesUseCase.resetHints()
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.mainThread())
+            .subscribeUntilDetached(
+                { view?.alertHintsReset() },
+                { view?.handleError(it.message) }
+            )
     }
 
     override fun shareApp() {

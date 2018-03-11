@@ -17,6 +17,7 @@ import com.fibelatti.pigbank.presentation.goals.adapter.GoalsAdapter
 import com.fibelatti.pigbank.presentation.models.Goal
 import com.fibelatti.pigbank.presentation.preferences.PreferencesActivity
 import kotlinx.android.synthetic.main.activity_goals.buttonAddGoal
+import kotlinx.android.synthetic.main.activity_goals.layoutHintContainer
 import kotlinx.android.synthetic.main.activity_goals.recyclerViewGoals
 import kotlinx.android.synthetic.main.layout_toolbar_default.toolbar
 import javax.inject.Inject
@@ -124,6 +125,23 @@ class GoalsActivity :
 
     override fun saveToGoalClicked(goal: Goal) {
         presenter.addSavings(goal)
+    }
+
+    override fun showFirstGoalHint() {
+        showDismissibleHint(
+            container = layoutHintContainer,
+            hintTitle = getString(R.string.goal_create_first_hint_title),
+            hintMessage = getString(R.string.goal_create_first_hint),
+            dismissListener = { presenter.firstGoalHintDismissed() }
+        )
+    }
+
+    override fun showQuickSaveHint() {
+        showDismissibleHint(
+            container = layoutHintContainer,
+            hintMessage = getString(R.string.goal_quick_save_hint),
+            dismissListener = { presenter.quickSaveHintDismissed() }
+        )
     }
     //endregion
 

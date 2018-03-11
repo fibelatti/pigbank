@@ -8,7 +8,7 @@ interface AddGoalContract {
     interface Presenter : BaseContract.Presenter<View> {
         fun editDeadline()
 
-        fun createGoals(goal: GoalCandidate)
+        fun createGoal(goal: GoalCandidate)
     }
 
     interface View : BaseContract.View {

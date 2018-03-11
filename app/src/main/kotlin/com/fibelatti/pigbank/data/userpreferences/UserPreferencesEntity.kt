@@ -12,6 +12,8 @@ private const val USER_PREFERENCE_TYPE_HINT = "hint"
 
 const val USER_PREFERENCE_NAME_ANALYTICS_ENABLED = "Analytics Enabled"
 const val USER_PREFERENCE_NAME_CRASH_REPORTS_ENABLED = "Crash Reports Enabled"
+const val USER_PREFERENCE_NAME_FIRST_GOAL_HINT_DISMISSED = "First Goal Hint Dismissed"
+const val USER_PREFERENCE_NAME_QUICK_SAVE_HINT_DISMISSED = "Quick Save Hint Dismissed"
 
 @Entity(tableName = TABLE_NAME)
 data class UserPreferencesEntity(
@@ -33,7 +35,9 @@ data class UserPreferencesEntity(
         const val COLUMN_VALUE = "value"
 
         const val TABLE_INITIAL_VALUES = "(0, '$USER_PREFERENCE_TYPE_TOGGLE', '$USER_PREFERENCE_NAME_ANALYTICS_ENABLED', 'true')," +
-            "(1, '$USER_PREFERENCE_TYPE_TOGGLE', '$USER_PREFERENCE_NAME_CRASH_REPORTS_ENABLED', 'true')"
+            "(1, '$USER_PREFERENCE_TYPE_TOGGLE', '$USER_PREFERENCE_NAME_CRASH_REPORTS_ENABLED', 'true')," +
+            "(2, '$USER_PREFERENCE_TYPE_HINT', '$USER_PREFERENCE_NAME_FIRST_GOAL_HINT_DISMISSED', 'false')," +
+            "(3, '$USER_PREFERENCE_TYPE_HINT', '$USER_PREFERENCE_NAME_QUICK_SAVE_HINT_DISMISSED', 'false')"
     }
 
     @Ignore constructor() : this(

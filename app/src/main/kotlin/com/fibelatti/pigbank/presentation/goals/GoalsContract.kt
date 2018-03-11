@@ -18,6 +18,10 @@ interface GoalsContract {
         fun goalDetails(goal: Goal)
 
         fun addSavings(goal: Goal)
+
+        fun firstGoalHintDismissed()
+
+        fun quickSaveHintDismissed()
     }
 
     interface View : BaseContract.View {
@@ -30,5 +34,9 @@ interface GoalsContract {
         fun showAddSavingsDialog(goal: Goal)
 
         fun updateGoals(goals: List<Goal>)
+
+        fun showFirstGoalHint()
+
+        fun showQuickSaveHint()
     }
 }
