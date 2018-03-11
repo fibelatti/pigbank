@@ -1,8 +1,8 @@
 package com.fibelatti.pigbank.domain
 
 import com.fibelatti.pigbank.BaseTest
-import com.fibelatti.pigbank.common.DateHelper.DATE_FORMAT_STRING
-import com.fibelatti.pigbank.common.asString
+import com.fibelatti.pigbank.any
+import com.fibelatti.pigbank.domain.goal.GoalMapper
 import com.fibelatti.pigbank.domain.goal.GoalValidationError
 import com.fibelatti.pigbank.domain.goal.InvalidGoalField.COST
 import com.fibelatti.pigbank.domain.goal.InvalidGoalField.DEADLINE
@@ -13,9 +13,10 @@ import com.fibelatti.pigbank.presentation.models.Goal
 import com.fibelatti.pigbank.presentation.models.GoalCandidate
 import io.reactivex.observers.TestObserver
 import junit.framework.Assert
-import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.mockito.BDDMockito.given
+import org.mockito.Mockito.mock
 import java.util.Date
 
 class ValidateGoalUseCaseTest : BaseTest() {
@@ -23,11 +24,6 @@ class ValidateGoalUseCaseTest : BaseTest() {
     //region Mocked Data
     private val mockedNow = Date(1534723200000) //20/08/2018
     private val mockedGoal = Goal(description = "Before any changes", cost = 1000F, deadline = mockedNow)
-
-    private val expectedDescription = "Test Description"
-    private val expectedCost = 1337.00F
-    private val expectedDate = Date(1597881600000) //20/08/2020
-    private val expectedGoal = Goal(description = expectedDescription, cost = expectedCost, deadline = expectedDate)
 
     private val invalidDescriptionEmpty = ""
     private val validDescription = "Test Description"
@@ -42,12 +38,16 @@ class ValidateGoalUseCaseTest : BaseTest() {
     private val validDate = "20/08/2020"
     //endregion
 
-    private val validateGoalUseCase = ValidateGoalUseCase()
-    private lateinit var testObserver: TestObserver<Goal>
+    private val mockGoal: Goal = mock(Goal::class.java)
+
+    private val mockGoalMapper: GoalMapper = mock(GoalMapper::class.java)
+    private val validateGoalUseCase = ValidateGoalUseCase(mockGoalMapper)
+    private var testObserver: TestObserver<Goal> = TestObserver()
 
     @Before
     fun setup() {
-        testObserver = TestObserver()
+        given(mockGoalMapper.toPresentationModel(any<GoalCandidate>()))
+            .willReturn(mockGoal)
     }
 
     @Test
@@ -164,11 +164,6 @@ class ValidateGoalUseCaseTest : BaseTest() {
         // Assert
         testObserver.assertNoErrors()
         testObserver.assertValueCount(1)
-
-        val result = testObserver.values()[0]
-        assertEquals(expectedGoal.description, result.description)
-        assertEquals(expectedGoal.cost, result.cost)
-        assertEquals(expectedGoal.deadline.asString(DATE_FORMAT_STRING), result.deadline.asString(DATE_FORMAT_STRING))
     }
 
     @Test
@@ -183,10 +178,5 @@ class ValidateGoalUseCaseTest : BaseTest() {
         // Assert
         testObserver.assertNoErrors()
         testObserver.assertValueCount(1)
-
-        val result = testObserver.values()[0]
-        assertEquals(expectedGoal.description, result.description)
-        assertEquals(expectedGoal.cost, result.cost)
-        assertEquals(expectedGoal.deadline.asString(DATE_FORMAT_STRING), result.deadline.asString(DATE_FORMAT_STRING))
     }
 }

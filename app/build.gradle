@@ -51,6 +51,7 @@ android {
         androidTest {
             java.srcDir sharedTestDir
             java.srcDirs += 'src/androidTest/kotlin'
+            java.srcDirs += 'src/test/resources'
         }
     }
     testOptions {
