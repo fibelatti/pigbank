@@ -30,6 +30,7 @@ ext.versions = [
     // Test dependencies
     jUnitVersion             : '4.12',
     mockitoVersion           : '2.10.0',
+    mockitoAndroidVersion    : '2.15.0',
     supportAnnotationsVersion: '27.0.2',
     testRunnerVersion        : '1.0.1',
 
@@ -74,6 +75,7 @@ ext.libraries = [
     // Testing
     junit                : "junit:junit:$versions.jUnitVersion",
     mockitoCore          : "org.mockito:mockito-core:$versions.mockitoVersion",
+    mockitoAndroid       : "org.mockito:mockito-android:$versions.mockitoAndroidVersion",
 
     supportAnnotations   : "com.android.support:support-annotations:$versions.supportAnnotationsVersion",
     testRunner           : "com.android.support.test:runner:$versions.testRunnerVersion",

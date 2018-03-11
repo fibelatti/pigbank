@@ -45,13 +45,11 @@ android {
         test {
             java.srcDir sharedTestDir
             java.srcDirs += 'src/test/kotlin'
-            java.srcDirs += 'src/test/resources'
         }
 
         androidTest {
             java.srcDir sharedTestDir
             java.srcDirs += 'src/androidTest/kotlin'
-            java.srcDirs += 'src/test/resources'
         }
     }
     testOptions {
@@ -110,4 +108,5 @@ dependencies {
     androidTestImplementation libraries.supportAnnotations
     androidTestImplementation libraries.testRunner
     androidTestImplementation libraries.kotlinTest
+    androidTestImplementation libraries.mockitoAndroid
 }
