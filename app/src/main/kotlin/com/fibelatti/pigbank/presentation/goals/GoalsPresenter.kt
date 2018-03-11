@@ -2,6 +2,7 @@ package com.fibelatti.pigbank.presentation.goals
 
 import com.fibelatti.pigbank.domain.goal.GetGoalUseCase
 import com.fibelatti.pigbank.domain.goal.SaveForGoalUseCase
+import com.fibelatti.pigbank.domain.userpreferences.UserPreferencesUseCase
 import com.fibelatti.pigbank.external.providers.ResourceProvider
 import com.fibelatti.pigbank.external.providers.SchedulerProvider
 import com.fibelatti.pigbank.presentation.base.BasePresenter
@@ -12,7 +13,8 @@ class GoalsPresenter(
     schedulerProvider: SchedulerProvider,
     resourceProvider: ResourceProvider,
     private val getGoalsUseCase: GetGoalUseCase,
-    private val saveForGoalUseCase: SaveForGoalUseCase
+    private val saveForGoalUseCase: SaveForGoalUseCase,
+    private val userPreferencesUseCase: UserPreferencesUseCase
 ) : GoalsContract.Presenter, BasePresenter<GoalsContract.View>(schedulerProvider, resourceProvider) {
 
     private var view: GoalsContract.View? = null
@@ -56,14 +58,45 @@ class GoalsPresenter(
         view?.showAddSavingsDialog(goal)
     }
 
+    override fun firstGoalHintDismissed() {
+        userPreferencesUseCase.setFirstGoalHintDismissed()
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.mainThread())
+            .subscribe()
+    }
+
+    override fun quickSaveHintDismissed() {
+        userPreferencesUseCase.setQuickSaveHintDismissed()
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.mainThread())
+            .subscribe()
+    }
+
     private fun showUpdatedGoals() {
-        getGoalsUseCase
-            .getAllGoals()
+        getGoalsUseCase.getAllGoals()
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.mainThread())
             .subscribeUntilDetached(
-                { view?.updateGoals(goals = it) },
+                { goals ->
+                    checkForHints(goals.size)
+                    view?.updateGoals(goals)
+                },
                 { view?.handleError(errorMessage = it.message) }
+            )
+    }
+
+    private fun checkForHints(goalsQuantity: Int) {
+        userPreferencesUseCase.getUserPreferences()
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.mainThread())
+            .subscribe(
+                { preferences ->
+                    when (goalsQuantity) {
+                        0 -> if (!preferences.firstGoalHintDismissed) view?.showFirstGoalHint()
+                        1 -> if (!preferences.quickSaveHintDismissed) view?.showQuickSaveHint()
+                    }
+                },
+                {}
             )
     }
 }

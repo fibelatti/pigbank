@@ -9,6 +9,7 @@ import com.fibelatti.pigbank.domain.goal.InvalidGoalField.DEADLINE
 import com.fibelatti.pigbank.domain.goal.InvalidGoalField.DESCRIPTION
 import com.fibelatti.pigbank.domain.goal.InvalidGoalField.PAST_DEADLINE
 import com.fibelatti.pigbank.domain.goal.ValidateGoalUseCase
+import com.fibelatti.pigbank.domain.userpreferences.UserPreferencesUseCase
 import com.fibelatti.pigbank.external.providers.ResourceProvider
 import com.fibelatti.pigbank.external.providers.SchedulerProvider
 import com.fibelatti.pigbank.presentation.addgoal.AddGoalContract.View
@@ -21,7 +22,8 @@ class AddGoalPresenter(
     resourceProvider: ResourceProvider,
     private val validateGoalUseCase: ValidateGoalUseCase,
     private val addGoalUseCase: AddGoalUseCase,
-    private val getGoalsUseCase: GetGoalUseCase
+    private val getGoalsUseCase: GetGoalUseCase,
+    private val userPreferencesUseCase: UserPreferencesUseCase
 ) : AddGoalContract.Presenter, BasePresenter<AddGoalContract.View>(schedulerProvider, resourceProvider) {
 
     private var view: AddGoalContract.View? = null
@@ -35,14 +37,17 @@ class AddGoalPresenter(
         view?.showDatePicker()
     }
 
-    override fun createGoals(goal: GoalCandidate) {
+    override fun createGoal(goal: GoalCandidate) {
         validateGoalUseCase.validateGoal(now = Date(), goalCandidate = goal)
             .flatMap { addGoalUseCase.addGoal(goal = it) }
             .flatMap { getGoalsUseCase.getGoalById(id = it) }
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.mainThread())
             .subscribeUntilDetached(
-                { view?.onGoalCreated(goal = it) },
+                {
+                    dismissFirstGoalHint()
+                    view?.onGoalCreated(goal = it)
+                },
                 { throwable ->
                     when (throwable) {
                         is GoalValidationError -> handleValidationError(throwable)
@@ -59,5 +64,12 @@ class AddGoalPresenter(
             DEADLINE -> view?.onInvalidDeadline(resourceProvider.getString(R.string.goal_add_invalid_deadline))
             PAST_DEADLINE -> view?.onInvalidDeadline(resourceProvider.getString(R.string.goal_add_past_deadline))
         }
+    }
+
+    private fun dismissFirstGoalHint() {
+        userPreferencesUseCase.setFirstGoalHintDismissed()
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.mainThread())
+            .subscribe()
     }
 }
