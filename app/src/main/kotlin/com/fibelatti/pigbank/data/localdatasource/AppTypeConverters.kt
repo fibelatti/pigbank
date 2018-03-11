@@ -1,6 +1,7 @@
 package com.fibelatti.pigbank.data.localdatasource
 
 import android.arch.persistence.room.TypeConverter
+import com.fibelatti.pigbank.data.userpreferences.UserPreferencesType
 import java.util.Date
 
 class AppTypeConverters {
@@ -11,4 +12,10 @@ class AppTypeConverters {
     fun toDate(millisSinceEpoch: Long?): Date? = if (millisSinceEpoch == null) {
         null
     } else Date(millisSinceEpoch)
+
+    @TypeConverter
+    fun fromUserPreferencesType(type: UserPreferencesType): String = type.value
+
+    @TypeConverter
+    fun toUserPrefrencesType(value: String): UserPreferencesType = UserPreferencesType.fromString(value)
 }

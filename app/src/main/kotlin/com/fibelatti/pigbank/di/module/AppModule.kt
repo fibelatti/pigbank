@@ -44,6 +44,7 @@ class AppModule {
     @Provides
     @AppScope
     fun providesDatabase(context: Context) = Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
+        .addCallback(AppDatabase.RoomCallback)
         .fallbackToDestructiveMigration()
         .build()
 }
