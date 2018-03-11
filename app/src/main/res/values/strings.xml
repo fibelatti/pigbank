@@ -63,7 +63,9 @@
     <string name="savings_invalid_amount">Are you sure you are saving money?</string>
 
     <!-- Preferences -->
+    <string name="preferences_title">Preferences</string>
     <string name="preferences_changes_saved">Changes saved</string>
+    <string name="preferences_changes_error">Changes saved</string>
 
     <string name="preferences_crash_report_opt_out_title">Crash Report Opt-out</string>
     <string name="preferences_crash_report_opt_out_description">This app uses Crashlytics to collect anonymized data about crashes and errors, which helps me make this app more stable. If you don\'t want your data to be sent uncheck this option
@@ -83,4 +85,15 @@
     <string name="preferences_rate">Rate PigBank in the Play Store!</string>
     <string name="preferences_about">Developed with ❤ by Filipe Belatti</string>
     <string name="preferences_app_version">Version: %s</string>
+
+    <!-- DialogRate -->
+    <string name="dialog_rate_title">Rate this app!</string>
+    <string name="dialog_rate_cancel">Cancel</string>
+    <string name="dialog_rate_header">If you\'re enjoying PigBank I would love to receive your review!</string>
+    <string name="dialog_rate_feedback_positive">I\'m glad you\'re enjoying it!\nWhat about showing your love in the Play Store?</string>
+    <string name="dialog_rate_play_store">Play Store</string>
+    <string name="dialog_rate_feedback_negative">Would you mind sending me an e-mail suggesting what can I do to improve your experience with the app?</string>
+    <string name="dialog_rate_send_email">Send e-mail</string>
+    <string name="dialog_rate_send_email_subject">PigBank - Feedback</string>
+    <string name="dialog_rate_send_email_title">Choose e-mail app</string>
 </resources>

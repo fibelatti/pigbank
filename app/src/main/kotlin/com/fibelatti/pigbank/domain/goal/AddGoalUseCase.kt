@@ -1,6 +1,8 @@
 package com.fibelatti.pigbank.domain.goal
 
+import com.fibelatti.pigbank.data.goal.GoalRepositoryContract
 import com.fibelatti.pigbank.data.goal.Savings
+import com.fibelatti.pigbank.data.goal.SavingsRepositoryContract
 import com.fibelatti.pigbank.data.localdatasource.AppDatabase
 import com.fibelatti.pigbank.data.localdatasource.DATABASE_GENERIC_ERROR_MESSAGE
 import com.fibelatti.pigbank.presentation.models.Goal
@@ -9,6 +11,8 @@ import javax.inject.Inject
 
 class AddGoalUseCase @Inject constructor(
     private val database: AppDatabase,
+    private val goalRepositoryContract: GoalRepositoryContract,
+    private val savingsRepositoryContract: SavingsRepositoryContract,
     private val goalMapper: GoalMapper,
     private val savingsMapper: SavingsMapper
 ) {
@@ -16,15 +20,11 @@ class AddGoalUseCase @Inject constructor(
         var goalId = -1L
 
         database.runInTransaction({
-            goalId = database.getGoalRepository()
-                .saveGoal(goalMapper.toDataModel(goal))
+            goalId = goalRepositoryContract.saveGoal(goalMapper.toDataModel(goal))
 
             val updatedSavings: Array<Savings>? = goal.savings.map { savingsMapper.toDataModel(it) }.toTypedArray()
 
-            updatedSavings?.let {
-                database.getSavingsRepository()
-                    .saveSavings(*updatedSavings)
-            }
+            updatedSavings?.let { savingsRepositoryContract.saveSavings(*updatedSavings) }
         })
 
         if (goalId != -1L) it.onSuccess(goalId) else it.onError(Throwable(DATABASE_GENERIC_ERROR_MESSAGE))

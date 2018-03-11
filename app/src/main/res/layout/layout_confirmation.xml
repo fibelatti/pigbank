@@ -12,8 +12,8 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationTick"
-        android:layout_width="@dimen/animation_tick_size"
-        android:layout_height="@dimen/animation_tick_size"
+        android:layout_width="@dimen/animation_size"
+        android:layout_height="@dimen/animation_size"
         app:lottie_fileName="tick.json"/>
 
     <TextView

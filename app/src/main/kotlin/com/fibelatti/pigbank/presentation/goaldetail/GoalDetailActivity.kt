@@ -91,7 +91,7 @@ class GoalDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_goal_details)
-        setUpLayout()
+        setupLayout()
         setupRecyclerView()
         savedInstanceState.ifNotNullThisElseThat({ restoreFromState(it) }, { parseIntent(intent) })
 
@@ -239,7 +239,7 @@ class GoalDetailActivity :
     //endregion
 
     //region Private methods
-    private fun setUpLayout() {
+    private fun setupLayout() {
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
             title = ""

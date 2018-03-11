@@ -4,20 +4,20 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
+import com.fibelatti.pigbank.data.localdatasource.DELETE_FROM
+import com.fibelatti.pigbank.data.localdatasource.SELECT_ALL_FROM
+import com.fibelatti.pigbank.data.localdatasource.WHERE
 import io.reactivex.Single
 
 @Dao
 interface SavingsRepositoryContract {
-    @Query(value = "select * from " + Savings.TABLE_NAME +
-        " where " + Savings.COLUMN_GOAL_ID + " = :goalId")
+    @Query(value = "$SELECT_ALL_FROM ${Savings.TABLE_NAME} $WHERE ${Savings.COLUMN_GOAL_ID} = :goalId")
     fun getSavingsByGoalId(goalId: Long): Single<List<Savings>>
 
-    @Query(value = "delete from " + Savings.TABLE_NAME +
-        " where " + Savings.COLUMN_GOAL_ID + " = :goalId")
+    @Query(value = "$DELETE_FROM ${Savings.TABLE_NAME} $WHERE ${Savings.COLUMN_GOAL_ID} = :goalId")
     fun deleteSavingsByGoalId(goalId: Long): Int
 
-    @Query(value = "delete from " + Savings.TABLE_NAME +
-        " where " + Savings.COLUMN_GOAL_ID + " in(:savingsIds)")
+    @Query(value = "$DELETE_FROM ${Savings.TABLE_NAME} $WHERE ${Savings.COLUMN_GOAL_ID} in(:savingsIds)")
     fun deleteSavingsById(savingsIds: List<Long>): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
