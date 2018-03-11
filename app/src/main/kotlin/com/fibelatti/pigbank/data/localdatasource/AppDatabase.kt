@@ -14,6 +14,15 @@ const val DATABASE_CURRENT_VERSION = 1
 
 const val DATABASE_GENERIC_ERROR_MESSAGE = "An error occurred when trying to perform a database operation"
 
+//region Common SQL Commands
+const val SELECT_ALL_FROM = "select * from"
+const val DELETE_FROM = "delete from"
+const val UPDATE = "update"
+const val INSERT_OR_REPLACE_INTO = "insert or replace into"
+const val VALUES = "values"
+const val SET = "set"
+const val WHERE = "where"
+//endregion
 @Database(
     entities = [Goal::class, Savings::class],
     version = DATABASE_CURRENT_VERSION,
