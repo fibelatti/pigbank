@@ -23,6 +23,18 @@ class UserPreferencesUseCase @Inject constructor(
             val affectedRows = userPreferencesRepositoryContract.updateCrashReportsEnabled(value.toString())
             if (affectedRows > 0) emitter.onSuccess(true) else emitter.onError(UserPreferencesError())
         }
+
+    fun setFirstGoalHintDismissed(): Single<Boolean> =
+        Single.create { emitter ->
+            val affectedRows = userPreferencesRepositoryContract.setFirstGoalHintDismissed()
+            if (affectedRows > 0) emitter.onSuccess(true) else emitter.onError(UserPreferencesError())
+        }
+
+    fun setQuickSaveHintDismissed(): Single<Boolean> =
+        Single.create { emitter ->
+            val affectedRows = userPreferencesRepositoryContract.setQuickSaveHintDismissed()
+            if (affectedRows > 0) emitter.onSuccess(true) else emitter.onError(UserPreferencesError())
+        }
 }
 
 class UserPreferencesError : Throwable()

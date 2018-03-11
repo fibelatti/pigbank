@@ -3,6 +3,7 @@ package com.fibelatti.pigbank.di.module
 import com.fibelatti.pigbank.domain.goal.AddGoalUseCase
 import com.fibelatti.pigbank.domain.goal.GetGoalUseCase
 import com.fibelatti.pigbank.domain.goal.ValidateGoalUseCase
+import com.fibelatti.pigbank.domain.userpreferences.UserPreferencesUseCase
 import com.fibelatti.pigbank.external.providers.ResourceProvider
 import com.fibelatti.pigbank.external.providers.SchedulerProvider
 import com.fibelatti.pigbank.presentation.addgoal.AddGoalContract
@@ -18,7 +19,8 @@ class AddGoalModule {
         resourceProvider: ResourceProvider,
         validateGoalUseCase: ValidateGoalUseCase,
         addGoalUseCase: AddGoalUseCase,
-        getGoalsUseCase: GetGoalUseCase
+        getGoalsUseCase: GetGoalUseCase,
+        userPreferencesUseCase: UserPreferencesUseCase
     ): AddGoalContract.Presenter =
-        AddGoalPresenter(schedulerProvider, resourceProvider, validateGoalUseCase, addGoalUseCase, getGoalsUseCase)
+        AddGoalPresenter(schedulerProvider, resourceProvider, validateGoalUseCase, addGoalUseCase, getGoalsUseCase, userPreferencesUseCase)
 }
