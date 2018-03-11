@@ -32,4 +32,14 @@ interface UserPreferencesRepositoryContract {
         "$SET ${UserPreferencesEntity.COLUMN_VALUE} = :value " +
         "$WHERE ${UserPreferencesEntity.COLUMN_NAME} = '$USER_PREFERENCE_NAME_CRASH_REPORTS_ENABLED'")
     fun updateCrashReportsEnabled(value: String): Int
+
+    @Query(value = "$UPDATE ${UserPreferencesEntity.TABLE_NAME} " +
+        "$SET ${UserPreferencesEntity.COLUMN_VALUE} = 'true' " +
+        "$WHERE ${UserPreferencesEntity.COLUMN_NAME} = '$USER_PREFERENCE_NAME_FIRST_GOAL_HINT_DISMISSED'")
+    fun setFirstGoalHintDismissed(): Int
+
+    @Query(value = "$UPDATE ${UserPreferencesEntity.TABLE_NAME} " +
+        "$SET ${UserPreferencesEntity.COLUMN_VALUE} = 'true' " +
+        "$WHERE ${UserPreferencesEntity.COLUMN_NAME} = '$USER_PREFERENCE_NAME_QUICK_SAVE_HINT_DISMISSED'")
+    fun setQuickSaveHintDismissed(): Int
 }
