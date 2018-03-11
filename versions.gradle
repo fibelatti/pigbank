@@ -15,6 +15,7 @@ ext.versions = [
     appCompatVersion         : '27.0.2',
     designVersion            : '27.0.2',
     constraintLayoutVersion  : '1.0.2',
+    cardViewVersion          : '27.0.2',
 
     // Core dependencies
     daggerVersion            : '2.14.1',

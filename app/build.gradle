@@ -75,6 +75,7 @@ dependencies {
     implementation libraries.supportLibrary
     implementation libraries.designLibrary
     implementation libraries.constraintLayout
+    implementation libraries.cardView
 
     // Dagger
     implementation libraries.dagger
