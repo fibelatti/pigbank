@@ -3,6 +3,8 @@ package com.fibelatti.pigbank.presentation.goals
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import com.fibelatti.pigbank.R
 import com.fibelatti.pigbank.presentation.addgoal.AddGoalDialogFragment
 import com.fibelatti.pigbank.presentation.addsavings.AddSavingsDialogFragment
@@ -64,6 +66,21 @@ class GoalsActivity :
         presenter.detachView()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_goals, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menuItemPreferences -> {
+                presenter.preferences()
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
     //endregion
 
     //region Override methods
