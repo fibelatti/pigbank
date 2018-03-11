@@ -49,7 +49,7 @@ class GoalsActivity :
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_goals)
 
-        setUpLayout()
+        setupLayout()
         setupRecyclerView()
         presenter.attachView(this)
     }
@@ -114,7 +114,7 @@ class GoalsActivity :
     //endregion
 
     //region Private methods
-    private fun setUpLayout() {
+    private fun setupLayout() {
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
             title = getString(R.string.goal_title)
