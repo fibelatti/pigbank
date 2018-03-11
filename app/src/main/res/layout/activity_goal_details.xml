@@ -103,8 +103,8 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationAchieved"
-        android:layout_width="@dimen/animation_tick_size"
-        android:layout_height="@dimen/animation_tick_size"
+        android:layout_width="@dimen/animation_size"
+        android:layout_height="@dimen/animation_size"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

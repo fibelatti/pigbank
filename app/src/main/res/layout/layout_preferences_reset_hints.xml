@@ -40,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="fill"
+            android:layout_marginStart="@dimen/margin_small"
             android:layout_toEndOf="@+id/buttonResetHints"
             android:gravity="center_vertical"
             android:text="@string/preferences_reset_hints_description"/>

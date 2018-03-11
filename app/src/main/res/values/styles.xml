@@ -22,8 +22,8 @@
         <item name="layout_constraintEnd_toEndOf">parent</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/divider_size</item>
-        <item name="android:layout_marginTop">@dimen/margin_smaller</item>
-        <item name="android:layout_marginBottom">@dimen/margin_smaller</item>
+        <item name="android:layout_marginTop">@dimen/margin_small</item>
+        <item name="android:layout_marginBottom">@dimen/margin_small</item>
         <item name="android:background">@color/colorDivider</item>
     </style>
 
