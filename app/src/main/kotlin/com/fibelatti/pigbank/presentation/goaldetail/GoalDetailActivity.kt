@@ -240,6 +240,7 @@ class GoalDetailActivity :
         supportActionBar?.apply {
             title = ""
             setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_close)
         }
         layoutRoot.stealFocusOnTouch()
         editTextDeadline.setDateInputMask()

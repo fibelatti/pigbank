@@ -100,6 +100,7 @@ class PreferencesActivity :
         supportActionBar?.apply {
             title = getString(R.string.preferences_title)
             setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_close)
         }
         checkBoxCrashReportOptOut.setOnCheckedChangeListener { _, isChecked -> presenter.toggleCrashReport(isChecked) }
         checkBoxAnalyticsOptOut.setOnCheckedChangeListener { _, isChecked -> presenter.toggleAnalytics(isChecked) }
