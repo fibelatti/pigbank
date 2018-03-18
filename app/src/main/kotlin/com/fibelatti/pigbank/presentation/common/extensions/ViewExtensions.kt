@@ -104,6 +104,14 @@ fun View.hideKeyboard() {
 //endregion
 
 //region Components
+fun ViewGroup.stealFocusOnTouch() {
+    setOnTouchListener { _, _ ->
+        requestFocus()
+        hideKeyboard()
+        return@setOnTouchListener false
+    }
+}
+
 fun EditText.textAsString(): String = text.toString()
 
 fun EditText.textAsFloat(): Float = try {

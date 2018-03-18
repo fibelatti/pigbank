@@ -16,6 +16,7 @@ import com.fibelatti.pigbank.presentation.common.extensions.clearError
 import com.fibelatti.pigbank.presentation.common.extensions.hideKeyboard
 import com.fibelatti.pigbank.presentation.common.extensions.setDateInputMask
 import com.fibelatti.pigbank.presentation.common.extensions.showError
+import com.fibelatti.pigbank.presentation.common.extensions.stealFocusOnTouch
 import com.fibelatti.pigbank.presentation.common.extensions.textAsString
 import com.fibelatti.pigbank.presentation.common.extensions.toast
 import com.fibelatti.pigbank.presentation.models.GoalPresentationModel
@@ -153,10 +154,10 @@ class AddGoalDialogFragment :
 
     //region Private methods
     private fun setupView() {
+        dialog.layoutRoot.stealFocusOnTouch()
+
         dialog.editTextCost.filters = arrayOf(DecimalDigitsInputFilter())
         dialog.editTextDeadline.setDateInputMask()
-
-//        dialog.editTextDeadline.setOnClickListener { presenter.editDeadline() }
     }
 
     private fun restoreInstance(savedInstanceState: Bundle?) {

@@ -23,6 +23,7 @@ import com.fibelatti.pigbank.presentation.common.extensions.setDateInputMask
 import com.fibelatti.pigbank.presentation.common.extensions.setElevated
 import com.fibelatti.pigbank.presentation.common.extensions.showError
 import com.fibelatti.pigbank.presentation.common.extensions.snackbar
+import com.fibelatti.pigbank.presentation.common.extensions.stealFocusOnTouch
 import com.fibelatti.pigbank.presentation.common.extensions.textAsString
 import com.fibelatti.pigbank.presentation.common.extensions.toast
 import com.fibelatti.pigbank.presentation.common.extensions.visible
@@ -240,6 +241,7 @@ class GoalDetailActivity :
             title = ""
             setDisplayHomeAsUpEnabled(true)
         }
+        layoutRoot.stealFocusOnTouch()
         editTextDeadline.setDateInputMask()
         buttonSaveToGoal.setOnClickListener {
             layoutRoot.hideKeyboard()
