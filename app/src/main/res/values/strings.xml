@@ -25,6 +25,9 @@
 
     <!-- Goal -->
     <string name="goal_title">My goals</string>
+    <string name="goal_tab_title_details">Details</string>
+    <string name="goal_tab_title_savings_log">Savings Log</string>
+
     <string name="goal_add">Add a new goal</string>
     <string name="goal_save_money">Save money</string>
     <string name="goal_saved_relative">%1$s of %2$s saved</string>
