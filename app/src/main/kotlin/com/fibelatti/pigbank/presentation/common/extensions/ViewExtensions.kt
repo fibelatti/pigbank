@@ -6,7 +6,6 @@ import android.app.Activity
 import android.content.Context
 import android.support.annotation.LayoutRes
 import android.support.design.widget.Snackbar
-import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
 import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
@@ -52,8 +51,9 @@ fun Activity.toast(message: String, duration: Int = Toast.LENGTH_SHORT) {
 
 fun TextInputLayout.showError(errorMessage: String) {
     error = errorMessage
-    if (childCount == 1 && (getChildAt(0) is TextInputEditText || getChildAt(0) is EditText)) {
-        getChildAt(0).requestFocus()
+    editText?.run {
+        requestFocus()
+        showKeyboard()
     }
 }
 

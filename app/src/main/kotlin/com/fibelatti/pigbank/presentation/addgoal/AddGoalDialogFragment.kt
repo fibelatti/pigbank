@@ -12,6 +12,7 @@ import com.fibelatti.pigbank.R
 import com.fibelatti.pigbank.R.color
 import com.fibelatti.pigbank.presentation.base.BaseDialogFragment
 import com.fibelatti.pigbank.presentation.common.DecimalDigitsInputFilter
+import com.fibelatti.pigbank.presentation.common.extensions.clearError
 import com.fibelatti.pigbank.presentation.common.extensions.hideKeyboard
 import com.fibelatti.pigbank.presentation.common.extensions.setDateInputMask
 import com.fibelatti.pigbank.presentation.common.extensions.showError
@@ -79,6 +80,7 @@ class AddGoalDialogFragment :
             setCanceledOnTouchOutside(false)
             getButton(DialogInterface.BUTTON_POSITIVE)?.apply {
                 setOnClickListener({ _ ->
+                    clearErrors()
                     presenter.createGoal(
                         dialog.editTextDescription.textAsString(),
                         dialog.editTextCost.textAsString(),
@@ -163,6 +165,12 @@ class AddGoalDialogFragment :
             dialog.editTextCost.setText(getString(BUNDLE_GOAL_COST))
             dialog.editTextDeadline.setText(getString(BUNDLE_GOAL_DEADLINE))
         }
+    }
+
+    private fun clearErrors() {
+        dialog.inputLayoutDescription.clearError()
+        dialog.inputLayoutCost.clearError()
+        dialog.inputLayoutDeadline.clearError()
     }
     //endregion
 }

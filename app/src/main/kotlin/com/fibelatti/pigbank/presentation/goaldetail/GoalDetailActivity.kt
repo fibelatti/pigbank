@@ -16,6 +16,7 @@ import com.fibelatti.pigbank.presentation.addsavings.AddSavingsDialogFragment
 import com.fibelatti.pigbank.presentation.base.BaseActivity
 import com.fibelatti.pigbank.presentation.base.BaseIntentBuilder
 import com.fibelatti.pigbank.presentation.common.extensions.animateWithListener
+import com.fibelatti.pigbank.presentation.common.extensions.clearError
 import com.fibelatti.pigbank.presentation.common.extensions.gone
 import com.fibelatti.pigbank.presentation.common.extensions.hideKeyboard
 import com.fibelatti.pigbank.presentation.common.extensions.setDateInputMask
@@ -274,6 +275,7 @@ class GoalDetailActivity :
     }
 
     private fun saveGoal() {
+        clearErrors()
         goal?.let {
             presenter.saveGoal(
                 goal = it,
@@ -306,6 +308,12 @@ class GoalDetailActivity :
             onAnimationEnd = {
                 animationAchieved.gone()
             })
+    }
+
+    private fun clearErrors() {
+        inputLayoutDescription.clearError()
+        inputLayoutCost.clearError()
+        inputLayoutDeadline.clearError()
     }
     //endregion
 
