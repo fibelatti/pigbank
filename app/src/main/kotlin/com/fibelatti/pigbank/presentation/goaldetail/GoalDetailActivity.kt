@@ -12,17 +12,18 @@ import android.view.MenuItem
 import com.fibelatti.pigbank.R
 import com.fibelatti.pigbank.common.asString
 import com.fibelatti.pigbank.common.ifNotNullThisElseThat
-import com.fibelatti.pigbank.common.toFormattedString
 import com.fibelatti.pigbank.presentation.addsavings.AddSavingsDialogFragment
 import com.fibelatti.pigbank.presentation.base.BaseActivity
 import com.fibelatti.pigbank.presentation.base.BaseIntentBuilder
 import com.fibelatti.pigbank.presentation.common.extensions.animateWithListener
+import com.fibelatti.pigbank.presentation.common.extensions.clearError
 import com.fibelatti.pigbank.presentation.common.extensions.gone
 import com.fibelatti.pigbank.presentation.common.extensions.hideKeyboard
 import com.fibelatti.pigbank.presentation.common.extensions.setDateInputMask
 import com.fibelatti.pigbank.presentation.common.extensions.setElevated
 import com.fibelatti.pigbank.presentation.common.extensions.showError
 import com.fibelatti.pigbank.presentation.common.extensions.snackbar
+import com.fibelatti.pigbank.presentation.common.extensions.stealFocusOnTouch
 import com.fibelatti.pigbank.presentation.common.extensions.textAsString
 import com.fibelatti.pigbank.presentation.common.extensions.toast
 import com.fibelatti.pigbank.presentation.common.extensions.visible
@@ -139,13 +140,13 @@ class GoalDetailActivity :
             textViewDaysUntilDeadline.text = resources.getQuantityString(R.plurals.goal_deadline_remaining, daysUntilDeadline.toInt(), daysUntilDeadline)
             textViewTotalSaved.text = getString(R.string.goal_total_saved, totalSaved)
             textViewSavingsPerDay.text = getString(R.string.goal_savings_per_day, suggestedSavingsPerDay)
-            if (suggestedSavingsPerWeek > 0) {
+            if (suggestedSavingsPerWeek.isNotEmpty()) {
                 textViewSavingsPerWeek.visible()
                 textViewSavingsPerWeek.text = getString(R.string.goal_savings_per_week, suggestedSavingsPerWeek)
             } else {
                 textViewSavingsPerWeek.gone()
             }
-            if (suggestedSavingsPerMonth > 0) {
+            if (suggestedSavingsPerMonth.isNotEmpty()) {
                 textViewSavingsPerMonth.visible()
                 textViewSavingsPerMonth.text = getString(R.string.goal_savings_per_month, suggestedSavingsPerMonth)
             } else {
@@ -239,7 +240,9 @@ class GoalDetailActivity :
         supportActionBar?.apply {
             title = ""
             setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_close)
         }
+        layoutRoot.stealFocusOnTouch()
         editTextDeadline.setDateInputMask()
         buttonSaveToGoal.setOnClickListener {
             layoutRoot.hideKeyboard()
@@ -267,7 +270,7 @@ class GoalDetailActivity :
             calendar.time = goal.deadline
 
             editTextDescription.setText(description)
-            editTextCost.setText(cost.toFormattedString())
+            editTextCost.setText(cost)
             editTextDeadline.setText(calendar.time.asString())
 
             adapter.addManyToList(savings)
@@ -275,6 +278,7 @@ class GoalDetailActivity :
     }
 
     private fun saveGoal() {
+        clearErrors()
         goal?.let {
             presenter.saveGoal(
                 goal = it,
@@ -307,6 +311,12 @@ class GoalDetailActivity :
             onAnimationEnd = {
                 animationAchieved.gone()
             })
+    }
+
+    private fun clearErrors() {
+        inputLayoutDescription.clearError()
+        inputLayoutCost.clearError()
+        inputLayoutDeadline.clearError()
     }
     //endregion
 

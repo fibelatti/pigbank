@@ -2,6 +2,7 @@ package com.fibelatti.pigbank.domain.goal.models
 
 import com.fibelatti.pigbank.common.stringAsDate
 import com.fibelatti.pigbank.common.sumByFloat
+import com.fibelatti.pigbank.common.toNormalizedFloat
 import com.fibelatti.pigbank.data.goal.GoalDataModel
 import com.fibelatti.pigbank.data.goal.GoalWithSavingsDataModel
 import java.util.Date
@@ -24,7 +25,7 @@ class GoalDomainMapper @Inject constructor(private val savingsDomainMapper: Savi
     fun toDomainModel(goalCandidate: GoalCandidateEntity): GoalEntity = with(goalCandidate) {
         GoalEntity(
             description = description,
-            cost = cost.toFloat(),
+            cost = cost.toNormalizedFloat(),
             deadline = stringAsDate(deadline)
         )
     }
@@ -33,7 +34,7 @@ class GoalDomainMapper @Inject constructor(private val savingsDomainMapper: Savi
         val totalSaved = savingsDataModelList.sumByFloat { it.amount }
         val remainingCost = goalDataModel.cost - totalSaved
         val daysUntilDeadline = (goalDataModel.deadline.time - Date().time) / oneDayInMilliseconds
-        val percentSaved = (totalSaved / goalDataModel.cost) * oneHundredPercent
+        val percentSaved = ((totalSaved / goalDataModel.cost) * oneHundredPercent).toInt()
 
         GoalEntity(
             id = goalDataModel.id,

@@ -42,6 +42,8 @@ class GoalsActivity :
     //endregion
 
     //region Private properties
+    private var firstGoalHintShowing = false
+    private var quickSaveHintShowing = false
     //endregion
 
     //region Override properties
@@ -128,20 +130,26 @@ class GoalsActivity :
     }
 
     override fun showFirstGoalHint() {
-        showDismissibleHint(
-            container = layoutHintContainer,
-            hintTitle = getString(R.string.goal_create_first_hint_title),
-            hintMessage = getString(R.string.goal_create_first_hint),
-            dismissListener = { presenter.firstGoalHintDismissed() }
-        )
+        if (!firstGoalHintShowing) {
+            showDismissibleHint(
+                container = layoutHintContainer,
+                hintTitle = getString(R.string.goal_create_first_hint_title),
+                hintMessage = getString(R.string.goal_create_first_hint),
+                dismissListener = { presenter.firstGoalHintDismissed() }
+            )
+            firstGoalHintShowing = true
+        }
     }
 
     override fun showQuickSaveHint() {
-        showDismissibleHint(
-            container = layoutHintContainer,
-            hintMessage = getString(R.string.goal_quick_save_hint),
-            dismissListener = { presenter.quickSaveHintDismissed() }
-        )
+        if (!quickSaveHintShowing) {
+            showDismissibleHint(
+                container = layoutHintContainer,
+                hintMessage = getString(R.string.goal_quick_save_hint),
+                dismissListener = { presenter.quickSaveHintDismissed() }
+            )
+            quickSaveHintShowing = true
+        }
     }
     //endregion
 

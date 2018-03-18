@@ -11,13 +11,13 @@ import java.util.Date
 data class SavingsPresentationModel(
     val id: Long,
     val goalId: Long,
-    val amount: Float,
+    val amount: String,
     val date: Date
 ) : Parcelable, ViewType {
     constructor(source: Parcel) : this(
         source.readLong(),
         source.readLong(),
-        source.readFloat(),
+        source.readString(),
         source.readDate()
     )
 
@@ -31,7 +31,7 @@ data class SavingsPresentationModel(
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeLong(id)
         writeLong(goalId)
-        writeFloat(amount)
+        writeString(amount)
         writeDate(date)
     }
 
