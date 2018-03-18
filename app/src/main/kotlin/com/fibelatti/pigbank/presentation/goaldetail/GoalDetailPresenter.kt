@@ -1,7 +1,6 @@
 package com.fibelatti.pigbank.presentation.goaldetail
 
 import com.fibelatti.pigbank.R
-import com.fibelatti.pigbank.common.asString
 import com.fibelatti.pigbank.domain.goal.AddGoalUseCase
 import com.fibelatti.pigbank.domain.goal.DeleteGoalUseCase
 import com.fibelatti.pigbank.domain.goal.GetGoalUseCase
