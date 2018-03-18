@@ -33,6 +33,7 @@
             android:id="@+id/editTextSavingsAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:digits="0123456789.,"
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
             android:singleLine="true"

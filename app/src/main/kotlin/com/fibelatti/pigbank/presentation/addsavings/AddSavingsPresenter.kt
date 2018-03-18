@@ -34,9 +34,7 @@ class AddSavingsPresenter(
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.mainThread())
             .subscribeUntilDetached(
-                {
-                    view?.onSavingsAdded(goal = goalPresentationMapper.toPresentationModel(it))
-                },
+                { view?.onSavingsAdded(goal = goalPresentationMapper.toPresentationModel(it)) },
                 { throwable ->
                     when (throwable) {
                         is SavingsValidationError -> view?.onInvalidSavingsAmount()

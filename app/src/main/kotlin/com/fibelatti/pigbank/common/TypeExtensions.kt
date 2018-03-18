@@ -2,14 +2,22 @@ package com.fibelatti.pigbank.common
 
 import java.util.regex.Pattern
 
+private const val COMMA = ","
+private const val FLOAT_SEPARATOR = "."
+
 inline fun <T> Iterable<T>.sumByFloat(selector: (T) -> Float) = map { selector(it) }.sum()
 
+fun Float.toFormattedString(format: String = "%.2f", separator: String = FLOAT_SEPARATOR): String =
+    String.format(format, this).replace(FLOAT_SEPARATOR, separator)
+
 fun String.isFloat(): Boolean = try {
-    this.toFloat()
+    this.toNormalizedFloat()
     true
 } catch (e: Exception) {
     false
 }
+
+fun String.toNormalizedFloat() = this.replace(oldValue = COMMA, newValue = FLOAT_SEPARATOR).toFloat()
 
 fun String.isDate(): Boolean = try {
     stringAsDate(this)

@@ -12,38 +12,38 @@ import java.util.Date
 
 data class GoalPresentationModel(
     val description: String,
-    val cost: Float,
+    val cost: String,
     val deadline: Date,
     val id: Long = 0,
     val creationDate: Date = Date(),
-    val totalSaved: Float = 0F,
-    val remainingCost: Float = 0F,
-    val percentSaved: Float = 0F,
+    val totalSaved: String = "",
+    val remainingCost: String = "",
+    val percentSaved: Int = 0,
     val isAchieved: Boolean = false,
     val daysUntilDeadline: Long = 0,
     val emphasizeRemainingDays: Boolean = false,
     val isOverdue: Boolean = false,
-    val suggestedSavingsPerDay: Float = 0F,
-    val suggestedSavingsPerWeek: Float = 0F,
-    val suggestedSavingsPerMonth: Float = 0F,
+    val suggestedSavingsPerDay: String = "",
+    val suggestedSavingsPerWeek: String = "",
+    val suggestedSavingsPerMonth: String = "",
     val savings: List<SavingsPresentationModel> = emptyList()
 ) : Parcelable, ViewType {
     constructor(source: Parcel) : this(
         source.readString(),
-        source.readFloat(),
+        source.readString(),
         source.readDate(),
         source.readLong(),
         source.readDate(),
-        source.readFloat(),
-        source.readFloat(),
-        source.readFloat(),
+        source.readString(),
+        source.readString(),
+        source.readInt(),
         source.readBoolean(),
         source.readLong(),
         source.readBoolean(),
         source.readBoolean(),
-        source.readFloat(),
-        source.readFloat(),
-        source.readFloat(),
+        source.readString(),
+        source.readString(),
+        source.readString(),
         ArrayList<SavingsPresentationModel>().apply { source.readList(this, SavingsPresentationModel::class.java.classLoader) }
     )
 
@@ -56,20 +56,20 @@ data class GoalPresentationModel(
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeString(description)
-        writeFloat(cost)
+        writeString(cost)
         writeDate(deadline)
         writeLong(id)
         writeDate(creationDate)
-        writeFloat(totalSaved)
-        writeFloat(remainingCost)
-        writeFloat(percentSaved)
+        writeString(totalSaved)
+        writeString(remainingCost)
+        writeInt(percentSaved)
         writeBoolean(isAchieved)
         writeLong(daysUntilDeadline)
         writeBoolean(emphasizeRemainingDays)
         writeBoolean(isOverdue)
-        writeFloat(suggestedSavingsPerDay)
-        writeFloat(suggestedSavingsPerWeek)
-        writeFloat(suggestedSavingsPerMonth)
+        writeString(suggestedSavingsPerDay)
+        writeString(suggestedSavingsPerWeek)
+        writeString(suggestedSavingsPerMonth)
         writeList(savings)
     }
 
