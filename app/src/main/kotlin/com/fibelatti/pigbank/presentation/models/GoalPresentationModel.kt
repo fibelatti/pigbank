@@ -10,7 +10,7 @@ import com.fibelatti.pigbank.presentation.common.extensions.writeDate
 import com.fibelatti.pigbank.presentation.goals.adapter.ViewType
 import java.util.Date
 
-data class Goal(
+data class GoalPresentationModel(
     val description: String,
     val cost: Float,
     val deadline: Date,
@@ -26,7 +26,7 @@ data class Goal(
     val suggestedSavingsPerDay: Float = 0F,
     val suggestedSavingsPerWeek: Float = 0F,
     val suggestedSavingsPerMonth: Float = 0F,
-    val savings: List<Savings> = emptyList()
+    val savings: List<SavingsPresentationModel> = emptyList()
 ) : Parcelable, ViewType {
     constructor(source: Parcel) : this(
         source.readString(),
@@ -44,12 +44,12 @@ data class Goal(
         source.readFloat(),
         source.readFloat(),
         source.readFloat(),
-        ArrayList<Savings>().apply { source.readList(this, Savings::class.java.classLoader) }
+        ArrayList<SavingsPresentationModel>().apply { source.readList(this, SavingsPresentationModel::class.java.classLoader) }
     )
 
     companion object {
         @JvmField
-        val CREATOR = createParcel { Goal(it) }
+        val CREATOR = createParcel { GoalPresentationModel(it) }
     }
 
     override fun describeContents() = 0
@@ -74,25 +74,4 @@ data class Goal(
     }
 
     override fun getViewType(): Int = ViewType.GOAL
-
-    fun deepCopy(
-        description: String = this.description,
-        cost: Float = this.cost,
-        deadline: Date = this.deadline,
-        id: Long = this.id,
-        creationDate: Date = this.creationDate,
-        totalSaved: Float = this.totalSaved,
-        remainingCost: Float = this.remainingCost,
-        percentSaved: Float = this.percentSaved,
-        isAchieved: Boolean = this.isOverdue,
-        daysUntilDeadline: Long = this.daysUntilDeadline,
-        emphasizeRemainingDays: Boolean = this.emphasizeRemainingDays,
-        isOverdue: Boolean = this.isOverdue,
-        suggestedSavingsPerDay: Float = this.suggestedSavingsPerDay,
-        suggestedSavingsPerWeek: Float = this.suggestedSavingsPerWeek,
-        suggestedSavingsPerMonth: Float = this.suggestedSavingsPerMonth,
-        savings: List<Savings> = this.savings.map { it.copy() }
-    ) = Goal(description, cost, deadline, id, creationDate, totalSaved, remainingCost, percentSaved,
-        isAchieved, daysUntilDeadline, emphasizeRemainingDays, isOverdue, suggestedSavingsPerDay,
-        suggestedSavingsPerWeek, suggestedSavingsPerMonth, savings)
 }

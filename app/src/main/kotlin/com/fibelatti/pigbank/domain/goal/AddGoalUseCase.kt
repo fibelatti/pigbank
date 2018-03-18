@@ -1,11 +1,13 @@
 package com.fibelatti.pigbank.domain.goal
 
 import com.fibelatti.pigbank.data.goal.GoalRepositoryContract
-import com.fibelatti.pigbank.data.goal.Savings
+import com.fibelatti.pigbank.data.goal.SavingsDataModel
 import com.fibelatti.pigbank.data.goal.SavingsRepositoryContract
 import com.fibelatti.pigbank.data.localdatasource.AppDatabase
 import com.fibelatti.pigbank.data.localdatasource.DATABASE_GENERIC_ERROR_MESSAGE
-import com.fibelatti.pigbank.presentation.models.Goal
+import com.fibelatti.pigbank.domain.goal.models.GoalDomainMapper
+import com.fibelatti.pigbank.domain.goal.models.GoalEntity
+import com.fibelatti.pigbank.domain.goal.models.SavingsDomainMapper
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -13,16 +15,16 @@ class AddGoalUseCase @Inject constructor(
     private val database: AppDatabase,
     private val goalRepositoryContract: GoalRepositoryContract,
     private val savingsRepositoryContract: SavingsRepositoryContract,
-    private val goalMapper: GoalMapper,
-    private val savingsMapper: SavingsMapper
+    private val goalDomainMapper: GoalDomainMapper,
+    private val savingsDomainMapper: SavingsDomainMapper
 ) {
-    fun addGoal(goal: Goal): Single<Long> = Single.create {
+    fun addGoal(goal: GoalEntity): Single<Long> = Single.create {
         var goalId = -1L
 
         database.runInTransaction({
-            goalId = goalRepositoryContract.saveGoal(goalMapper.toDataModel(goal))
+            goalId = goalRepositoryContract.saveGoal(goalDomainMapper.toDataModel(goal))
 
-            val updatedSavings: Array<Savings>? = goal.savings.map { savingsMapper.toDataModel(it) }.toTypedArray()
+            val updatedSavings: Array<SavingsDataModel>? = goal.savings.map { savingsDomainMapper.toDataModel(it) }.toTypedArray()
 
             updatedSavings?.let { savingsRepositoryContract.saveSavings(*updatedSavings) }
         })

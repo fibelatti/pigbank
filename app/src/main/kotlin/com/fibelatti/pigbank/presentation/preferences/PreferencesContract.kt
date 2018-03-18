@@ -1,6 +1,6 @@
 package com.fibelatti.pigbank.presentation.preferences
 
-import com.fibelatti.pigbank.domain.userpreferences.UserPreferencesModel
+import com.fibelatti.pigbank.domain.userpreferences.models.UserPreferencesEntity
 import com.fibelatti.pigbank.presentation.base.BaseContract
 
 interface PreferencesContract {
@@ -19,9 +19,9 @@ interface PreferencesContract {
     }
 
     interface View : BaseContract.View {
-        fun showPreferences(userPreferencesModel: UserPreferencesModel)
+        fun showPreferences(userPreferencesEntity: UserPreferencesEntity)
 
-        fun updatePreferences(userPreferencesModel: UserPreferencesModel)
+        fun updatePreferences(userPreferencesEntity: UserPreferencesEntity)
 
         fun errorUpdatingPreferences()
 

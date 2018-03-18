@@ -11,35 +11,35 @@ import io.reactivex.Single
 @Dao
 interface UserPreferencesRepositoryContract {
 
-    @Query(value = "$SELECT_ALL_FROM ${UserPreferencesEntity.TABLE_NAME}")
-    fun getAllUserPreferences(): Single<List<UserPreferencesEntity>>
+    @Query(value = "$SELECT_ALL_FROM ${UserPreferencesDataModel.TABLE_NAME}")
+    fun getAllUserPreferences(): Single<List<UserPreferencesDataModel>>
 
-    @Query(value = "$SELECT_ALL_FROM ${UserPreferencesEntity.TABLE_NAME} " +
-        "$WHERE ${UserPreferencesEntity.COLUMN_TYPE} = :type")
-    fun getAllByType(type: String): Single<List<UserPreferencesEntity>>
+    @Query(value = "$SELECT_ALL_FROM ${UserPreferencesDataModel.TABLE_NAME} " +
+        "$WHERE ${UserPreferencesDataModel.COLUMN_TYPE} = :type")
+    fun getAllByType(type: String): Single<List<UserPreferencesDataModel>>
 
-    @Query(value = "$UPDATE ${UserPreferencesEntity.TABLE_NAME} " +
-        "$SET ${UserPreferencesEntity.COLUMN_VALUE} = :value " +
-        "$WHERE ${UserPreferencesEntity.COLUMN_TYPE} = :type")
+    @Query(value = "$UPDATE ${UserPreferencesDataModel.TABLE_NAME} " +
+        "$SET ${UserPreferencesDataModel.COLUMN_VALUE} = :value " +
+        "$WHERE ${UserPreferencesDataModel.COLUMN_TYPE} = :type")
     fun updateAllByType(type: String, value: String): Int
 
-    @Query(value = "$UPDATE ${UserPreferencesEntity.TABLE_NAME} " +
-        "$SET ${UserPreferencesEntity.COLUMN_VALUE} = :value " +
-        "$WHERE ${UserPreferencesEntity.COLUMN_NAME} = '$USER_PREFERENCE_NAME_ANALYTICS_ENABLED'")
+    @Query(value = "$UPDATE ${UserPreferencesDataModel.TABLE_NAME} " +
+        "$SET ${UserPreferencesDataModel.COLUMN_VALUE} = :value " +
+        "$WHERE ${UserPreferencesDataModel.COLUMN_NAME} = '$USER_PREFERENCE_NAME_ANALYTICS_ENABLED'")
     fun updateAnalyticsEnabled(value: String): Int
 
-    @Query(value = "$UPDATE ${UserPreferencesEntity.TABLE_NAME} " +
-        "$SET ${UserPreferencesEntity.COLUMN_VALUE} = :value " +
-        "$WHERE ${UserPreferencesEntity.COLUMN_NAME} = '$USER_PREFERENCE_NAME_CRASH_REPORTS_ENABLED'")
+    @Query(value = "$UPDATE ${UserPreferencesDataModel.TABLE_NAME} " +
+        "$SET ${UserPreferencesDataModel.COLUMN_VALUE} = :value " +
+        "$WHERE ${UserPreferencesDataModel.COLUMN_NAME} = '$USER_PREFERENCE_NAME_CRASH_REPORTS_ENABLED'")
     fun updateCrashReportsEnabled(value: String): Int
 
-    @Query(value = "$UPDATE ${UserPreferencesEntity.TABLE_NAME} " +
-        "$SET ${UserPreferencesEntity.COLUMN_VALUE} = 'true' " +
-        "$WHERE ${UserPreferencesEntity.COLUMN_NAME} = '$USER_PREFERENCE_NAME_FIRST_GOAL_HINT_DISMISSED'")
+    @Query(value = "$UPDATE ${UserPreferencesDataModel.TABLE_NAME} " +
+        "$SET ${UserPreferencesDataModel.COLUMN_VALUE} = 'true' " +
+        "$WHERE ${UserPreferencesDataModel.COLUMN_NAME} = '$USER_PREFERENCE_NAME_FIRST_GOAL_HINT_DISMISSED'")
     fun setFirstGoalHintDismissed(): Int
 
-    @Query(value = "$UPDATE ${UserPreferencesEntity.TABLE_NAME} " +
-        "$SET ${UserPreferencesEntity.COLUMN_VALUE} = 'true' " +
-        "$WHERE ${UserPreferencesEntity.COLUMN_NAME} = '$USER_PREFERENCE_NAME_QUICK_SAVE_HINT_DISMISSED'")
+    @Query(value = "$UPDATE ${UserPreferencesDataModel.TABLE_NAME} " +
+        "$SET ${UserPreferencesDataModel.COLUMN_VALUE} = 'true' " +
+        "$WHERE ${UserPreferencesDataModel.COLUMN_NAME} = '$USER_PREFERENCE_NAME_QUICK_SAVE_HINT_DISMISSED'")
     fun setQuickSaveHintDismissed(): Int
 }

@@ -4,7 +4,7 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
-import com.fibelatti.pigbank.data.userpreferences.UserPreferencesEntity.Companion.TABLE_NAME
+import com.fibelatti.pigbank.data.userpreferences.UserPreferencesDataModel.Companion.TABLE_NAME
 import com.fibelatti.pigbank.data.userpreferences.UserPreferencesType.UNKNOWN
 
 private const val USER_PREFERENCE_TYPE_TOGGLE = "toggle"
@@ -12,11 +12,11 @@ private const val USER_PREFERENCE_TYPE_HINT = "hint"
 
 const val USER_PREFERENCE_NAME_ANALYTICS_ENABLED = "Analytics Enabled"
 const val USER_PREFERENCE_NAME_CRASH_REPORTS_ENABLED = "Crash Reports Enabled"
-const val USER_PREFERENCE_NAME_FIRST_GOAL_HINT_DISMISSED = "First Goal Hint Dismissed"
+const val USER_PREFERENCE_NAME_FIRST_GOAL_HINT_DISMISSED = "First GoalDataModel Hint Dismissed"
 const val USER_PREFERENCE_NAME_QUICK_SAVE_HINT_DISMISSED = "Quick Save Hint Dismissed"
 
 @Entity(tableName = TABLE_NAME)
-data class UserPreferencesEntity(
+data class UserPreferencesDataModel(
     @ColumnInfo(name = COLUMN_ID)
     @PrimaryKey(autoGenerate = true)
     val id: Long,

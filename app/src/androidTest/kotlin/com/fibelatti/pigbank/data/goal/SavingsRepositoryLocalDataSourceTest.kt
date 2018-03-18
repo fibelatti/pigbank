@@ -40,7 +40,7 @@ class SavingsRepositoryLocalDataSourceTest : BaseDbTest() {
     @Test
     fun getSavingsByGoalId() {
         // Arrange
-        val testObserver = TestObserver<List<Savings>>()
+        val testObserver = TestObserver<List<SavingsDataModel>>()
         createSampleData()
 
         // Act
@@ -61,8 +61,8 @@ class SavingsRepositoryLocalDataSourceTest : BaseDbTest() {
     @Test
     fun deleteSavingsByGoalId() {
         // Arrange
-        val testObserver = TestObserver<List<Savings>>()
-        val testObserverOther = TestObserver<List<Savings>>()
+        val testObserver = TestObserver<List<SavingsDataModel>>()
+        val testObserverOther = TestObserver<List<SavingsDataModel>>()
         createSampleData()
 
         // Act
@@ -94,7 +94,7 @@ class SavingsRepositoryLocalDataSourceTest : BaseDbTest() {
     @Test
     fun deleteSavingsById() {
         // Arrange
-        val testObserver = TestObserver<List<Savings>>()
+        val testObserver = TestObserver<List<SavingsDataModel>>()
         createSampleData()
 
         // Act
@@ -114,18 +114,18 @@ class SavingsRepositoryLocalDataSourceTest : BaseDbTest() {
     }
 
     private fun createSampleData() {
-        insertGoal(Goal(firstGoalId, firstGoalCreationDate, firstGoalDescription, firstGoalCost, firstGoalDeadline))
-        insertGoal(Goal(secondGoalId, secondGoalCreationDate, secondGoalDescription, secondGoalCost, secondGoalDeadline))
-        insertSavings(Savings(firstSavingsId, firstGoalId, firstSavingsAmount, firstSavingsDate))
-        insertSavings(Savings(secondSavingsId, secondGoalId, secondSavingsAmount, secondSavingsDate))
-        insertSavings(Savings(thirdSavingsId, secondGoalId, thirdSavingsAmount, thirdSavingsDate))
+        insertGoal(GoalDataModel(firstGoalId, firstGoalCreationDate, firstGoalDescription, firstGoalCost, firstGoalDeadline))
+        insertGoal(GoalDataModel(secondGoalId, secondGoalCreationDate, secondGoalDescription, secondGoalCost, secondGoalDeadline))
+        insertSavings(SavingsDataModel(firstSavingsId, firstGoalId, firstSavingsAmount, firstSavingsDate))
+        insertSavings(SavingsDataModel(secondSavingsId, secondGoalId, secondSavingsAmount, secondSavingsDate))
+        insertSavings(SavingsDataModel(thirdSavingsId, secondGoalId, thirdSavingsAmount, thirdSavingsDate))
     }
 
-    private fun insertGoal(goal: Goal) {
-        appDatabase.getGoalRepository().saveGoal(goal)
+    private fun insertGoal(goalDataModel: GoalDataModel) {
+        appDatabase.getGoalRepository().saveGoal(goalDataModel)
     }
 
-    private fun insertSavings(savings: Savings) {
-        appDatabase.getSavingsRepository().saveSavings(savings)
+    private fun insertSavings(savingsDataModel: SavingsDataModel) {
+        appDatabase.getSavingsRepository().saveSavings(savingsDataModel)
     }
 }

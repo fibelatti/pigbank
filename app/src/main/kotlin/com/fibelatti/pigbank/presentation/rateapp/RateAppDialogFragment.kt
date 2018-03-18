@@ -10,21 +10,17 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.RatingBar
 import com.fibelatti.pigbank.R
 import com.fibelatti.pigbank.R.color
 import com.fibelatti.pigbank.presentation.base.BaseDialogFragment
-import com.fibelatti.pigbank.presentation.common.extensions.alert
 import com.fibelatti.pigbank.presentation.common.extensions.gone
-import com.fibelatti.pigbank.presentation.common.extensions.negativeButton
-import com.fibelatti.pigbank.presentation.common.extensions.notCancelable
-import com.fibelatti.pigbank.presentation.common.extensions.showListener
 import com.fibelatti.pigbank.presentation.common.extensions.toast
-import com.fibelatti.pigbank.presentation.common.extensions.updateNegativeButton
-import com.fibelatti.pigbank.presentation.common.extensions.view
 import com.fibelatti.pigbank.presentation.common.extensions.visible
+import kotlinx.android.synthetic.main.dialog_rate_app.buttonEmail
+import kotlinx.android.synthetic.main.dialog_rate_app.buttonPlayStore
+import kotlinx.android.synthetic.main.dialog_rate_app.layoutNegativeFeedback
+import kotlinx.android.synthetic.main.dialog_rate_app.layoutPositiveFeedback
+import kotlinx.android.synthetic.main.dialog_rate_app.ratingBar
 import javax.inject.Inject
 
 private const val PLAY_STORE_BASE_URL = "http://play.google.com/store/apps/details"
@@ -44,40 +40,33 @@ class RateAppDialogFragment :
     //endregion
 
     //region Private properties
-    private lateinit var ratingBar: RatingBar
-    private lateinit var layoutPositiveFeedback: ViewGroup
-    private lateinit var buttonPlayStore: Button
-    private lateinit var layoutNegativeFeedback: ViewGroup
-    private lateinit var buttonEmail: Button
     //endregion
 
     //region Override properties
     //endregion
 
     //region Override Lifecycle methods
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val view = View.inflate(activity, R.layout.dialog_rate_app, null)
-        val dialog = activity.alert().apply {
-            view(view)
-            negativeButton(buttonText = getString(R.string.hint_cancel))
-            notCancelable()
-            showListener(DialogInterface.OnShowListener { dialogInstance ->
-                (dialogInstance as? AlertDialog)?.apply {
-                    updateNegativeButton(
-                        buttonColor = ContextCompat.getColor(context, color.colorGray),
-                        onClickListener = View.OnClickListener { _ ->
-                            dismiss()
-                        }
-                    )
-                }
-            })
-        }
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = activity?.let {
+        val view = View.inflate(it, R.layout.dialog_rate_app, null)
 
-        bindViews(view)
+        return@let AlertDialog.Builder(it).apply {
+            setView(view)
+            setNegativeButton(getString(R.string.hint_cancel), null)
+        }.create()
+    } ?: super.onCreateDialog(savedInstanceState)
+
+    override fun onStart() {
+        super.onStart()
         setupListeners()
-        dialog.show()
 
-        return dialog
+        (dialog as? AlertDialog)?.apply {
+            getButton(DialogInterface.BUTTON_NEGATIVE)?.apply {
+                setTextColor(ContextCompat.getColor(context, color.colorGray))
+                setOnClickListener({ _ ->
+                    dismiss()
+                })
+            }
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -93,17 +82,17 @@ class RateAppDialogFragment :
 
     //region Override methods
     override fun handleError(errorMessage: String?) {
-        errorMessage?.let { activity.toast(it) }
+        errorMessage?.let { activity?.toast(it) }
     }
 
     override fun showPlayStore() {
-        layoutPositiveFeedback.visible()
-        layoutNegativeFeedback.gone()
+        dialog.layoutPositiveFeedback.visible()
+        dialog.layoutNegativeFeedback.gone()
     }
 
     override fun showEmail() {
-        layoutPositiveFeedback.gone()
-        layoutNegativeFeedback.visible()
+        dialog.layoutPositiveFeedback.gone()
+        dialog.layoutNegativeFeedback.visible()
     }
     //endregion
 
@@ -111,18 +100,10 @@ class RateAppDialogFragment :
     //endregion
 
     //region Private methods
-    private fun bindViews(view: View) {
-        ratingBar = view.findViewById(R.id.ratingBar)
-        layoutPositiveFeedback = view.findViewById(R.id.layoutPositiveFeedback)
-        buttonPlayStore = view.findViewById(R.id.buttonPlayStore)
-        layoutNegativeFeedback = view.findViewById(R.id.layoutNegativeFeedback)
-        buttonEmail = view.findViewById(R.id.buttonEmail)
-    }
-
     private fun setupListeners() {
-        ratingBar.setOnRatingBarChangeListener { _, rating, _ -> presenter.ratingChanged(rating.toInt()) }
-        buttonPlayStore.setOnClickListener { rateApp() }
-        buttonEmail.setOnClickListener { sendEmail() }
+        dialog.ratingBar.setOnRatingBarChangeListener { _, rating, _ -> presenter.ratingChanged(rating.toInt()) }
+        dialog.buttonPlayStore.setOnClickListener { rateApp() }
+        dialog.buttonEmail.setOnClickListener { sendEmail() }
     }
 
     private fun rateApp() {
@@ -137,7 +118,7 @@ class RateAppDialogFragment :
     }
 
     private fun createPlayStoreIntent(url: String): Intent =
-        Intent(Intent.ACTION_VIEW, Uri.parse("$url?id=${activity.packageName}"))
+        Intent(Intent.ACTION_VIEW, Uri.parse("$url?id=${activity?.packageName}"))
 
     private fun sendEmail() {
         val intent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "fibelatti+dev@gmail.com", null))

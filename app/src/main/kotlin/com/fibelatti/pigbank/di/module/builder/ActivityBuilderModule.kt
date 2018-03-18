@@ -1,5 +1,8 @@
-package com.fibelatti.pigbank.di.module
+package com.fibelatti.pigbank.di.module.builder
 
+import com.fibelatti.pigbank.di.module.GoalDetailModule
+import com.fibelatti.pigbank.di.module.GoalsModule
+import com.fibelatti.pigbank.di.module.PreferencesModule
 import com.fibelatti.pigbank.di.scope.LifecycleScope
 import com.fibelatti.pigbank.presentation.goaldetail.GoalDetailActivity
 import com.fibelatti.pigbank.presentation.goals.GoalsActivity

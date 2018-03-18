@@ -14,7 +14,7 @@ import com.fibelatti.pigbank.presentation.common.LinearLayoutManagerOffsetDecora
 import com.fibelatti.pigbank.presentation.common.extensions.toast
 import com.fibelatti.pigbank.presentation.goaldetail.GoalDetailActivity
 import com.fibelatti.pigbank.presentation.goals.adapter.GoalsAdapter
-import com.fibelatti.pigbank.presentation.models.Goal
+import com.fibelatti.pigbank.presentation.models.GoalPresentationModel
 import com.fibelatti.pigbank.presentation.preferences.PreferencesActivity
 import kotlinx.android.synthetic.main.activity_goals.buttonAddGoal
 import kotlinx.android.synthetic.main.activity_goals.layoutHintContainer
@@ -95,35 +95,35 @@ class GoalsActivity :
 
     override fun createGoal() {
         val addGoalDialogFragment = AddGoalDialogFragment()
-        addGoalDialogFragment.show(fragmentManager, AddGoalDialogFragment.TAG)
+        addGoalDialogFragment.show(supportFragmentManager, AddGoalDialogFragment.TAG)
     }
 
-    override fun openGoal(goal: Goal) {
+    override fun openGoal(goal: GoalPresentationModel) {
         startActivity(GoalDetailActivity.IntentBuilder(this).addGoalExtra(goal).build())
     }
 
-    override fun showAddSavingsDialog(goal: Goal) {
+    override fun showAddSavingsDialog(goal: GoalPresentationModel) {
         val addSavingsDialogFragment = AddSavingsDialogFragment.newInstance(goal)
-        addSavingsDialogFragment.show(fragmentManager, AddGoalDialogFragment.TAG)
+        addSavingsDialogFragment.show(supportFragmentManager, AddGoalDialogFragment.TAG)
     }
 
-    override fun updateGoals(goals: List<Goal>) {
+    override fun updateGoals(goals: List<GoalPresentationModel>) {
         adapter.addManyToList(goals)
     }
 
-    override fun onGoalCreated(goal: Goal) {
+    override fun onGoalCreated(goal: GoalPresentationModel) {
         presenter.newGoalAdded(goal)
     }
 
-    override fun onSavingsAdded(goal: Goal) {
+    override fun onSavingsAdded(goal: GoalPresentationModel) {
         presenter.goalsUpdated()
     }
 
-    override fun goalClicked(goal: Goal) {
+    override fun goalClicked(goal: GoalPresentationModel) {
         presenter.goalDetails(goal)
     }
 
-    override fun saveToGoalClicked(goal: Goal) {
+    override fun saveToGoalClicked(goal: GoalPresentationModel) {
         presenter.addSavings(goal)
     }
 

@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.fibelatti.pigbank.BuildConfig
 import com.fibelatti.pigbank.R
-import com.fibelatti.pigbank.domain.userpreferences.UserPreferencesModel
+import com.fibelatti.pigbank.domain.userpreferences.models.UserPreferencesEntity
 import com.fibelatti.pigbank.presentation.addgoal.AddGoalDialogFragment
 import com.fibelatti.pigbank.presentation.base.BaseActivity
 import com.fibelatti.pigbank.presentation.base.BaseIntentBuilder
@@ -64,12 +64,12 @@ class PreferencesActivity :
         toast(getString(R.string.generic_msg_error))
     }
 
-    override fun showPreferences(userPreferencesModel: UserPreferencesModel) {
-        setValues(userPreferencesModel)
+    override fun showPreferences(userPreferencesEntity: UserPreferencesEntity) {
+        setValues(userPreferencesEntity)
     }
 
-    override fun updatePreferences(userPreferencesModel: UserPreferencesModel) {
-        setValues(userPreferencesModel)
+    override fun updatePreferences(userPreferencesEntity: UserPreferencesEntity) {
+        setValues(userPreferencesEntity)
     }
 
     override fun errorUpdatingPreferences() {
@@ -87,7 +87,7 @@ class PreferencesActivity :
 
     override fun showRateMenu() {
         val rateAppDialogFragment = RateAppDialogFragment()
-        rateAppDialogFragment.show(fragmentManager, AddGoalDialogFragment.TAG)
+        rateAppDialogFragment.show(supportFragmentManager, AddGoalDialogFragment.TAG)
     }
     //endregion
 
@@ -110,8 +110,8 @@ class PreferencesActivity :
         textViewAppVersion.text = getString(R.string.preferences_app_version, BuildConfig.VERSION_NAME)
     }
 
-    private fun setValues(userPreferencesModel: UserPreferencesModel) {
-        with(userPreferencesModel) {
+    private fun setValues(userPreferencesEntity: UserPreferencesEntity) {
+        with(userPreferencesEntity) {
             checkBoxCrashReportOptOut.isChecked = crashReportsEnabled
             checkBoxAnalyticsOptOut.isChecked = analyticsEnabled
         }

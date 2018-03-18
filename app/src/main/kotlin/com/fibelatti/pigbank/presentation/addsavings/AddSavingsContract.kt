@@ -1,15 +1,15 @@
 package com.fibelatti.pigbank.presentation.addsavings
 
 import com.fibelatti.pigbank.presentation.base.BaseContract
-import com.fibelatti.pigbank.presentation.models.Goal
+import com.fibelatti.pigbank.presentation.models.GoalPresentationModel
 
 interface AddSavingsContract {
     interface Presenter : BaseContract.Presenter<View> {
-        fun addSavings(goal: Goal, amount: String)
+        fun addSavings(goal: GoalPresentationModel, amount: String)
     }
 
     interface View : BaseContract.View {
-        fun onSavingsAdded(goal: Goal)
+        fun onSavingsAdded(goal: GoalPresentationModel)
 
         fun onInvalidSavingsAmount()
 

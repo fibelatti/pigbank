@@ -1,40 +1,41 @@
 package com.fibelatti.pigbank.presentation.goaldetail
 
 import com.fibelatti.pigbank.presentation.base.BaseContract
-import com.fibelatti.pigbank.presentation.models.Goal
-import com.fibelatti.pigbank.presentation.models.GoalCandidate
+import com.fibelatti.pigbank.presentation.models.GoalPresentationModel
 
 interface GoalDetailContract {
     interface Presenter : BaseContract.Presenter<View> {
-        fun goalSet(goal: Goal)
+        fun goalSet(goal: GoalPresentationModel)
 
-        fun editDeadline()
+        fun addSavings(goal: GoalPresentationModel)
 
-        fun addSavings(goal: Goal)
+        fun saveGoal(goal: GoalPresentationModel, description: String, cost: String, deadline: String)
 
-        fun saveGoal(goal: Goal, goalCandidate: GoalCandidate)
+        fun deleteGoal(goal: GoalPresentationModel)
 
-        fun deleteGoal(goal: Goal)
-
-        fun confirmDeletion(goal: Goal)
+        fun confirmDeletion(goal: GoalPresentationModel)
     }
 
     interface View : BaseContract.View {
-        fun showGoalDetails(goal: Goal)
+        fun showGoalDetails(goal: GoalPresentationModel)
 
-        fun showGoalAchievedDetails(goal: Goal)
+        fun showGoalAchievedDetails(goal: GoalPresentationModel)
 
-        fun showGoalOverdueDetails(goal: Goal)
+        fun showGoalOverdueDetails(goal: GoalPresentationModel)
 
         fun showChangesSaved()
 
-        fun showDatePicker()
+        fun showAddSavingsDialog(goal: GoalPresentationModel)
 
-        fun showAddSavingsDialog(goal: Goal)
+        fun onInvalidDescription(error: String)
+
+        fun onInvalidCost(error: String)
+
+        fun onInvalidDeadline(error: String)
 
         fun onSaveError()
 
-        fun showDeleteConfirmationDialog(goal: Goal)
+        fun showDeleteConfirmationDialog(goal: GoalPresentationModel)
 
         fun onGoalDeleted()
 

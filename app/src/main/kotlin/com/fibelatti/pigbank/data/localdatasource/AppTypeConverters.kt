@@ -17,5 +17,5 @@ class AppTypeConverters {
     fun fromUserPreferencesType(type: UserPreferencesType): String = type.value
 
     @TypeConverter
-    fun toUserPrefrencesType(value: String): UserPreferencesType = UserPreferencesType.fromString(value)
+    fun toUserPreferencesType(value: String): UserPreferencesType = UserPreferencesType.fromString(value)
 }

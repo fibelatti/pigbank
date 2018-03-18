@@ -17,7 +17,8 @@
         layout="@layout/layout_divider_default"
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_size"
-        android:layout_below="@+id/textViewTitleCrashReportOptOut"/>
+        android:layout_below="@+id/textViewTitleCrashReportOptOut"
+        android:layout_marginBottom="@dimen/margin_small"/>
 
     <LinearLayout
         android:layout_width="match_parent"

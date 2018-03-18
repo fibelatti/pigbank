@@ -7,11 +7,13 @@ import com.fibelatti.pigbank.external.providers.ResourceProvider
 import com.fibelatti.pigbank.external.providers.SchedulerProvider
 import com.fibelatti.pigbank.presentation.base.BasePresenter
 import com.fibelatti.pigbank.presentation.goals.GoalsContract.View
-import com.fibelatti.pigbank.presentation.models.Goal
+import com.fibelatti.pigbank.presentation.models.GoalPresentationMapper
+import com.fibelatti.pigbank.presentation.models.GoalPresentationModel
 
 class GoalsPresenter(
     schedulerProvider: SchedulerProvider,
     resourceProvider: ResourceProvider,
+    private val goalPresentationMapper: GoalPresentationMapper,
     private val getGoalsUseCase: GetGoalUseCase,
     private val saveForGoalUseCase: SaveForGoalUseCase,
     private val userPreferencesUseCase: UserPreferencesUseCase
@@ -32,8 +34,8 @@ class GoalsPresenter(
         view?.createGoal()
     }
 
-    override fun saveToGoal(goal: Goal, amount: Float) {
-        saveForGoalUseCase.saveForGoal(goal, amount)
+    override fun saveToGoal(goal: GoalPresentationModel, amount: Float) {
+        saveForGoalUseCase.saveForGoal(goalPresentationMapper.toDomainModel(goal), amount)
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.mainThread())
             .subscribeUntilDetached(
@@ -42,7 +44,7 @@ class GoalsPresenter(
             )
     }
 
-    override fun newGoalAdded(goal: Goal) {
+    override fun newGoalAdded(goal: GoalPresentationModel) {
         view?.openGoal(goal)
     }
 
@@ -50,11 +52,11 @@ class GoalsPresenter(
         showUpdatedGoals()
     }
 
-    override fun goalDetails(goal: Goal) {
+    override fun goalDetails(goal: GoalPresentationModel) {
         view?.openGoal(goal)
     }
 
-    override fun addSavings(goal: Goal) {
+    override fun addSavings(goal: GoalPresentationModel) {
         view?.showAddSavingsDialog(goal)
     }
 
@@ -79,7 +81,7 @@ class GoalsPresenter(
             .subscribeUntilDetached(
                 { goals ->
                     checkForHints(goals.size)
-                    view?.updateGoals(goals)
+                    view?.updateGoals(goals.map { goalPresentationMapper.toPresentationModel(it) })
                 },
                 { view?.handleError(errorMessage = it.message) }
             )

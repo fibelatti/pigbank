@@ -8,7 +8,7 @@ import com.fibelatti.pigbank.presentation.common.extensions.writeDate
 import com.fibelatti.pigbank.presentation.goaldetail.adapter.ViewType
 import java.util.Date
 
-data class Savings(
+data class SavingsPresentationModel(
     val id: Long,
     val goalId: Long,
     val amount: Float,
@@ -23,7 +23,7 @@ data class Savings(
 
     companion object {
         @JvmField
-        val CREATOR = createParcel { Savings(it) }
+        val CREATOR = createParcel { SavingsPresentationModel(it) }
     }
 
     override fun describeContents() = 0

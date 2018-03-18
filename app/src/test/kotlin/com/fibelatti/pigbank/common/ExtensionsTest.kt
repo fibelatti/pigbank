@@ -17,4 +17,10 @@ class ExtensionsTest {
         assertTrue("20/08/1991".isDate())
         assertFalse("".isDate())
     }
+
+    @Test
+    fun testIsValidDate() {
+        assertTrue("20/08/1991".isValidDate())
+        assertFalse("30/02/2018".isValidDate())
+    }
 }

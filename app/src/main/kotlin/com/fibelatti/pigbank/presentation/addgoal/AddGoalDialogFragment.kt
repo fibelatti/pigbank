@@ -4,37 +4,27 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import android.widget.DatePicker
-import android.widget.EditText
 import com.fibelatti.pigbank.R
 import com.fibelatti.pigbank.R.color
-import com.fibelatti.pigbank.common.asString
-import com.fibelatti.pigbank.common.intPartsAsDate
 import com.fibelatti.pigbank.presentation.base.BaseDialogFragment
 import com.fibelatti.pigbank.presentation.common.DecimalDigitsInputFilter
-import com.fibelatti.pigbank.presentation.common.extensions.alert
 import com.fibelatti.pigbank.presentation.common.extensions.hideKeyboard
-import com.fibelatti.pigbank.presentation.common.extensions.negativeButton
-import com.fibelatti.pigbank.presentation.common.extensions.notCancelable
-import com.fibelatti.pigbank.presentation.common.extensions.positiveButton
-import com.fibelatti.pigbank.presentation.common.extensions.requestUserFocus
+import com.fibelatti.pigbank.presentation.common.extensions.setDateInputMask
 import com.fibelatti.pigbank.presentation.common.extensions.showError
-import com.fibelatti.pigbank.presentation.common.extensions.showKeyboard
-import com.fibelatti.pigbank.presentation.common.extensions.showListener
 import com.fibelatti.pigbank.presentation.common.extensions.textAsString
 import com.fibelatti.pigbank.presentation.common.extensions.toast
-import com.fibelatti.pigbank.presentation.common.extensions.updateNegativeButton
-import com.fibelatti.pigbank.presentation.common.extensions.updatePositiveButton
-import com.fibelatti.pigbank.presentation.common.extensions.view
-import com.fibelatti.pigbank.presentation.models.Goal
-import com.fibelatti.pigbank.presentation.models.GoalCandidate
-import java.util.Calendar
+import com.fibelatti.pigbank.presentation.models.GoalPresentationModel
+import kotlinx.android.synthetic.main.dialog_add_goal.layoutRoot
+import kotlinx.android.synthetic.main.layout_goal_basic_info.editTextCost
+import kotlinx.android.synthetic.main.layout_goal_basic_info.editTextDeadline
+import kotlinx.android.synthetic.main.layout_goal_basic_info.editTextDescription
+import kotlinx.android.synthetic.main.layout_goal_basic_info.inputLayoutCost
+import kotlinx.android.synthetic.main.layout_goal_basic_info.inputLayoutDeadline
+import kotlinx.android.synthetic.main.layout_goal_basic_info.inputLayoutDescription
 import javax.inject.Inject
 
 private const val BUNDLE_GOAL_DESCRIPTION = "GOAL_DESCRIPTION"
@@ -50,7 +40,7 @@ class AddGoalDialogFragment :
     }
 
     interface Callback {
-        fun onGoalCreated(goal: Goal)
+        fun onGoalCreated(goal: GoalPresentationModel)
     }
     //endregion
 
@@ -61,61 +51,48 @@ class AddGoalDialogFragment :
 
     //region Private properties
     private var callback: Callback? = null
-    private var calendar = Calendar.getInstance()
-
-    private lateinit var layoutRoot: ViewGroup
-    private lateinit var editTextDescription: EditText
-    private lateinit var editTextCost: EditText
-    private lateinit var inputLayoutCost: TextInputLayout
-    private lateinit var editTextDeadline: EditText
-    private lateinit var inputLayoutDeadline: TextInputLayout
-    private lateinit var datePickerDeadline: DatePicker
     //endregion
 
     //region Override properties
     //endregion
 
     //region Override Lifecycle methods
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = activity?.let {
+        val view = View.inflate(it, R.layout.dialog_add_goal, null)
+
         restoreInstance(savedInstanceState)
 
-        val view = View.inflate(activity, R.layout.dialog_add_goal, null)
-        val dialog = activity.alert(dialogTitle = getString(R.string.goal_add)).apply {
-            view(view)
-            positiveButton(buttonText = getString(R.string.hint_done))
-            negativeButton(buttonText = getString(R.string.hint_cancel))
-            notCancelable()
-            showListener(DialogInterface.OnShowListener { dialogInstance ->
-                (dialogInstance as? AlertDialog)?.apply {
-                    updatePositiveButton(
-                        buttonColor = ContextCompat.getColor(context, color.colorAccent),
-                        onClickListener = View.OnClickListener { _ ->
-                            presenter.createGoal(GoalCandidate(
-                                editTextDescription.textAsString(),
-                                editTextCost.textAsString(),
-                                editTextDeadline.textAsString()))
-                        }
-                    )
-                    updateNegativeButton(
-                        buttonColor = ContextCompat.getColor(context, color.colorGray),
-                        onClickListener = View.OnClickListener { _ ->
-                            if (datePickerDeadline.visibility == View.VISIBLE) {
-                                datePickerDeadline.visibility = View.GONE
-                            } else {
-                                layoutRoot.hideKeyboard()
-                                dismiss()
-                            }
-                        }
-                    )
-                    editTextDescription.showKeyboard()
-                }
-            })
+        return@let AlertDialog.Builder(it).apply {
+            setView(view)
+            setTitle(getString(R.string.goal_add_title))
+            setPositiveButton(getString(R.string.hint_done), null)
+            setNegativeButton(getString(R.string.hint_cancel), null)
+            setCancelable(false)
+        }.create()
+    } ?: super.onCreateDialog(savedInstanceState)
+
+    override fun onStart() {
+        super.onStart()
+        setupView()
+
+        (dialog as? AlertDialog)?.apply {
+            setCanceledOnTouchOutside(false)
+            getButton(DialogInterface.BUTTON_POSITIVE)?.apply {
+                setOnClickListener({ _ ->
+                    presenter.createGoal(
+                        dialog.editTextDescription.textAsString(),
+                        dialog.editTextCost.textAsString(),
+                        dialog.editTextDeadline.textAsString())
+                })
+            }
+            getButton(DialogInterface.BUTTON_NEGATIVE)?.apply {
+                setTextColor(ContextCompat.getColor(context, color.colorGray))
+                setOnClickListener({ _ ->
+                    dialog.layoutRoot.hideKeyboard()
+                    dismiss()
+                })
+            }
         }
-
-        bindViews(view)
-        dialog.show()
-
-        return dialog
     }
 
     override fun onAttach(context: Context) {
@@ -136,45 +113,34 @@ class AddGoalDialogFragment :
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         with(outState) {
-            putString(BUNDLE_GOAL_DESCRIPTION, editTextDescription.textAsString())
-            putString(BUNDLE_GOAL_COST, editTextCost.textAsString())
+            putString(BUNDLE_GOAL_DESCRIPTION, dialog.editTextDescription.textAsString())
+            putString(BUNDLE_GOAL_COST, dialog.editTextCost.textAsString())
         }
     }
     //endregion
 
     //region Override methods
     override fun handleError(errorMessage: String?) {
-        errorMessage?.let { activity.toast(it) }
-    }
-
-    override fun showDatePicker() {
-        layoutRoot.hideKeyboard()
-
-        datePickerDeadline.visibility = View.VISIBLE
-        datePickerDeadline.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)) { _, year, month, dayOfMonth ->
-            editTextDeadline.setText(intPartsAsDate(year, month, dayOfMonth).asString())
-            datePickerDeadline.visibility = View.GONE
-        }
+        errorMessage?.let { activity?.toast(it) }
     }
 
     override fun onInvalidDescription(error: String) {
-        editTextDescription.error = error
-        editTextDescription.requestUserFocus(activity)
+        dialog.inputLayoutDescription.showError(error)
     }
 
     override fun onInvalidCost(error: String) {
-        inputLayoutCost.showError(error)
+        dialog.inputLayoutCost.showError(error)
     }
 
     override fun onInvalidDeadline(error: String) {
-        inputLayoutDeadline.showError(error)
+        dialog.inputLayoutDeadline.showError(error)
     }
 
     override fun onErrorAddingGoal() {
-        activity.toast(getString(R.string.generic_msg_error))
+        activity?.toast(getString(R.string.generic_msg_error))
     }
 
-    override fun onGoalCreated(goal: Goal) {
+    override fun onGoalCreated(goal: GoalPresentationModel) {
         callback?.onGoalCreated(goal)
         dismiss()
     }
@@ -184,24 +150,18 @@ class AddGoalDialogFragment :
     //endregion
 
     //region Private methods
-    private fun bindViews(view: View) {
-        layoutRoot = view.findViewById(R.id.layoutRoot)
-        editTextDescription = view.findViewById(R.id.editTextDescription)
-        editTextCost = view.findViewById(R.id.editTextCost)
-        inputLayoutCost = view.findViewById(R.id.inputLayoutCost)
-        editTextDeadline = view.findViewById(R.id.editTextDeadline)
-        inputLayoutDeadline = view.findViewById(R.id.inputLayoutDeadline)
-        datePickerDeadline = view.findViewById(R.id.datePickerDeadline)
+    private fun setupView() {
+        dialog.editTextCost.filters = arrayOf(DecimalDigitsInputFilter())
+        dialog.editTextDeadline.setDateInputMask()
 
-        editTextCost.filters = arrayOf(DecimalDigitsInputFilter())
-        editTextDeadline.setOnClickListener { presenter.editDeadline() }
+//        dialog.editTextDeadline.setOnClickListener { presenter.editDeadline() }
     }
 
     private fun restoreInstance(savedInstanceState: Bundle?) {
-        savedInstanceState?.apply {
-            editTextDescription.setText(getString(BUNDLE_GOAL_DESCRIPTION))
-            editTextCost.setText(getString(BUNDLE_GOAL_COST))
-            editTextDeadline.setText(getString(BUNDLE_GOAL_DEADLINE))
+        savedInstanceState?.run {
+            dialog.editTextDescription.setText(getString(BUNDLE_GOAL_DESCRIPTION))
+            dialog.editTextCost.setText(getString(BUNDLE_GOAL_COST))
+            dialog.editTextDeadline.setText(getString(BUNDLE_GOAL_DEADLINE))
         }
     }
     //endregion

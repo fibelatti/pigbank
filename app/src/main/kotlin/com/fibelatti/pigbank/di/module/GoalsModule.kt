@@ -9,9 +9,7 @@ import com.fibelatti.pigbank.external.providers.SchedulerProvider
 import com.fibelatti.pigbank.presentation.goals.GoalsActivity
 import com.fibelatti.pigbank.presentation.goals.GoalsContract
 import com.fibelatti.pigbank.presentation.goals.GoalsPresenter
-import com.fibelatti.pigbank.presentation.goals.adapter.GoalsAdapter
-import com.fibelatti.pigbank.presentation.goals.adapter.GoalsDelegateAdapter
-import com.fibelatti.pigbank.presentation.goals.adapter.LoadingDelegateAdapter
+import com.fibelatti.pigbank.presentation.models.GoalPresentationMapper
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -28,19 +26,16 @@ class GoalsModule {
     fun provideGoalsPresenter(
         schedulerProvider: SchedulerProvider,
         resourceProvider: ResourceProvider,
+        goalPresentationMapper: GoalPresentationMapper,
         getGoalsUseCase: GetGoalUseCase,
         saveForGoalUseCase: SaveForGoalUseCase,
         userPreferencesUseCase: UserPreferencesUseCase
     ): GoalsContract.Presenter =
-        GoalsPresenter(schedulerProvider, resourceProvider, getGoalsUseCase, saveForGoalUseCase, userPreferencesUseCase)
-
-    @Provides
-    fun provideGoalsAdapter(goalsDelegateAdapter: GoalsDelegateAdapter, loadingDelegateAdapter: LoadingDelegateAdapter) =
-        GoalsAdapter(goalsDelegateAdapter, loadingDelegateAdapter)
-
-    @Provides
-    fun provideGoalsDelegateAdapter() = GoalsDelegateAdapter()
-
-    @Provides
-    fun provideLoadingDelegateAdapter() = LoadingDelegateAdapter()
+        GoalsPresenter(
+            schedulerProvider,
+            resourceProvider,
+            goalPresentationMapper,
+            getGoalsUseCase,
+            saveForGoalUseCase,
+            userPreferencesUseCase)
 }

@@ -2,31 +2,24 @@ package com.fibelatti.pigbank.presentation.addsavings
 
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface.OnShowListener
+import android.content.DialogInterface
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import android.widget.EditText
 import com.fibelatti.pigbank.R
 import com.fibelatti.pigbank.common.ifNotNullThisElseThat
 import com.fibelatti.pigbank.presentation.base.BaseDialogFragment
 import com.fibelatti.pigbank.presentation.common.DecimalDigitsInputFilter
-import com.fibelatti.pigbank.presentation.common.extensions.alert
-import com.fibelatti.pigbank.presentation.common.extensions.negativeButton
-import com.fibelatti.pigbank.presentation.common.extensions.positiveButton
+import com.fibelatti.pigbank.presentation.common.extensions.hideKeyboard
 import com.fibelatti.pigbank.presentation.common.extensions.showError
-import com.fibelatti.pigbank.presentation.common.extensions.showKeyboard
-import com.fibelatti.pigbank.presentation.common.extensions.showListener
 import com.fibelatti.pigbank.presentation.common.extensions.textAsString
 import com.fibelatti.pigbank.presentation.common.extensions.toast
-import com.fibelatti.pigbank.presentation.common.extensions.updateNegativeButton
-import com.fibelatti.pigbank.presentation.common.extensions.updatePositiveButton
-import com.fibelatti.pigbank.presentation.common.extensions.view
-import com.fibelatti.pigbank.presentation.models.Goal
+import com.fibelatti.pigbank.presentation.models.GoalPresentationModel
+import kotlinx.android.synthetic.main.dialog_add_savings.editTextSavingsAmount
+import kotlinx.android.synthetic.main.dialog_add_savings.inputLayoutSavingAmount
+import kotlinx.android.synthetic.main.dialog_add_savings.layoutRoot
 import javax.inject.Inject
 
 private const val BUNDLE_GOAL = "GOAL"
@@ -39,18 +32,19 @@ class AddSavingsDialogFragment :
     companion object {
         val TAG: String = AddSavingsDialogFragment::class.java.simpleName
 
-        fun newInstance(goal: Goal): AddSavingsDialogFragment {
-            val fragment = AddSavingsDialogFragment()
-            val args = Bundle()
-            args.putParcelable(BUNDLE_GOAL, goal)
-            fragment.arguments = args
+        fun newInstance(goal: GoalPresentationModel): AddSavingsDialogFragment {
+            val args = Bundle().apply {
+                putParcelable(BUNDLE_GOAL, goal)
+            }
 
-            return fragment
+            return AddSavingsDialogFragment().apply {
+                arguments = args
+            }
         }
     }
 
     interface Callback {
-        fun onSavingsAdded(goal: Goal)
+        fun onSavingsAdded(goal: GoalPresentationModel)
     }
     //endregion
 
@@ -61,48 +55,48 @@ class AddSavingsDialogFragment :
 
     //region Private properties
     private var callback: Callback? = null
-
-    private var goal: Goal? = null
+    private var goal: GoalPresentationModel? = null
     private var savingsAmount: String = ""
-
-    private lateinit var layoutRoot: ViewGroup
-    private lateinit var editTextSavingsAmount: EditText
-    private lateinit var inputLayoutSavingsAmount: TextInputLayout
     //endregion
 
     //region Override properties
     //endregion
 
     //region Override Lifecycle methods
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = activity?.let {
+        val view = View.inflate(it, R.layout.dialog_add_savings, null)
+
         savedInstanceState.ifNotNullThisElseThat({ restoreInstance(it) }, { parseArguments(arguments) })
 
-        val view = View.inflate(activity, R.layout.dialog_add_savings, null)
-        val dialog = activity.alert(dialogMessage = getString(R.string.savings_description, goal?.description)).apply {
-            view(view)
-            positiveButton(buttonText = getString(R.string.goal_save_money))
-            negativeButton(buttonText = getString(R.string.hint_cancel))
-            showListener(OnShowListener { dialogInstance ->
-                (dialogInstance as? AlertDialog)?.apply {
-                    updatePositiveButton(
-                        buttonColor = ContextCompat.getColor(context, R.color.colorAccent),
-                        onClickListener = View.OnClickListener { _ ->
-                            goal?.let { presenter.addSavings(it, editTextSavingsAmount.textAsString()) }
-                        })
-                    updateNegativeButton(
-                        buttonColor = ContextCompat.getColor(context, R.color.colorGray),
-                        onClickListener = View.OnClickListener { _ ->
-                            dismiss()
-                        })
-                }
-                editTextSavingsAmount.showKeyboard()
-            })
+        return@let AlertDialog.Builder(it).apply {
+            setView(view)
+            setTitle(getString(R.string.savings_description, goal?.description))
+            setPositiveButton(getString(R.string.goal_save_money), null)
+            setNegativeButton(getString(R.string.hint_cancel), null)
+            setCancelable(false)
+        }.create()
+    } ?: super.onCreateDialog(savedInstanceState)
+
+    override fun onStart() {
+        super.onStart()
+
+        (dialog as? AlertDialog)?.apply {
+            setCanceledOnTouchOutside(false)
+            getButton(DialogInterface.BUTTON_POSITIVE)?.apply {
+                setOnClickListener({ _ ->
+                    goal?.let { presenter.addSavings(it, dialog.editTextSavingsAmount.textAsString()) }
+                })
+            }
+            getButton(DialogInterface.BUTTON_NEGATIVE)?.apply {
+                setTextColor(ContextCompat.getColor(context, R.color.colorGray))
+                setOnClickListener({ _ ->
+                    dialog.layoutRoot.hideKeyboard()
+                    dismiss()
+                })
+            }
         }
 
-        bindViews(view)
-        dialog.show()
-
-        return dialog
+        dialog.editTextSavingsAmount.filters = arrayOf(DecimalDigitsInputFilter())
     }
 
     override fun onAttach(context: Context) {
@@ -124,7 +118,7 @@ class AddSavingsDialogFragment :
         super.onSaveInstanceState(outState)
         with(outState) {
             putParcelable(BUNDLE_GOAL, goal)
-            putString(BUNDLE_AMOUNT, editTextSavingsAmount.textAsString())
+            putString(BUNDLE_AMOUNT, dialog.editTextSavingsAmount.textAsString())
         }
     }
     //endregion
@@ -134,13 +128,13 @@ class AddSavingsDialogFragment :
         errorMessage?.let { activity?.toast(it) }
     }
 
-    override fun onSavingsAdded(goal: Goal) {
+    override fun onSavingsAdded(goal: GoalPresentationModel) {
         callback?.onSavingsAdded(goal)
         dismiss()
     }
 
     override fun onInvalidSavingsAmount() {
-        inputLayoutSavingsAmount.showError(getString(R.string.savings_invalid_amount))
+        dialog.inputLayoutSavingAmount.showError(getString(R.string.savings_invalid_amount))
     }
 
     override fun onErrorAddingSavings() {
@@ -152,23 +146,15 @@ class AddSavingsDialogFragment :
     //endregion
 
     //region Private methods
-    private fun bindViews(view: View) {
-        layoutRoot = view.findViewById(R.id.layoutRoot)
-        editTextSavingsAmount = view.findViewById(R.id.editTextSavingsAmount)
-        inputLayoutSavingsAmount = view.findViewById(R.id.inputLayoutSavingAmount)
-
-        editTextSavingsAmount.filters = arrayOf(DecimalDigitsInputFilter())
-    }
-
     private fun restoreInstance(savedInstanceState: Bundle?) {
-        savedInstanceState?.apply {
+        savedInstanceState?.run {
             goal = getParcelable(BUNDLE_GOAL)
             savingsAmount = getString(BUNDLE_AMOUNT)
         }
     }
 
-    private fun parseArguments(arguments: Bundle) {
-        with(arguments) {
+    private fun parseArguments(arguments: Bundle?) {
+        arguments?.run {
             goal = getParcelable(BUNDLE_GOAL)
         }
     }

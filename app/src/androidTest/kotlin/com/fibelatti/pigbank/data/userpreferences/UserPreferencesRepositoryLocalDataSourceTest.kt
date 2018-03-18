@@ -14,7 +14,7 @@ class UserPreferencesRepositoryLocalDataSourceTest : BaseDbTest() {
     @Test
     fun getAllSettings() {
         // Arrange
-        val testObserver = TestObserver<List<UserPreferencesEntity>>()
+        val testObserver = TestObserver<List<UserPreferencesDataModel>>()
 
         // Act
         appDatabase.getUserPreferencesRepository()
@@ -35,7 +35,7 @@ class UserPreferencesRepositoryLocalDataSourceTest : BaseDbTest() {
     @Test
     fun getAllToggles() {
         // Arrange
-        val testObserver = TestObserver<List<UserPreferencesEntity>>()
+        val testObserver = TestObserver<List<UserPreferencesDataModel>>()
 
         // Act
         appDatabase.getUserPreferencesRepository()
@@ -56,7 +56,7 @@ class UserPreferencesRepositoryLocalDataSourceTest : BaseDbTest() {
     @Test
     fun updateAllByType() {
         // Arrange
-        val testObserver = TestObserver<List<UserPreferencesEntity>>()
+        val testObserver = TestObserver<List<UserPreferencesDataModel>>()
 
         appDatabase.getUserPreferencesRepository()
             .updateAllByType(UserPreferencesType.TOGGLE.value, false.toString())
@@ -83,7 +83,7 @@ class UserPreferencesRepositoryLocalDataSourceTest : BaseDbTest() {
     @Test
     fun updateAnalyticsEnabled() {
         // Arrange
-        val testObserver = TestObserver<List<UserPreferencesEntity>>()
+        val testObserver = TestObserver<List<UserPreferencesDataModel>>()
 
         appDatabase.getUserPreferencesRepository()
             .updateAnalyticsEnabled(false.toString())
@@ -111,7 +111,7 @@ class UserPreferencesRepositoryLocalDataSourceTest : BaseDbTest() {
     @Test
     fun updateCrashReportsEnabled() {
         // Arrange
-        val testObserver = TestObserver<List<UserPreferencesEntity>>()
+        val testObserver = TestObserver<List<UserPreferencesDataModel>>()
 
         appDatabase.getUserPreferencesRepository()
             .updateCrashReportsEnabled(false.toString())
@@ -139,7 +139,7 @@ class UserPreferencesRepositoryLocalDataSourceTest : BaseDbTest() {
     @Test
     fun setFirstGoalHintDismissed() {
         // Arrange
-        val testObserver = TestObserver<List<UserPreferencesEntity>>()
+        val testObserver = TestObserver<List<UserPreferencesDataModel>>()
 
         appDatabase.getUserPreferencesRepository()
             .setFirstGoalHintDismissed()
@@ -167,7 +167,7 @@ class UserPreferencesRepositoryLocalDataSourceTest : BaseDbTest() {
     @Test
     fun setQuickSaveHintDismissed() {
         // Arrange
-        val testObserver = TestObserver<List<UserPreferencesEntity>>()
+        val testObserver = TestObserver<List<UserPreferencesDataModel>>()
 
         appDatabase.getUserPreferencesRepository()
             .setQuickSaveHintDismissed()

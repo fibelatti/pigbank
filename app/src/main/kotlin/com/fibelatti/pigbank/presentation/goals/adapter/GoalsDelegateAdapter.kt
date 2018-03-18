@@ -9,7 +9,7 @@ import com.fibelatti.pigbank.presentation.base.BaseViewType
 import com.fibelatti.pigbank.presentation.common.extensions.gone
 import com.fibelatti.pigbank.presentation.common.extensions.inflate
 import com.fibelatti.pigbank.presentation.common.extensions.visible
-import com.fibelatti.pigbank.presentation.models.Goal
+import com.fibelatti.pigbank.presentation.models.GoalPresentationModel
 import kotlinx.android.synthetic.main.list_item_goal.view.imageViewGoalAchieved
 import kotlinx.android.synthetic.main.list_item_goal.view.imageViewGoalOverdue
 import kotlinx.android.synthetic.main.list_item_goal.view.imageViewSaveToGoal
@@ -21,14 +21,15 @@ import kotlinx.android.synthetic.main.list_item_goal.view.textViewGoalOverdue
 import kotlinx.android.synthetic.main.list_item_goal.view.textViewSaveToGoal
 import kotlinx.android.synthetic.main.list_item_goal.view.textViewSavingsProgress
 import kotlinx.android.synthetic.main.list_item_goal.view.textViewSavingsProgressPercent
+import javax.inject.Inject
 
-class GoalsDelegateAdapter :
+class GoalsDelegateAdapter @Inject constructor() :
     BaseDelegateAdapter {
 
     interface Callback {
-        fun goalClicked(goal: Goal)
+        fun goalClicked(goal: GoalPresentationModel)
 
-        fun saveToGoalClicked(goal: Goal)
+        fun saveToGoalClicked(goal: GoalPresentationModel)
     }
 
     var callback: Callback? = null
@@ -36,13 +37,13 @@ class GoalsDelegateAdapter :
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder = DataViewHolder(parent)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: BaseViewType) {
-        (holder as? DataViewHolder)?.bind(item as? Goal)
+        (holder as? DataViewHolder)?.bind(item as? GoalPresentationModel)
     }
 
     internal inner class DataViewHolder(parent: ViewGroup) :
         RecyclerView.ViewHolder(parent.inflate(R.layout.list_item_goal)) {
-        fun bind(item: Goal?) = apply {
-            fun setDefaultData(goal: Goal) {
+        fun bind(item: GoalPresentationModel?) = apply {
+            fun setDefaultData(goal: GoalPresentationModel) {
                 with(goal) {
                     itemView.layoutClickableGoal.setOnClickListener { callback?.goalClicked(goal = this) }
                     itemView.progressBarPercent.setOnClickListener { callback?.goalClicked(goal = this) }
@@ -76,13 +77,15 @@ class GoalsDelegateAdapter :
                 itemView.imageViewGoalAchieved.gone()
             }
 
-            fun showDefaultView(goal: Goal) {
+            fun showDefaultView(goal: GoalPresentationModel) {
                 with(goal) {
                     itemView.textViewDaysUntilDeadline.visible()
                     itemView.imageViewSaveToGoal.visible()
                     itemView.textViewSaveToGoal.visible()
 
-                    itemView.imageViewSaveToGoal.setOnClickListener { callback?.saveToGoalClicked(goal = this) }
+                    itemView.imageViewSaveToGoal.setOnClickListener {
+                        callback?.saveToGoalClicked(goal = this)
+                    }
                     itemView.textViewDaysUntilDeadline.text = itemView.context.resources.getQuantityString(R.plurals.goal_deadline_remaining, daysUntilDeadline.toInt(), daysUntilDeadline)
                     itemView.textViewDaysUntilDeadline.setTextColor(ContextCompat.getColor(itemView.context, if (emphasizeRemainingDays) R.color.alertRed else R.color.textPrimary))
 

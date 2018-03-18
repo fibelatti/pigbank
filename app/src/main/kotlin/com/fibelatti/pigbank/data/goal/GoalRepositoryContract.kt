@@ -13,15 +13,15 @@ import io.reactivex.Single
 @Dao
 interface GoalRepositoryContract {
     @Transaction
-    @Query(value = "$SELECT_ALL_FROM ${Goal.TABLE_NAME} $WHERE ${Goal.COLUMN_ID} = :goalId")
-    fun getGoalById(goalId: Long): Single<GoalWithSavings>
+    @Query(value = "$SELECT_ALL_FROM ${GoalDataModel.TABLE_NAME} $WHERE ${GoalDataModel.COLUMN_ID} = :goalId")
+    fun getGoalById(goalId: Long): Single<GoalWithSavingsDataModel>
 
-    @Query(value = "$SELECT_ALL_FROM ${Goal.TABLE_NAME}")
-    fun getAllGoals(): Single<List<GoalWithSavings>>
+    @Query(value = "$SELECT_ALL_FROM ${GoalDataModel.TABLE_NAME}")
+    fun getAllGoals(): Single<List<GoalWithSavingsDataModel>>
 
     @Insert(onConflict = REPLACE)
-    fun saveGoal(goal: Goal): Long
+    fun saveGoal(goalDataModel: GoalDataModel): Long
 
-    @Query(value = "$DELETE_FROM ${Goal.TABLE_NAME} $WHERE ${Goal.COLUMN_ID} = :goalId")
+    @Query(value = "$DELETE_FROM ${GoalDataModel.TABLE_NAME} $WHERE ${GoalDataModel.COLUMN_ID} = :goalId")
     fun deleteGoalById(goalId: Long): Int
 }

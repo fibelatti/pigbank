@@ -10,33 +10,25 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import com.fibelatti.pigbank.R
-import com.fibelatti.pigbank.R.color
 import com.fibelatti.pigbank.common.asString
 import com.fibelatti.pigbank.common.ifNotNullThisElseThat
-import com.fibelatti.pigbank.common.intPartsAsDate
 import com.fibelatti.pigbank.common.toFormattedString
 import com.fibelatti.pigbank.presentation.addsavings.AddSavingsDialogFragment
 import com.fibelatti.pigbank.presentation.base.BaseActivity
 import com.fibelatti.pigbank.presentation.base.BaseIntentBuilder
-import com.fibelatti.pigbank.presentation.common.extensions.alert
 import com.fibelatti.pigbank.presentation.common.extensions.animateWithListener
 import com.fibelatti.pigbank.presentation.common.extensions.gone
 import com.fibelatti.pigbank.presentation.common.extensions.hideKeyboard
-import com.fibelatti.pigbank.presentation.common.extensions.negativeButton
-import com.fibelatti.pigbank.presentation.common.extensions.positiveButton
+import com.fibelatti.pigbank.presentation.common.extensions.setDateInputMask
 import com.fibelatti.pigbank.presentation.common.extensions.setElevated
-import com.fibelatti.pigbank.presentation.common.extensions.showListener
+import com.fibelatti.pigbank.presentation.common.extensions.showError
 import com.fibelatti.pigbank.presentation.common.extensions.snackbar
 import com.fibelatti.pigbank.presentation.common.extensions.textAsString
 import com.fibelatti.pigbank.presentation.common.extensions.toast
-import com.fibelatti.pigbank.presentation.common.extensions.updateNegativeButton
-import com.fibelatti.pigbank.presentation.common.extensions.updatePositiveButton
 import com.fibelatti.pigbank.presentation.common.extensions.visible
 import com.fibelatti.pigbank.presentation.goaldetail.adapter.SavingsAdapter
-import com.fibelatti.pigbank.presentation.models.Goal
-import com.fibelatti.pigbank.presentation.models.GoalCandidate
+import com.fibelatti.pigbank.presentation.models.GoalPresentationModel
 import kotlinx.android.synthetic.main.activity_goal_details.animationAchieved
-import kotlinx.android.synthetic.main.activity_goal_details.datePickerDeadline
 import kotlinx.android.synthetic.main.activity_goal_details.layoutAchieved
 import kotlinx.android.synthetic.main.activity_goal_details.layoutOverdue
 import kotlinx.android.synthetic.main.activity_goal_details.layoutRoot
@@ -48,6 +40,9 @@ import kotlinx.android.synthetic.main.layout_confirmation.textViewConfirmation
 import kotlinx.android.synthetic.main.layout_goal_basic_info.editTextCost
 import kotlinx.android.synthetic.main.layout_goal_basic_info.editTextDeadline
 import kotlinx.android.synthetic.main.layout_goal_basic_info.editTextDescription
+import kotlinx.android.synthetic.main.layout_goal_basic_info.inputLayoutCost
+import kotlinx.android.synthetic.main.layout_goal_basic_info.inputLayoutDeadline
+import kotlinx.android.synthetic.main.layout_goal_basic_info.inputLayoutDescription
 import kotlinx.android.synthetic.main.layout_goal_summary.buttonSaveToGoal
 import kotlinx.android.synthetic.main.layout_goal_summary.textViewDaysUntilDeadline
 import kotlinx.android.synthetic.main.layout_goal_summary.textViewSavingsPerDay
@@ -80,7 +75,7 @@ class GoalDetailActivity :
     //endregion
 
     //region Private properties
-    private var goal: Goal? = null
+    private var goal: GoalPresentationModel? = null
     private var calendar = Calendar.getInstance()
     //endregion
 
@@ -137,7 +132,7 @@ class GoalDetailActivity :
         toast(errorMessage ?: getString(R.string.generic_msg_error))
     }
 
-    override fun showGoalDetails(goal: Goal) {
+    override fun showGoalDetails(goal: GoalPresentationModel) {
         setGoalCommonDetails(goal)
 
         with(goal) {
@@ -163,7 +158,7 @@ class GoalDetailActivity :
         layoutOverdue.gone()
     }
 
-    override fun showGoalAchievedDetails(goal: Goal) {
+    override fun showGoalAchievedDetails(goal: GoalPresentationModel) {
         setGoalCommonDetails(goal)
         layoutSummary.gone()
         layoutOverdue.gone()
@@ -171,7 +166,7 @@ class GoalDetailActivity :
         showAchievedAnimation()
     }
 
-    override fun showGoalOverdueDetails(goal: Goal) {
+    override fun showGoalOverdueDetails(goal: GoalPresentationModel) {
         setGoalCommonDetails(goal)
         layoutSummary.gone()
         layoutAchieved.gone()
@@ -182,43 +177,43 @@ class GoalDetailActivity :
         showConfirmationAnimation(getString(R.string.generic_changes_saved))
     }
 
-    override fun showDatePicker() {
-        datePickerDeadline.visible()
-        datePickerDeadline.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)) { _, year, month, dayOfMonth ->
-            val newDate = intPartsAsDate(year, month, dayOfMonth)
-            calendar.time = newDate
-            editTextDeadline.setText(newDate.asString())
-            datePickerDeadline.gone()
-        }
-        datePickerDeadline.setElevated()
+    override fun showAddSavingsDialog(goal: GoalPresentationModel) {
+        AddSavingsDialogFragment.newInstance(goal).show(supportFragmentManager, AddSavingsDialogFragment.TAG)
     }
 
-    override fun showAddSavingsDialog(goal: Goal) {
-        AddSavingsDialogFragment.newInstance(goal).show(fragmentManager, AddSavingsDialogFragment.TAG)
+    override fun onInvalidDescription(error: String) {
+        inputLayoutDescription.showError(error)
+    }
+
+    override fun onInvalidCost(error: String) {
+        inputLayoutCost.showError(error)
+    }
+
+    override fun onInvalidDeadline(error: String) {
+        inputLayoutDeadline.showError(error)
     }
 
     override fun onSaveError() {
         layoutRoot.snackbar(getString(R.string.goal_save_error))
     }
 
-    override fun showDeleteConfirmationDialog(goal: Goal) {
-        val dialog = alert(dialogTitle = getString(R.string.goal_delete_title),
-            dialogMessage = getString(R.string.goal_delete_message, goal.description))
-            .positiveButton(
-                buttonText = getString(R.string.hint_yes),
-                onClickListener = DialogInterface.OnClickListener { _, _ ->
-                    presenter.confirmDeletion(goal)
-                }
-            )
-            .negativeButton(buttonText = getString(R.string.hint_cancel))
-            .showListener(DialogInterface.OnShowListener { dialogInstance ->
-                (dialogInstance as? AlertDialog)?.apply {
-                    updatePositiveButton(ContextCompat.getColor(context, color.colorGray))
-                    updateNegativeButton(ContextCompat.getColor(context, color.colorAccent))
-                }
-            })
+    override fun showDeleteConfirmationDialog(goal: GoalPresentationModel) {
+        val alertDialog: AlertDialog = AlertDialog.Builder(this).apply {
+            setTitle(getString(R.string.goal_delete_title))
+            setMessage(getString(R.string.goal_delete_message, goal.description))
+            setPositiveButton(getString(R.string.hint_yes), { _, _ -> presenter.confirmDeletion(goal) })
+            setNegativeButton(getString(R.string.hint_cancel), null)
+        }.create()
 
-        dialog.show()
+        alertDialog.apply {
+            setOnShowListener {
+                getButton(DialogInterface.BUTTON_POSITIVE)?.apply {
+                    setTextColor(ContextCompat.getColor(context, R.color.colorGray))
+                }
+            }
+        }
+
+        alertDialog.show()
     }
 
     override fun onGoalDeleted() {
@@ -230,7 +225,7 @@ class GoalDetailActivity :
         layoutRoot.snackbar(getString(R.string.goal_delete_error))
     }
 
-    override fun onSavingsAdded(goal: Goal) {
+    override fun onSavingsAdded(goal: GoalPresentationModel) {
         presenter.goalSet(goal)
     }
     //endregion
@@ -245,10 +240,7 @@ class GoalDetailActivity :
             title = ""
             setDisplayHomeAsUpEnabled(true)
         }
-        editTextDeadline.setOnClickListener {
-            layoutRoot.hideKeyboard()
-            presenter.editDeadline()
-        }
+        editTextDeadline.setDateInputMask()
         buttonSaveToGoal.setOnClickListener {
             layoutRoot.hideKeyboard()
             goal?.let { presenter.addSavings(goal = it) }
@@ -268,7 +260,7 @@ class GoalDetailActivity :
         goal = savedInstanceState.getParcelable(BUNDLE_GOAL)
     }
 
-    private fun setGoalCommonDetails(goal: Goal) {
+    private fun setGoalCommonDetails(goal: GoalPresentationModel) {
         with(goal) {
             this@GoalDetailActivity.goal = this
 
@@ -283,12 +275,13 @@ class GoalDetailActivity :
     }
 
     private fun saveGoal() {
-        val goalCandidate = GoalCandidate(
-            description = editTextDescription.textAsString(),
-            cost = editTextCost.textAsString(),
-            deadline = editTextDeadline.textAsString())
-
-        goal?.let { presenter.saveGoal(it, goalCandidate) }
+        goal?.let {
+            presenter.saveGoal(
+                goal = it,
+                description = editTextDescription.textAsString(),
+                cost = editTextCost.textAsString(),
+                deadline = editTextDeadline.textAsString())
+        }
     }
 
     private fun showConfirmationAnimation(confirmationText: String) {
@@ -318,7 +311,7 @@ class GoalDetailActivity :
     //endregion
 
     class IntentBuilder(context: Context) : BaseIntentBuilder<GoalDetailActivity>(context, GoalDetailActivity::class.java) {
-        fun addGoalExtra(goal: Goal): IntentBuilder {
+        fun addGoalExtra(goal: GoalPresentationModel): IntentBuilder {
             intent.putExtra(BUNDLE_GOAL, goal)
             return this
         }

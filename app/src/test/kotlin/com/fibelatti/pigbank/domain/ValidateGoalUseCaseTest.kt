@@ -2,15 +2,16 @@ package com.fibelatti.pigbank.domain
 
 import com.fibelatti.pigbank.BaseTest
 import com.fibelatti.pigbank.any
-import com.fibelatti.pigbank.domain.goal.GoalMapper
 import com.fibelatti.pigbank.domain.goal.GoalValidationError
 import com.fibelatti.pigbank.domain.goal.InvalidGoalField.COST
 import com.fibelatti.pigbank.domain.goal.InvalidGoalField.DEADLINE
 import com.fibelatti.pigbank.domain.goal.InvalidGoalField.DESCRIPTION
+import com.fibelatti.pigbank.domain.goal.InvalidGoalField.INVALID_DEADLINE
 import com.fibelatti.pigbank.domain.goal.InvalidGoalField.PAST_DEADLINE
 import com.fibelatti.pigbank.domain.goal.ValidateGoalUseCase
-import com.fibelatti.pigbank.presentation.models.Goal
-import com.fibelatti.pigbank.presentation.models.GoalCandidate
+import com.fibelatti.pigbank.domain.goal.models.GoalCandidateEntity
+import com.fibelatti.pigbank.domain.goal.models.GoalDomainMapper
+import com.fibelatti.pigbank.domain.goal.models.GoalEntity
 import io.reactivex.observers.TestObserver
 import junit.framework.Assert
 import org.junit.Before
@@ -22,8 +23,8 @@ import java.util.Date
 class ValidateGoalUseCaseTest : BaseTest() {
 
     //region Mocked Data
-    private val mockedNow = Date(1534723200000) //20/08/2018
-    private val mockedGoal = Goal(description = "Before any changes", cost = 1000F, deadline = mockedNow)
+    private val mockNow = Date(1534723200000) //20/08/2018
+    private val mockOriginalGoal = GoalEntity(description = "Before any changes", cost = 1000F, deadline = mockNow)
 
     private val invalidDescriptionEmpty = ""
     private val validDescription = "Test Description"
@@ -33,30 +34,30 @@ class ValidateGoalUseCaseTest : BaseTest() {
     private val validCost = "1337"
 
     private val invalidDateEmpty = ""
-    private val invalidDateOther = "F"
+    private val invalidDateOther = "30/02/2018"
     private val invalidDatePast = "20/08/2017"
     private val validDate = "20/08/2020"
     //endregion
 
-    private val mockGoal: Goal = mock(Goal::class.java)
+    private val mockGoal: GoalEntity = mock(GoalEntity::class.java)
 
-    private val mockGoalMapper: GoalMapper = mock(GoalMapper::class.java)
+    private val mockGoalMapper: GoalDomainMapper = mock(GoalDomainMapper::class.java)
     private val validateGoalUseCase = ValidateGoalUseCase(mockGoalMapper)
-    private var testObserver: TestObserver<Goal> = TestObserver()
+    private val testObserver: TestObserver<GoalEntity> = TestObserver()
 
     @Before
     fun setup() {
-        given(mockGoalMapper.toPresentationModel(any<GoalCandidate>()))
+        given(mockGoalMapper.toDomainModel(any<GoalCandidateEntity>()))
             .willReturn(mockGoal)
     }
 
     @Test
     fun testValidateGoalEmptyDescriptionReturnsValidationErrorDescriptionField() {
         // Arrange
-        val goalCandidate = GoalCandidate(invalidDescriptionEmpty, invalidCostEmpty, invalidDateEmpty)
+        val goalCandidate = GoalCandidateEntity(invalidDescriptionEmpty, invalidCostEmpty, invalidDateEmpty)
 
         // Act
-        validateGoalUseCase.validateGoal(goalCandidate, mockedNow)
+        validateGoalUseCase.validateGoal(goalCandidate, mockNow)
             .subscribe(testObserver)
 
         // Assert
@@ -70,10 +71,10 @@ class ValidateGoalUseCaseTest : BaseTest() {
     @Test
     fun testValidateGoalEmptyCostReturnsValidationErrorCostField() {
         // Arrange
-        val goalCandidate = GoalCandidate(validDescription, invalidCostEmpty, invalidDateEmpty)
+        val goalCandidate = GoalCandidateEntity(validDescription, invalidCostEmpty, invalidDateEmpty)
 
         // Act
-        validateGoalUseCase.validateGoal(goalCandidate, mockedNow)
+        validateGoalUseCase.validateGoal(goalCandidate, mockNow)
             .subscribe(testObserver)
 
         // Assert
@@ -87,10 +88,10 @@ class ValidateGoalUseCaseTest : BaseTest() {
     @Test
     fun testValidateGoalInvalidCostReturnsValidationErrorCostField() {
         // Arrange
-        val goalCandidate = GoalCandidate(validDescription, invalidCostOther, invalidDateEmpty)
+        val goalCandidate = GoalCandidateEntity(validDescription, invalidCostOther, invalidDateEmpty)
 
         // Act
-        validateGoalUseCase.validateGoal(goalCandidate, mockedNow)
+        validateGoalUseCase.validateGoal(goalCandidate, mockNow)
             .subscribe(testObserver)
 
         // Assert
@@ -104,10 +105,10 @@ class ValidateGoalUseCaseTest : BaseTest() {
     @Test
     fun testValidateGoalEmptyDateReturnsValidationErrorDeadlineField() {
         // Arrange
-        val goalCandidate = GoalCandidate(validDescription, validCost, invalidDateEmpty)
+        val goalCandidate = GoalCandidateEntity(validDescription, validCost, invalidDateEmpty)
 
         // Act
-        validateGoalUseCase.validateGoal(goalCandidate, mockedNow)
+        validateGoalUseCase.validateGoal(goalCandidate, mockNow)
             .subscribe(testObserver)
 
         // Assert
@@ -119,29 +120,29 @@ class ValidateGoalUseCaseTest : BaseTest() {
     }
 
     @Test
-    fun testValidateGoalInvalidDateReturnsValidationErrorDeadlineField() {
+    fun testValidateGoalInvalidDateReturnsValidationErrorInvalidDeadlineField() {
         // Arrange
-        val goalCandidate = GoalCandidate(validDescription, validCost, invalidDateOther)
+        val goalCandidate = GoalCandidateEntity(validDescription, validCost, invalidDateOther)
 
         // Act
-        validateGoalUseCase.validateGoal(goalCandidate, mockedNow)
+        validateGoalUseCase.validateGoal(goalCandidate, mockNow)
             .subscribe(testObserver)
 
         // Assert
         testObserver.assertNoValues()
         testObserver.assertError(GoalValidationError::class.java)
         (testObserver.errors()[0] as? GoalValidationError)?.let {
-            Assert.assertEquals(DEADLINE, it.field)
+            Assert.assertEquals(INVALID_DEADLINE, it.field)
         }
     }
 
     @Test
     fun testValidateGoalPastDateReturnsValidationErrorPastDeadlineField() {
         // Arrange
-        val goalCandidate = GoalCandidate(validDescription, validCost, invalidDatePast)
+        val goalCandidate = GoalCandidateEntity(validDescription, validCost, invalidDatePast)
 
         // Act
-        validateGoalUseCase.validateGoal(goalCandidate, mockedNow)
+        validateGoalUseCase.validateGoal(goalCandidate, mockNow)
             .subscribe(testObserver)
 
         // Assert
@@ -155,10 +156,10 @@ class ValidateGoalUseCaseTest : BaseTest() {
     @Test
     fun testValidateGoalAllFieldsAreValidReturnsGoal() {
         // Arrange
-        val goalCandidate = GoalCandidate(validDescription, validCost, validDate)
+        val goalCandidate = GoalCandidateEntity(validDescription, validCost, validDate)
 
         // Act
-        validateGoalUseCase.validateGoal(goalCandidate, mockedNow)
+        validateGoalUseCase.validateGoal(goalCandidate, mockNow)
             .subscribe(testObserver)
 
         // Assert
@@ -169,10 +170,10 @@ class ValidateGoalUseCaseTest : BaseTest() {
     @Test
     fun testValidateGoalAllFieldsAreValidReturnsUpdatedGoal() {
         // Arrange
-        val goalCandidate = GoalCandidate(validDescription, validCost, validDate)
+        val goalCandidate = GoalCandidateEntity(validDescription, validCost, validDate)
 
         // Act
-        validateGoalUseCase.validateGoal(mockedGoal, goalCandidate, mockedNow)
+        validateGoalUseCase.validateGoal(mockOriginalGoal, goalCandidate, mockNow)
             .subscribe(testObserver)
 
         // Assert

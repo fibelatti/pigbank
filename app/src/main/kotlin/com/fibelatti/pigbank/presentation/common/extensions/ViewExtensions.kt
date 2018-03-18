@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import com.airbnb.lottie.LottieAnimationView
+import com.fibelatti.pigbank.presentation.common.DateInputMask
 
 private const val COMPONENT_ELEVATION = 20F
 
@@ -61,9 +62,9 @@ fun TextInputLayout.clearError() {
     isErrorEnabled = false
 }
 
-fun View.requestUserFocus(activity: Activity) {
+fun View.requestUserFocus(activity: Activity?) {
     if (requestFocus()) {
-        activity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     }
 }
 //endregion
@@ -109,6 +110,10 @@ fun EditText.textAsFloat(): Float = try {
     text.toString().toFloat()
 } catch (e: Exception) {
     0F
+}
+
+fun EditText.setDateInputMask() {
+    DateInputMask(this).listen()
 }
 
 fun View.setElevated() {

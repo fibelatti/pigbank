@@ -1,7 +1,7 @@
 package com.fibelatti.pigbank.presentation.goals
 
 import com.fibelatti.pigbank.presentation.base.BaseContract
-import com.fibelatti.pigbank.presentation.models.Goal
+import com.fibelatti.pigbank.presentation.models.GoalPresentationModel
 
 interface GoalsContract {
     interface Presenter : BaseContract.Presenter<View> {
@@ -9,15 +9,15 @@ interface GoalsContract {
 
         fun addGoal()
 
-        fun saveToGoal(goal: Goal, amount: Float)
+        fun saveToGoal(goal: GoalPresentationModel, amount: Float)
 
-        fun newGoalAdded(goal: Goal)
+        fun newGoalAdded(goal: GoalPresentationModel)
 
         fun goalsUpdated()
 
-        fun goalDetails(goal: Goal)
+        fun goalDetails(goal: GoalPresentationModel)
 
-        fun addSavings(goal: Goal)
+        fun addSavings(goal: GoalPresentationModel)
 
         fun firstGoalHintDismissed()
 
@@ -29,11 +29,11 @@ interface GoalsContract {
 
         fun createGoal()
 
-        fun openGoal(goal: Goal)
+        fun openGoal(goal: GoalPresentationModel)
 
-        fun showAddSavingsDialog(goal: Goal)
+        fun showAddSavingsDialog(goal: GoalPresentationModel)
 
-        fun updateGoals(goals: List<Goal>)
+        fun updateGoals(goals: List<GoalPresentationModel>)
 
         fun showFirstGoalHint()
 

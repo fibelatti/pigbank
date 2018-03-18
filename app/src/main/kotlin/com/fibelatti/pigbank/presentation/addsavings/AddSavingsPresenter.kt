@@ -8,11 +8,13 @@ import com.fibelatti.pigbank.external.providers.ResourceProvider
 import com.fibelatti.pigbank.external.providers.SchedulerProvider
 import com.fibelatti.pigbank.presentation.addsavings.AddSavingsContract.View
 import com.fibelatti.pigbank.presentation.base.BasePresenter
-import com.fibelatti.pigbank.presentation.models.Goal
+import com.fibelatti.pigbank.presentation.models.GoalPresentationMapper
+import com.fibelatti.pigbank.presentation.models.GoalPresentationModel
 
 class AddSavingsPresenter(
     schedulerProvider: SchedulerProvider,
     resourceProvider: ResourceProvider,
+    private val goalPresentationMapper: GoalPresentationMapper,
     private val validateSavingsUseCase: ValidateSavingsUseCase,
     private val saveForGoalUseCase: SaveForGoalUseCase,
     private val getGoalsUseCase: GetGoalUseCase
@@ -25,14 +27,16 @@ class AddSavingsPresenter(
         this.view = view
     }
 
-    override fun addSavings(goal: Goal, amount: String) {
+    override fun addSavings(goal: GoalPresentationModel, amount: String) {
         validateSavingsUseCase.validateSavings(amount)
-            .flatMap { saveForGoalUseCase.saveForGoal(goal, it) }
+            .flatMap { saveForGoalUseCase.saveForGoal(goalPresentationMapper.toDomainModel(goal), it) }
             .flatMap { getGoalsUseCase.getGoalById(goal.id) }
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.mainThread())
             .subscribeUntilDetached(
-                { view?.onSavingsAdded(goal = it) },
+                {
+                    view?.onSavingsAdded(goal = goalPresentationMapper.toPresentationModel(it))
+                },
                 { throwable ->
                     when (throwable) {
                         is SavingsValidationError -> view?.onInvalidSavingsAmount()

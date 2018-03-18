@@ -2,6 +2,8 @@ package com.fibelatti.pigbank.domain.userpreferences
 
 import com.fibelatti.pigbank.data.userpreferences.UserPreferencesRepositoryContract
 import com.fibelatti.pigbank.data.userpreferences.UserPreferencesType
+import com.fibelatti.pigbank.domain.userpreferences.models.UserPreferencesEntity
+import com.fibelatti.pigbank.domain.userpreferences.models.UserPreferencesMapper
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -9,7 +11,7 @@ class UserPreferencesUseCase @Inject constructor(
     private val userPreferencesRepositoryContract: UserPreferencesRepositoryContract,
     private val userPreferencesMapper: UserPreferencesMapper
 ) {
-    fun getUserPreferences(): Single<UserPreferencesModel> =
+    fun getUserPreferences(): Single<UserPreferencesEntity> =
         userPreferencesRepositoryContract.getAllUserPreferences()
             .map { userPreferencesMapper.toDomainModel(it) }
 

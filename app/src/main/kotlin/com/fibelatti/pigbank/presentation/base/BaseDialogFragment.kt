@@ -1,9 +1,9 @@
 package com.fibelatti.pigbank.presentation.base
 
-import dagger.android.DaggerDialogFragment
+import dagger.android.support.DaggerAppCompatDialogFragment
 
 abstract class BaseDialogFragment :
-    DaggerDialogFragment(),
+    DaggerAppCompatDialogFragment(),
     BaseContract.View {
 
     //region Companion objects and interfaces

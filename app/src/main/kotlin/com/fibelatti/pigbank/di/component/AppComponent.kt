@@ -2,9 +2,9 @@ package com.fibelatti.pigbank.di.component
 
 import android.app.Application
 import com.fibelatti.pigbank.App
-import com.fibelatti.pigbank.di.module.ActivityBuilderModule
+import com.fibelatti.pigbank.di.module.builder.ActivityBuilderModule
 import com.fibelatti.pigbank.di.module.AppModule
-import com.fibelatti.pigbank.di.module.FragmentBuilderModule
+import com.fibelatti.pigbank.di.module.builder.FragmentBuilderModule
 import com.fibelatti.pigbank.di.scope.AppScope
 import dagger.BindsInstance
 import dagger.Component

@@ -4,11 +4,11 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
-import com.fibelatti.pigbank.data.goal.Goal.Companion.TABLE_NAME
+import com.fibelatti.pigbank.data.goal.GoalDataModel.Companion.TABLE_NAME
 import java.util.Date
 
 @Entity(tableName = TABLE_NAME)
-data class Goal(
+data class GoalDataModel(
     @ColumnInfo(name = COLUMN_ID)
     @PrimaryKey(autoGenerate = true)
     val id: Long,

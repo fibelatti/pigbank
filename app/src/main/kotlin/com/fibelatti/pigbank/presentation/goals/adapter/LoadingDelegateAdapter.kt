@@ -6,8 +6,9 @@ import com.fibelatti.pigbank.R
 import com.fibelatti.pigbank.presentation.base.BaseDelegateAdapter
 import com.fibelatti.pigbank.presentation.base.BaseViewType
 import com.fibelatti.pigbank.presentation.common.extensions.inflate
+import javax.inject.Inject
 
-class LoadingDelegateAdapter : BaseDelegateAdapter {
+class LoadingDelegateAdapter @Inject constructor() : BaseDelegateAdapter {
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder = ViewHolder(parent)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: BaseViewType) {

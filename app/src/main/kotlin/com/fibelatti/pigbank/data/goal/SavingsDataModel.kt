@@ -6,19 +6,19 @@ import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.ForeignKey.CASCADE
 import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
-import com.fibelatti.pigbank.data.goal.Savings.Companion.TABLE_NAME
+import com.fibelatti.pigbank.data.goal.SavingsDataModel.Companion.TABLE_NAME
 import java.util.Date
 
 @Entity(
     tableName = TABLE_NAME,
     foreignKeys = [(ForeignKey(
-        entity = Goal::class,
-        parentColumns = [Goal.COLUMN_ID],
-        childColumns = [(Savings.COLUMN_GOAL_ID)],
+        entity = GoalDataModel::class,
+        parentColumns = [GoalDataModel.COLUMN_ID],
+        childColumns = [(SavingsDataModel.COLUMN_GOAL_ID)],
         onDelete = CASCADE)
         )]
 )
-data class Savings(
+data class SavingsDataModel(
     @ColumnInfo(name = COLUMN_ID)
     @PrimaryKey(autoGenerate = true)
     val id: Long,
@@ -30,7 +30,7 @@ data class Savings(
     val date: Date
 ) {
     companion object {
-        const val TABLE_NAME = "group_items"
+        const val TABLE_NAME = "savings"
         const val COLUMN_ID = "_id"
         const val COLUMN_GOAL_ID = "goal_id"
         const val COLUMN_AMOUNT = "amount"

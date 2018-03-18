@@ -1,19 +1,14 @@
 package com.fibelatti.pigbank.presentation.addgoal
 
 import com.fibelatti.pigbank.presentation.base.BaseContract
-import com.fibelatti.pigbank.presentation.models.Goal
-import com.fibelatti.pigbank.presentation.models.GoalCandidate
+import com.fibelatti.pigbank.presentation.models.GoalPresentationModel
 
 interface AddGoalContract {
     interface Presenter : BaseContract.Presenter<View> {
-        fun editDeadline()
-
-        fun createGoal(goal: GoalCandidate)
+        fun createGoal(description: String, cost: String, deadline: String)
     }
 
     interface View : BaseContract.View {
-        fun showDatePicker()
-
         fun onInvalidDescription(error: String)
 
         fun onInvalidCost(error: String)
@@ -22,6 +17,6 @@ interface AddGoalContract {
 
         fun onErrorAddingGoal()
 
-        fun onGoalCreated(goal: Goal)
+        fun onGoalCreated(goal: GoalPresentationModel)
     }
 }

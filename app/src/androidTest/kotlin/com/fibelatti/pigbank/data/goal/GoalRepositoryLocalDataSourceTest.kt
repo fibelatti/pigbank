@@ -31,7 +31,7 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
     @Test
     fun updateGoal() {
         // Arrange
-        val firstTestObserver = TestObserver<GoalWithSavings>()
+        val firstTestObserver = TestObserver<GoalWithSavingsDataModel>()
 
         insertGoal()
         insertSavings()
@@ -48,14 +48,14 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
 
         // Act
         val savings = arrayOf(
-            Savings(firstSavingsId, goalId, firstSavingsAmount, firstSavingsDate),
-            Savings(secondSavingsId, goalId, secondSavingsAmount, secondSavingsDate)
+            SavingsDataModel(firstSavingsId, goalId, firstSavingsAmount, firstSavingsDate),
+            SavingsDataModel(secondSavingsId, goalId, secondSavingsAmount, secondSavingsDate)
         )
 
         appDatabase.getSavingsRepository().saveSavings(*savings)
 
         // Assert
-        val secondTestObserver = TestObserver<GoalWithSavings>()
+        val secondTestObserver = TestObserver<GoalWithSavingsDataModel>()
         appDatabase.getGoalRepository()
             .getGoalById(goalId)
             .subscribeOn(testSchedulerProvider.io())
@@ -65,27 +65,27 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
         assertSingleOnCompleteWithNoErrors(secondTestObserver)
         val result = secondTestObserver.values()[0]
         with(result) {
-            assertEquals(goalId, goal.id)
-            assertEquals(goalDescription, goal.description)
-            assertEquals(goalCost, goal.cost)
-            assertEquals(goalDeadline, goal.deadline)
+            assertEquals(goalId, goalDataModel.id)
+            assertEquals(goalDescription, goalDataModel.description)
+            assertEquals(goalCost, goalDataModel.cost)
+            assertEquals(goalDeadline, goalDataModel.deadline)
 
-            assertEquals(2, result.savings.size)
+            assertEquals(2, result.savingsDataModelList.size)
 
-            assertEquals(firstSavingsId, result.savings[0].id)
-            assertEquals(firstSavingsAmount, result.savings[0].amount)
-            assertEquals(firstSavingsDate, result.savings[0].date)
+            assertEquals(firstSavingsId, result.savingsDataModelList[0].id)
+            assertEquals(firstSavingsAmount, result.savingsDataModelList[0].amount)
+            assertEquals(firstSavingsDate, result.savingsDataModelList[0].date)
 
-            assertEquals(secondSavingsId, result.savings[1].id)
-            assertEquals(secondSavingsAmount, result.savings[1].amount)
-            assertEquals(secondSavingsDate, result.savings[1].date)
+            assertEquals(secondSavingsId, result.savingsDataModelList[1].id)
+            assertEquals(secondSavingsAmount, result.savingsDataModelList[1].amount)
+            assertEquals(secondSavingsDate, result.savingsDataModelList[1].date)
         }
     }
 
     @Test
     fun getGroupById() {
         // Arrange
-        val testObserver = TestObserver<GoalWithSavings>()
+        val testObserver = TestObserver<GoalWithSavingsDataModel>()
         insertGoal()
 
         // Act
@@ -103,7 +103,7 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
     @Test
     fun getGoalByIdWithItems() {
         // Arrange
-        val testObserver = TestObserver<GoalWithSavings>()
+        val testObserver = TestObserver<GoalWithSavingsDataModel>()
         insertGoal()
         insertSavings()
 
@@ -123,7 +123,7 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
     @Test
     fun deleteGoalById() {
         // Arrange
-        val testObserver = TestObserver<List<GoalWithSavings>>()
+        val testObserver = TestObserver<List<GoalWithSavingsDataModel>>()
         insertGoal()
         insertSavings()
 
@@ -145,7 +145,7 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
     @Test
     fun getAllGoals() {
         // Arrange
-        val testObserver = TestObserver<List<GoalWithSavings>>()
+        val testObserver = TestObserver<List<GoalWithSavingsDataModel>>()
         insertGoal()
 
         // Act
@@ -160,9 +160,9 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
         assertTrue(testObserver.values()[0].isNotEmpty())
     }
 
-    private fun createGoal() = Goal(goalId, goalCreationDate, goalDescription, goalCost, goalDeadline)
+    private fun createGoal() = GoalDataModel(goalId, goalCreationDate, goalDescription, goalCost, goalDeadline)
 
-    private fun createSavings() = Savings(firstSavingsId, goalId, firstSavingsAmount, firstSavingsDate)
+    private fun createSavings() = SavingsDataModel(firstSavingsId, goalId, firstSavingsAmount, firstSavingsDate)
 
     private fun insertGoal() {
         appDatabase.getGoalRepository().saveGoal(createGoal())
@@ -172,21 +172,21 @@ class GoalRepositoryLocalDataSourceTest : BaseDbTest() {
         appDatabase.getSavingsRepository().saveSavings(createSavings())
     }
 
-    private fun assertGoal(testObserver: TestObserver<GoalWithSavings>) {
+    private fun assertGoal(testObserver: TestObserver<GoalWithSavingsDataModel>) {
         val result = testObserver.values()[0]
         with(result) {
-            assertEquals(goalId, goal.id)
-            assertEquals(goalDescription, goal.description)
-            assertEquals(goalCost, goal.cost)
-            assertEquals(goalDeadline, goal.deadline)
+            assertEquals(goalId, goalDataModel.id)
+            assertEquals(goalDescription, goalDataModel.description)
+            assertEquals(goalCost, goalDataModel.cost)
+            assertEquals(goalDeadline, goalDataModel.deadline)
         }
     }
 
-    private fun assertSavings(testObserver: TestObserver<GoalWithSavings>) {
+    private fun assertSavings(testObserver: TestObserver<GoalWithSavingsDataModel>) {
         val result = testObserver.values()[0]
 
-        assertTrue(result.savings.isNotEmpty())
-        with(result.savings[0]) {
+        assertTrue(result.savingsDataModelList.isNotEmpty())
+        with(result.savingsDataModelList[0]) {
             assertEquals(firstSavingsId, id)
             assertEquals(firstSavingsAmount, amount)
             assertEquals(firstSavingsDate, date)
