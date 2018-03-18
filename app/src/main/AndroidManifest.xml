@@ -5,6 +5,7 @@
 
     <application
         android:name=".App"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -19,7 +20,7 @@
         <!-- ACTIVITY -->
         <activity
             android:name=".presentation.goals.GoalsActivity"
-            android:configChanges="orientation"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustNothing|stateHidden">
@@ -31,7 +32,6 @@
         </activity>
         <activity
             android:name=".presentation.goaldetail.GoalDetailActivity"
-            android:configChanges="orientation"
             android:parentActivityName=".presentation.goals.GoalsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
@@ -42,7 +42,6 @@
         </activity>
         <activity
             android:name=".presentation.preferences.PreferencesActivity"
-            android:configChanges="orientation"
             android:parentActivityName=".presentation.goals.GoalsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
