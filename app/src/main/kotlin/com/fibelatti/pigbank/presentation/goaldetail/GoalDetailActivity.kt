@@ -13,7 +13,6 @@ import android.view.MenuItem
 import com.fibelatti.pigbank.R
 import com.fibelatti.pigbank.common.asString
 import com.fibelatti.pigbank.common.ifNotNullThisElseThat
-import com.fibelatti.pigbank.presentation.addsavings.AddSavingsDialogFragment
 import com.fibelatti.pigbank.presentation.base.BaseActivity
 import com.fibelatti.pigbank.presentation.base.BaseIntentBuilder
 import com.fibelatti.pigbank.presentation.common.extensions.animateWithListener
@@ -32,6 +31,8 @@ import com.fibelatti.pigbank.presentation.common.extensions.visible
 import com.fibelatti.pigbank.presentation.goaldetail.detail.GoalDetailFragment
 import com.fibelatti.pigbank.presentation.goaldetail.savingslog.SavingsLogFragment
 import com.fibelatti.pigbank.presentation.models.GoalPresentationModel
+import com.fibelatti.pigbank.presentation.savings.add.AddSavingsDialogFragment
+import com.fibelatti.pigbank.presentation.savings.remove.RemoveSavingsDialogFragment
 import kotlinx.android.synthetic.main.activity_goal_details.animationAchieved
 import kotlinx.android.synthetic.main.activity_goal_details.layoutRoot
 import kotlinx.android.synthetic.main.activity_goal_details.layoutTabs
@@ -57,7 +58,8 @@ class GoalDetailActivity :
     GoalDetailContract.View,
     GoalDetailFragment.Callback,
     SavingsLogFragment.Callback,
-    AddSavingsDialogFragment.Callback {
+    AddSavingsDialogFragment.Callback,
+    RemoveSavingsDialogFragment.Callback {
 
     //region Companion objects and interfaces
     companion object {
@@ -160,6 +162,10 @@ class GoalDetailActivity :
         AddSavingsDialogFragment.newInstance(goal).show(supportFragmentManager, AddSavingsDialogFragment.TAG)
     }
 
+    override fun showRemoveSavingsDialog(goal: GoalPresentationModel) {
+        RemoveSavingsDialogFragment.newInstance(goal).show(supportFragmentManager, RemoveSavingsDialogFragment.TAG)
+    }
+
     override fun onInvalidDescription(error: String) {
         inputLayoutDescription.showError(error)
     }
@@ -216,7 +222,15 @@ class GoalDetailActivity :
         goal?.let { presenter.addSavings(goal = it) }
     }
 
+    override fun onRemoveFromGoalClicked() {
+        goal?.let { presenter.removeSavings(goal = it) }
+    }
+
     override fun onSavingsAdded(goal: GoalPresentationModel) {
+        presenter.goalSet(goal)
+    }
+
+    override fun onSavingsRemoved(goal: GoalPresentationModel) {
         presenter.goalSet(goal)
     }
     //endregion

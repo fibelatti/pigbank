@@ -50,6 +50,10 @@ class GoalDetailPresenter(
         view?.showAddSavingsDialog(goal)
     }
 
+    override fun removeSavings(goal: GoalPresentationModel) {
+        view?.showRemoveSavingsDialog(goal)
+    }
+
     override fun saveGoal(goal: GoalPresentationModel, description: String, cost: String, deadline: String) {
         validateGoalUseCase.validateGoal(
             originalGoal = goalPresentationMapper.toDomainModel(goal),

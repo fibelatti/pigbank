@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_goal_details.layoutAchieved
 import kotlinx.android.synthetic.main.fragment_goal_details.layoutOverdue
 import kotlinx.android.synthetic.main.fragment_goal_details.layoutRoot
 import kotlinx.android.synthetic.main.fragment_goal_details.layoutSummary
+import kotlinx.android.synthetic.main.layout_goal_summary.buttonRemoveFromGoal
 import kotlinx.android.synthetic.main.layout_goal_summary.buttonSaveToGoal
 import kotlinx.android.synthetic.main.layout_goal_summary.layoutActualSavings
 import kotlinx.android.synthetic.main.layout_goal_summary.progressBarPercent
@@ -42,6 +43,8 @@ class GoalDetailFragment :
         fun onDetailViewReady()
 
         fun onSaveToGoalClicked()
+
+        fun onRemoveFromGoalClicked()
     }
     //endregion
 
@@ -120,6 +123,10 @@ class GoalDetailFragment :
         buttonSaveToGoal.setOnClickListener {
             layoutRoot.hideKeyboard()
             callback?.onSaveToGoalClicked()
+        }
+        buttonRemoveFromGoal.setOnClickListener {
+            layoutRoot.hideKeyboard()
+            callback?.onRemoveFromGoalClicked()
         }
     }
 

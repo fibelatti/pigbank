@@ -10,10 +10,16 @@ class SavingsPresentationMapper @Inject constructor(decimalFormatSymbols: Decima
     private val decimalSeparator: String = decimalFormatSymbols?.decimalSeparator?.toString() ?: "."
 
     fun toDomainModel(savingsPresentationModel: SavingsPresentationModel): SavingsEntity = with(savingsPresentationModel) {
-        SavingsEntity(id, goalId, amount.toNormalizedFloat(), date)
+        SavingsEntity(id, goalId, amount.toNormalizedFloat(), date, isRemoval)
     }
 
     fun toPresentationModel(savingsEntity: SavingsEntity): SavingsPresentationModel = with(savingsEntity) {
-        SavingsPresentationModel(id, goalId, amount.toFormattedString(separator = decimalSeparator), date)
+        SavingsPresentationModel(
+            id = id,
+            goalId = goalId,
+            amount = amount.toFormattedString(separator = decimalSeparator),
+            date = date,
+            isRemoval = isRemoval
+        )
     }
 }

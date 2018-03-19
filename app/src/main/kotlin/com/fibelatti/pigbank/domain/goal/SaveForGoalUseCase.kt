@@ -11,8 +11,11 @@ class SaveForGoalUseCase @Inject constructor(
     private val savingsRepositoryContract: SavingsRepositoryContract,
     private val savingsDomainMapper: SavingsDomainMapper
 ) {
-    fun saveForGoal(goal: GoalEntity, amount: Float): Single<List<Long>> = Single.create {
-        val ids = savingsRepositoryContract.saveSavings(savingsDomainMapper.toDataModel(goal.id, amount))
+    fun saveForGoal(goal: GoalEntity, amount: Float, shouldSubtract: Boolean): Single<List<Long>> = Single.create {
+        val multiplier = if (shouldSubtract) -1 else 1
+        val actualAmount = amount * multiplier
+
+        val ids = savingsRepositoryContract.saveSavings(savingsDomainMapper.toDataModel(goal.id, actualAmount))
 
         if (ids.isNotEmpty()) it.onSuccess(ids) else it.onError(Throwable(DATABASE_GENERIC_ERROR_MESSAGE))
     }

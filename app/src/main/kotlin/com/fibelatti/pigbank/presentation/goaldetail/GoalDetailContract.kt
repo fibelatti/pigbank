@@ -9,6 +9,8 @@ interface GoalDetailContract {
 
         fun addSavings(goal: GoalPresentationModel)
 
+        fun removeSavings(goal: GoalPresentationModel)
+
         fun saveGoal(goal: GoalPresentationModel, description: String, cost: String, deadline: String)
 
         fun deleteGoal(goal: GoalPresentationModel)
@@ -26,6 +28,8 @@ interface GoalDetailContract {
         fun showChangesSaved()
 
         fun showAddSavingsDialog(goal: GoalPresentationModel)
+
+        fun showRemoveSavingsDialog(goal: GoalPresentationModel)
 
         fun onInvalidDescription(error: String)
 

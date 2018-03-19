@@ -1,4 +1,4 @@
-package com.fibelatti.pigbank.presentation.addsavings
+package com.fibelatti.pigbank.presentation.savings.remove
 
 import android.app.Dialog
 import android.content.Context
@@ -17,6 +17,8 @@ import com.fibelatti.pigbank.presentation.common.extensions.showError
 import com.fibelatti.pigbank.presentation.common.extensions.textAsString
 import com.fibelatti.pigbank.presentation.common.extensions.toast
 import com.fibelatti.pigbank.presentation.models.GoalPresentationModel
+import com.fibelatti.pigbank.presentation.savings.AddSavingsContract
+import com.fibelatti.pigbank.presentation.savings.AddSavingsContract.Presenter
 import kotlinx.android.synthetic.main.dialog_add_savings.editTextSavingsAmount
 import kotlinx.android.synthetic.main.dialog_add_savings.inputLayoutSavingAmount
 import kotlinx.android.synthetic.main.dialog_add_savings.layoutRoot
@@ -25,32 +27,32 @@ import javax.inject.Inject
 private const val BUNDLE_GOAL = "GOAL"
 private const val BUNDLE_AMOUNT = "AMOUNT"
 
-class AddSavingsDialogFragment :
+class RemoveSavingsDialogFragment :
     BaseDialogFragment(),
     AddSavingsContract.View {
     //region Companion objects and interfaces
     companion object {
-        val TAG: String = AddSavingsDialogFragment::class.java.simpleName
+        val TAG: String = RemoveSavingsDialogFragment::class.java.simpleName
 
-        fun newInstance(goal: GoalPresentationModel): AddSavingsDialogFragment {
+        fun newInstance(goal: GoalPresentationModel): RemoveSavingsDialogFragment {
             val args = Bundle().apply {
                 putParcelable(BUNDLE_GOAL, goal)
             }
 
-            return AddSavingsDialogFragment().apply {
+            return RemoveSavingsDialogFragment().apply {
                 arguments = args
             }
         }
     }
 
     interface Callback {
-        fun onSavingsAdded(goal: GoalPresentationModel)
+        fun onSavingsRemoved(goal: GoalPresentationModel)
     }
     //endregion
 
     //region Public properties
     @Inject
-    lateinit var presenter: AddSavingsContract.Presenter
+    lateinit var presenter: Presenter
     //endregion
 
     //region Private properties
@@ -64,14 +66,14 @@ class AddSavingsDialogFragment :
 
     //region Override Lifecycle methods
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = activity?.let {
-        val view = View.inflate(it, R.layout.dialog_add_savings, null)
+        val view = View.inflate(it, R.layout.dialog_remove_savings, null)
 
         savedInstanceState.ifNotNullThisElseThat({ restoreInstance(it) }, { parseArguments(arguments) })
 
         return@let AlertDialog.Builder(it).apply {
             setView(view)
-            setTitle(getString(R.string.savings_description, goal?.description))
-            setPositiveButton(getString(R.string.goal_save_money), null)
+            setTitle(getString(R.string.savings_remove_description, goal?.description))
+            setPositiveButton(getString(R.string.goal_take_money), null)
             setNegativeButton(getString(R.string.hint_cancel), null)
             setCancelable(false)
         }.create()
@@ -84,7 +86,12 @@ class AddSavingsDialogFragment :
             setCanceledOnTouchOutside(false)
             getButton(DialogInterface.BUTTON_POSITIVE)?.apply {
                 setOnClickListener({ _ ->
-                    goal?.let { presenter.addSavings(it, dialog.editTextSavingsAmount.textAsString()) }
+                    goal?.let {
+                        presenter.addSavings(
+                            goal = it,
+                            amount = dialog.editTextSavingsAmount.textAsString(),
+                            shouldSubtract = true)
+                    }
                 })
             }
             getButton(DialogInterface.BUTTON_NEGATIVE)?.apply {
@@ -129,8 +136,8 @@ class AddSavingsDialogFragment :
     }
 
     override fun onSavingsAdded(goal: GoalPresentationModel) {
-        layoutRoot.hideKeyboard()
-        callback?.onSavingsAdded(goal)
+        dialog.layoutRoot.hideKeyboard()
+        callback?.onSavingsRemoved(goal)
         dismiss()
     }
 
