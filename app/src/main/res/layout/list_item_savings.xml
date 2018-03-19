@@ -6,8 +6,8 @@
     android:id="@+id/layoutRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/padding_small"
-    tools:layout_margin="@dimen/margin_small">
+    android:layout_marginBottom="@dimen/margin_small"
+    android:layout_marginTop="@dimen/margin_small">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imageViewIcon"

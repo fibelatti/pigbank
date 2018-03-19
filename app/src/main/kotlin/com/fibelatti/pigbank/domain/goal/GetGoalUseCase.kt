@@ -17,7 +17,7 @@ class GetGoalUseCase @Inject constructor(
             .onErrorReturn { emptyList() }
             .flattenAsObservable<GoalWithSavingsDataModel> { list -> list }
             .map { goalDomainMapper.toDomainModel(goalWithSavingsDataModel = it) }
-            .toSortedList { goal1, goal2 -> (goal1.daysUntilDeadline - goal2.daysUntilDeadline).toInt() }
+            .toSortedList { goal1, goal2 -> goal1.daysUntilDeadline - goal2.daysUntilDeadline }
 
     fun getGoalById(id: Long): Single<GoalEntity> =
         goalRepositoryContract

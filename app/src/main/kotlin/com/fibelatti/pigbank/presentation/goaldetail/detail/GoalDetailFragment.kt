@@ -16,10 +16,16 @@ import kotlinx.android.synthetic.main.fragment_goal_details.layoutOverdue
 import kotlinx.android.synthetic.main.fragment_goal_details.layoutRoot
 import kotlinx.android.synthetic.main.fragment_goal_details.layoutSummary
 import kotlinx.android.synthetic.main.layout_goal_summary.buttonSaveToGoal
+import kotlinx.android.synthetic.main.layout_goal_summary.layoutActualSavings
+import kotlinx.android.synthetic.main.layout_goal_summary.progressBarPercent
 import kotlinx.android.synthetic.main.layout_goal_summary.textViewDaysUntilDeadline
+import kotlinx.android.synthetic.main.layout_goal_summary.textViewSavingsActualPerDay
+import kotlinx.android.synthetic.main.layout_goal_summary.textViewSavingsActualPerMonth
+import kotlinx.android.synthetic.main.layout_goal_summary.textViewSavingsActualPerWeek
 import kotlinx.android.synthetic.main.layout_goal_summary.textViewSavingsPerDay
 import kotlinx.android.synthetic.main.layout_goal_summary.textViewSavingsPerMonth
 import kotlinx.android.synthetic.main.layout_goal_summary.textViewSavingsPerWeek
+import kotlinx.android.synthetic.main.layout_goal_summary.textViewSavingsProgressPercent
 import kotlinx.android.synthetic.main.layout_goal_summary.textViewTotalSaved
 
 class GoalDetailFragment :
@@ -83,19 +89,12 @@ class GoalDetailFragment :
         with(goal) {
             textViewDaysUntilDeadline.text = resources.getQuantityString(R.plurals.goal_deadline_remaining, daysUntilDeadline.toInt(), daysUntilDeadline)
             textViewTotalSaved.text = getString(R.string.goal_total_saved, totalSaved)
-            textViewSavingsPerDay.text = getString(R.string.goal_savings_per_day, suggestedSavingsPerDay)
-            if (suggestedSavingsPerWeek.isNotEmpty()) {
-                textViewSavingsPerWeek.visible()
-                textViewSavingsPerWeek.text = getString(R.string.goal_savings_per_week, suggestedSavingsPerWeek)
-            } else {
-                textViewSavingsPerWeek.gone()
-            }
-            if (suggestedSavingsPerMonth.isNotEmpty()) {
-                textViewSavingsPerMonth.visible()
-                textViewSavingsPerMonth.text = getString(R.string.goal_savings_per_month, suggestedSavingsPerMonth)
-            } else {
-                textViewSavingsPerMonth.gone()
-            }
+
+            progressBarPercent.progress = percentSaved.toInt()
+            textViewSavingsProgressPercent.text = getString(R.string.goal_saved_percent, percentSaved)
+
+            showSavingsSuggestions(goal = this)
+            showSavingsActual(goal = this)
         }
 
         layoutSummary.visible()
@@ -121,6 +120,49 @@ class GoalDetailFragment :
         buttonSaveToGoal.setOnClickListener {
             layoutRoot.hideKeyboard()
             callback?.onSaveToGoalClicked()
+        }
+    }
+
+    private fun showSavingsSuggestions(goal: GoalPresentationModel) {
+        with(goal) {
+            textViewSavingsPerDay.text = getString(R.string.goal_savings_per_day, suggestedSavingsPerDay)
+            if (shouldShowSavingsPerWeek) {
+                textViewSavingsPerWeek.visible()
+                textViewSavingsPerWeek.text = getString(R.string.goal_savings_per_week, suggestedSavingsPerWeek)
+            } else {
+                textViewSavingsPerWeek.gone()
+            }
+            if (shouldShowSavingsPerMonth) {
+                textViewSavingsPerMonth.visible()
+                textViewSavingsPerMonth.text = getString(R.string.goal_savings_per_month, suggestedSavingsPerMonth)
+            } else {
+                textViewSavingsPerMonth.gone()
+            }
+        }
+    }
+
+    private fun showSavingsActual(goal: GoalPresentationModel) {
+        with(goal) {
+            if (shouldShowActualSavingsPerDay) {
+                layoutActualSavings.visible()
+                textViewSavingsActualPerDay.text = getString(R.string.goal_savings_actual_per_day, actualSavingsPerDay)
+
+                if (shouldShowActualSavingsPerWeek) {
+                    textViewSavingsActualPerWeek.visible()
+                    textViewSavingsActualPerWeek.text = getString(R.string.goal_savings_actual_per_week, actualSavingsPerWeek)
+                } else {
+                    textViewSavingsActualPerWeek.gone()
+                }
+
+                if (shouldShowActualSavingsPerMonth) {
+                    textViewSavingsActualPerMonth.visible()
+                    textViewSavingsActualPerMonth.text = getString(R.string.goal_savings_actual_per_month, actualSavingsPerMonth)
+                } else {
+                    textViewSavingsActualPerMonth.gone()
+                }
+            } else {
+                layoutActualSavings.gone()
+            }
         }
     }
     //endregion

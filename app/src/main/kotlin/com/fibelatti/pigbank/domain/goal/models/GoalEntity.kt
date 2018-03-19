@@ -8,17 +8,14 @@ data class GoalEntity(
     val deadline: Date,
     val id: Long = 0,
     val creationDate: Date = Date(),
+    val savings: List<SavingsEntity> = emptyList(),
     val totalSaved: Float = 0F,
     val remainingCost: Float = 0F,
-    val percentSaved: Int = 0,
+    val percentSaved: Float = 0F,
     val isAchieved: Boolean = false,
-    val daysUntilDeadline: Long = 0,
-    val emphasizeRemainingDays: Boolean = false,
+    val daysUntilDeadline: Int = 0,
     val isOverdue: Boolean = false,
-    val suggestedSavingsPerDay: Float = 0F,
-    val suggestedSavingsPerWeek: Float = 0F,
-    val suggestedSavingsPerMonth: Float = 0F,
-    val savings: List<SavingsEntity> = emptyList()
+    val timeElapsed: Int = 0
 ) {
     fun deepCopy(
         description: String = this.description,
@@ -26,18 +23,14 @@ data class GoalEntity(
         deadline: Date = this.deadline,
         id: Long = this.id,
         creationDate: Date = this.creationDate,
+        savings: List<SavingsEntity> = this.savings.map { it.copy() },
         totalSaved: Float = this.totalSaved,
         remainingCost: Float = this.remainingCost,
-        percentSaved: Int = this.percentSaved,
+        percentSaved: Float = this.percentSaved,
         isAchieved: Boolean = this.isOverdue,
-        daysUntilDeadline: Long = this.daysUntilDeadline,
-        emphasizeRemainingDays: Boolean = this.emphasizeRemainingDays,
+        daysUntilDeadline: Int = this.daysUntilDeadline,
         isOverdue: Boolean = this.isOverdue,
-        suggestedSavingsPerDay: Float = this.suggestedSavingsPerDay,
-        suggestedSavingsPerWeek: Float = this.suggestedSavingsPerWeek,
-        suggestedSavingsPerMonth: Float = this.suggestedSavingsPerMonth,
-        savings: List<SavingsEntity> = this.savings.map { it.copy() }
-    ) = GoalEntity(description, cost, deadline, id, creationDate, totalSaved, remainingCost, percentSaved,
-        isAchieved, daysUntilDeadline, emphasizeRemainingDays, isOverdue, suggestedSavingsPerDay,
-        suggestedSavingsPerWeek, suggestedSavingsPerMonth, savings)
+        timeElapsed: Int = this.timeElapsed
+    ) = GoalEntity(description, cost, deadline, id, creationDate, savings, totalSaved,
+        remainingCost, percentSaved, isAchieved, daysUntilDeadline, isOverdue, timeElapsed)
 }

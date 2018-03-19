@@ -16,17 +16,27 @@ data class GoalPresentationModel(
     val deadline: Date,
     val id: Long = 0,
     val creationDate: Date = Date(),
+    val savings: List<SavingsPresentationModel> = emptyList(),
     val totalSaved: String = "",
     val remainingCost: String = "",
-    val percentSaved: Int = 0,
+    val percentSaved: Float = 0F,
     val isAchieved: Boolean = false,
-    val daysUntilDeadline: Long = 0,
-    val emphasizeRemainingDays: Boolean = false,
+    val daysUntilDeadline: Int = 0,
     val isOverdue: Boolean = false,
+    val timeElapsed: Int = 0,
+    val emphasizeRemainingDays: Boolean = false,
     val suggestedSavingsPerDay: String = "",
+    val shouldShowSavingsPerWeek: Boolean = false,
     val suggestedSavingsPerWeek: String = "",
+    val shouldShowSavingsPerMonth: Boolean = false,
     val suggestedSavingsPerMonth: String = "",
-    val savings: List<SavingsPresentationModel> = emptyList()
+    val shouldShowActualSavingsPerDay: Boolean = false,
+    val actualSavingsPerDay: String = "",
+    val shouldShowActualSavingsPerWeek: Boolean = false,
+    val actualSavingsPerWeek: String = "",
+    val shouldShowActualSavingsPerMonth: Boolean = false,
+    val actualSavingsPerMonth: String = ""
+
 ) : Parcelable, ViewType {
     constructor(source: Parcel) : this(
         source.readString(),
@@ -34,17 +44,22 @@ data class GoalPresentationModel(
         source.readDate(),
         source.readLong(),
         source.readDate(),
+        ArrayList<SavingsPresentationModel>().apply { source.readList(this, SavingsPresentationModel::class.java.classLoader) },
         source.readString(),
         source.readString(),
+        source.readFloat(),
+        source.readBoolean(),
         source.readInt(),
         source.readBoolean(),
-        source.readLong(),
+        source.readInt(),
         source.readBoolean(),
+        source.readString(),
         source.readBoolean(),
         source.readString(),
+        source.readBoolean(),
         source.readString(),
-        source.readString(),
-        ArrayList<SavingsPresentationModel>().apply { source.readList(this, SavingsPresentationModel::class.java.classLoader) }
+        source.readBoolean(),
+        source.readString()
     )
 
     companion object {
@@ -60,17 +75,26 @@ data class GoalPresentationModel(
         writeDate(deadline)
         writeLong(id)
         writeDate(creationDate)
+        writeList(savings)
         writeString(totalSaved)
         writeString(remainingCost)
-        writeInt(percentSaved)
+        writeFloat(percentSaved)
         writeBoolean(isAchieved)
-        writeLong(daysUntilDeadline)
-        writeBoolean(emphasizeRemainingDays)
+        writeInt(daysUntilDeadline)
         writeBoolean(isOverdue)
+        writeInt(timeElapsed)
+        writeBoolean(emphasizeRemainingDays)
         writeString(suggestedSavingsPerDay)
+        writeBoolean(shouldShowSavingsPerWeek)
         writeString(suggestedSavingsPerWeek)
+        writeBoolean(shouldShowSavingsPerMonth)
         writeString(suggestedSavingsPerMonth)
-        writeList(savings)
+        writeBoolean(shouldShowActualSavingsPerDay)
+        writeString(actualSavingsPerDay)
+        writeBoolean(shouldShowActualSavingsPerWeek)
+        writeString(actualSavingsPerWeek)
+        writeBoolean(shouldShowActualSavingsPerMonth)
+        writeString(actualSavingsPerMonth)
     }
 
     override fun getViewType(): Int = ViewType.GOAL

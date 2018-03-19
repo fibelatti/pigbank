@@ -25,32 +25,43 @@
 
     <!-- Goal -->
     <string name="goal_title">My goals</string>
-    <string name="goal_tab_title_details">Details</string>
-    <string name="goal_tab_title_savings_log">Savings Log</string>
-
     <string name="goal_add">Add a new goal</string>
     <string name="goal_save_money">Save money</string>
+    <string name="goal_take_money">Take money</string>
     <string name="goal_saved_relative">%1$s of %2$s saved</string>
     <plurals name="goal_deadline_remaining">
         <item quantity="one">Last day to achieve my goal!</item>
         <item quantity="other">%d days until my deadline</item>
     </plurals>
-    <string name="goal_saved_percent">%d%% saved</string>
-    <string name="goal_description">My goal</string>
-    <string name="goal_cost">Amount to save</string>
-    <string name="goal_deadline">Deadline</string>
-    <string name="goal_savings">Savings</string>
-    <string name="goal_total_saved">%s saved</string>
-    <string name="goal_total_remaining">%s remaining</string>
-    <string name="goal_savings_per_day">Save %s per day</string>
-    <string name="goal_savings_per_week">Save %s per week</string>
-    <string name="goal_savings_per_month">Save %s per month (30 day average)</string>
+    <string name="goal_saved_percent">%.2f%% complete</string>
+
+    <!-- Goal - Add -->
     <string name="goal_add_title">Adding a new goal</string>
     <string name="goal_add_invalid_description">Please give a short description to your goal</string>
     <string name="goal_add_invalid_cost">How much do you need to save?</string>
     <string name="goal_add_empty_deadline">When do you expect to achieve your goal?</string>
     <string name="goal_add_invalid_deadline">This deadline does not look like a valid date</string>
     <string name="goal_add_past_deadline">You can\'t achieve your goal in the past</string>
+
+    <!-- Goal - Details -->
+    <string name="goal_tab_title_details">Details</string>
+    <string name="goal_tab_title_savings_log">Savings Log</string>
+
+    <string name="goal_description">My goal</string>
+    <string name="goal_cost">Amount to save</string>
+    <string name="goal_deadline">Deadline</string>
+    <string name="goal_savings">Savings</string>
+    <string name="goal_total_saved">%s saved</string>
+    <string name="goal_total_remaining">%s remaining</string>
+    <string name="goal_savings_suggestions_title">Suggested savings</string>
+    <string name="goal_savings_per_day">Save %s per day</string>
+    <string name="goal_savings_per_week">Save %s per week</string>
+    <string name="goal_savings_per_month">Save %s per month (30 day average)</string>
+    <string name="goal_savings_actual_savings_title">My savings pace so far</string>
+    <string name="goal_savings_actual_per_day">Saving %s per day</string>
+    <string name="goal_savings_actual_per_week">Saving %s per week</string>
+    <string name="goal_savings_actual_per_month">Saving %s per month (30 day average)</string>
+
     <string name="goal_save_success">Changes saved successfully!</string>
     <string name="goal_save_error">There was a problem saving your changes. Please try again.</string>
     <string name="goal_delete_title">Delete this goal?</string>
@@ -61,6 +72,7 @@
     <string name="goal_overdue_short">This goal is overdue!</string>
     <string name="goal_overdue">This goal is overdue.\nUpdate the deadline to continue saving.</string>
 
+    <!-- Goal - Hints -->
     <string name="goal_create_first_hint_title">Think of a goal and start saving!</string>
     <string name="goal_create_first_hint">
         Create a habit and keep track of your savings. PigBank will help you remember how much you saved to achieve your goals.

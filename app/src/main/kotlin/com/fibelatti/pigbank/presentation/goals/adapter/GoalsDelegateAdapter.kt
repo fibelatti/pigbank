@@ -50,7 +50,7 @@ class GoalsDelegateAdapter @Inject constructor() :
 
                     itemView.textViewDescription.text = description
                     itemView.textViewSavingsProgress.text = itemView.context.resources.getString(R.string.goal_saved_relative, totalSaved, cost)
-                    itemView.progressBarPercent.progress = percentSaved
+                    itemView.progressBarPercent.progress = percentSaved.toInt()
                     itemView.textViewSavingsProgressPercent.text = itemView.context.resources.getString(R.string.goal_saved_percent, percentSaved)
                 }
             }

@@ -105,8 +105,8 @@ class GoalDetailPresenter(
         val presentationGoal = goalPresentationMapper.toPresentationModel(goalEntity)
 
         when {
-            goalEntity.isAchieved -> view?.showGoalAchievedDetails(presentationGoal)
-            goalEntity.isOverdue -> view?.showGoalOverdueDetails(presentationGoal)
+            presentationGoal.isAchieved -> view?.showGoalAchievedDetails(presentationGoal)
+            presentationGoal.isOverdue -> view?.showGoalOverdueDetails(presentationGoal)
             else -> view?.showGoalDetails(presentationGoal)
         }
     }

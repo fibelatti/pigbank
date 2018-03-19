@@ -6,4 +6,6 @@
     style="@style/CustomScrollbars"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/padding_regular"
+    android:paddingTop="@dimen/padding_regular"
     tools:listitem="@layout/list_item_savings"/>
