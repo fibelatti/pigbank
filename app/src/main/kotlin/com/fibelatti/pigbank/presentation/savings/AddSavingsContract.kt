@@ -5,7 +5,7 @@ import com.fibelatti.pigbank.presentation.models.GoalPresentationModel
 
 interface AddSavingsContract {
     interface Presenter : BaseContract.Presenter<View> {
-        fun addSavings(goal: GoalPresentationModel, amount: String)
+        fun addSavings(goal: GoalPresentationModel, amount: String, shouldSubtract: Boolean)
     }
 
     interface View : BaseContract.View {

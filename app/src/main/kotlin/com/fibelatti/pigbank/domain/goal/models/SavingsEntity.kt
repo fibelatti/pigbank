@@ -6,5 +6,6 @@ data class SavingsEntity(
     val id: Long,
     val goalId: Long,
     val amount: Float,
-    val date: Date
+    val date: Date,
+    val isRemoval: Boolean
 )

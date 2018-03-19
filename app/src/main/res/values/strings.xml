@@ -89,6 +89,10 @@
     <string name="savings_saved">%1$s saved in %2$s</string>
     <string name="savings_invalid_amount">Are you sure you are saving money?</string>
 
+    <string name="savings_remove_description">Taking money away from %s</string>
+    <string name="savings_remove_amount">How much do you need to take away?</string>
+    <string name="savings_removed">%1$s removed in %2$s</string>
+
     <!-- Preferences -->
     <string name="preferences_title">Preferences</string>
     <string name="preferences_changes_saved">Changes saved</string>

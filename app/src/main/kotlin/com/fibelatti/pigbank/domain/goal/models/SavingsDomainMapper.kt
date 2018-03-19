@@ -6,13 +6,25 @@ import javax.inject.Inject
 
 class SavingsDomainMapper @Inject constructor() {
     fun toDataModel(savings: SavingsEntity): SavingsDataModel = with(savings) {
-        SavingsDataModel(id, goalId, amount, date)
+        val multiplier: Int = if (isRemoval) -1 else 1
+        val actualAmount: Float = amount * multiplier
+
+        SavingsDataModel(id, goalId, actualAmount, date)
     }
 
     fun toDataModel(goalId: Long, amount: Float): SavingsDataModel =
         SavingsDataModel(id = 0, goalId = goalId, amount = amount, date = Date())
 
     fun toDomainModel(savings: SavingsDataModel): SavingsEntity = with(savings) {
-        SavingsEntity(id, goalId, amount, date)
+        val isRemoval = amount < 0
+        val absoluteAmount = if (isRemoval) amount * -1 else amount
+
+        SavingsEntity(
+            id = id,
+            goalId = goalId,
+            amount = absoluteAmount,
+            date = date,
+            isRemoval = isRemoval
+        )
     }
 }
