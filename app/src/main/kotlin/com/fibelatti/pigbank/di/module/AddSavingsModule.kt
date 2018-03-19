@@ -5,8 +5,8 @@ import com.fibelatti.pigbank.domain.goal.SaveForGoalUseCase
 import com.fibelatti.pigbank.domain.goal.ValidateSavingsUseCase
 import com.fibelatti.pigbank.external.providers.ResourceProvider
 import com.fibelatti.pigbank.external.providers.SchedulerProvider
-import com.fibelatti.pigbank.presentation.addsavings.AddSavingsContract
-import com.fibelatti.pigbank.presentation.addsavings.AddSavingsPresenter
+import com.fibelatti.pigbank.presentation.savings.AddSavingsContract
+import com.fibelatti.pigbank.presentation.savings.AddSavingsPresenter
 import com.fibelatti.pigbank.presentation.models.GoalPresentationMapper
 import dagger.Module
 import dagger.Provides

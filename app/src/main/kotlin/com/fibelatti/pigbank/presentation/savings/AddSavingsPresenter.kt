@@ -1,4 +1,4 @@
-package com.fibelatti.pigbank.presentation.addsavings
+package com.fibelatti.pigbank.presentation.savings
 
 import com.fibelatti.pigbank.domain.goal.GetGoalUseCase
 import com.fibelatti.pigbank.domain.goal.SaveForGoalUseCase
@@ -6,10 +6,10 @@ import com.fibelatti.pigbank.domain.goal.SavingsValidationError
 import com.fibelatti.pigbank.domain.goal.ValidateSavingsUseCase
 import com.fibelatti.pigbank.external.providers.ResourceProvider
 import com.fibelatti.pigbank.external.providers.SchedulerProvider
-import com.fibelatti.pigbank.presentation.addsavings.AddSavingsContract.View
 import com.fibelatti.pigbank.presentation.base.BasePresenter
 import com.fibelatti.pigbank.presentation.models.GoalPresentationMapper
 import com.fibelatti.pigbank.presentation.models.GoalPresentationModel
+import com.fibelatti.pigbank.presentation.savings.AddSavingsContract.View
 
 class AddSavingsPresenter(
     schedulerProvider: SchedulerProvider,

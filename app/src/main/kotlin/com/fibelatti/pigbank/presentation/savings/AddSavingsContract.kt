@@ -1,4 +1,4 @@
-package com.fibelatti.pigbank.presentation.addsavings
+package com.fibelatti.pigbank.presentation.savings
 
 import com.fibelatti.pigbank.presentation.base.BaseContract
 import com.fibelatti.pigbank.presentation.models.GoalPresentationModel

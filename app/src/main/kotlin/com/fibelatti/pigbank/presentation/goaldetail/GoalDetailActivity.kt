@@ -13,7 +13,7 @@ import android.view.MenuItem
 import com.fibelatti.pigbank.R
 import com.fibelatti.pigbank.common.asString
 import com.fibelatti.pigbank.common.ifNotNullThisElseThat
-import com.fibelatti.pigbank.presentation.addsavings.AddSavingsDialogFragment
+import com.fibelatti.pigbank.presentation.savings.AddSavingsDialogFragment
 import com.fibelatti.pigbank.presentation.base.BaseActivity
 import com.fibelatti.pigbank.presentation.base.BaseIntentBuilder
 import com.fibelatti.pigbank.presentation.common.extensions.animateWithListener

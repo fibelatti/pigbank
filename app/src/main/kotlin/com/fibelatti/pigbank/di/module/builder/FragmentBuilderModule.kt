@@ -5,7 +5,7 @@ import com.fibelatti.pigbank.di.module.AddSavingsModule
 import com.fibelatti.pigbank.di.module.PreferencesModule
 import com.fibelatti.pigbank.di.scope.LifecycleScope
 import com.fibelatti.pigbank.presentation.addgoal.AddGoalDialogFragment
-import com.fibelatti.pigbank.presentation.addsavings.AddSavingsDialogFragment
+import com.fibelatti.pigbank.presentation.savings.AddSavingsDialogFragment
 import com.fibelatti.pigbank.presentation.goaldetail.detail.GoalDetailFragment
 import com.fibelatti.pigbank.presentation.goaldetail.savingslog.SavingsLogFragment
 import com.fibelatti.pigbank.presentation.rateapp.RateAppDialogFragment
