@@ -29,7 +29,7 @@ class AddSavingsPresenter(
 
     override fun addSavings(goal: GoalPresentationModel, amount: String, shouldSubtract: Boolean) {
         validateSavingsUseCase.validateSavings(amount)
-            .flatMap {saveForGoalUseCase.saveForGoal(goalPresentationMapper.toDomainModel(goal), it, shouldSubtract) }
+            .flatMap { saveForGoalUseCase.saveForGoal(goalPresentationMapper.toDomainModel(goal), it, shouldSubtract) }
             .flatMap { getGoalsUseCase.getGoalById(goal.id) }
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.mainThread())

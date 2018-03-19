@@ -35,7 +35,11 @@ class GoalsPresenter(
     }
 
     override fun saveToGoal(goal: GoalPresentationModel, amount: Float) {
-        saveForGoalUseCase.saveForGoal(goalPresentationMapper.toDomainModel(goal), amount)
+        saveForGoalUseCase.saveForGoal(
+            goal = goalPresentationMapper.toDomainModel(goal),
+            amount = amount,
+            shouldSubtract = false
+        )
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.mainThread())
             .subscribeUntilDetached(
