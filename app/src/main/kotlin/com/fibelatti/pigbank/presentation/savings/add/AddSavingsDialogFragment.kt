@@ -1,4 +1,4 @@
-package com.fibelatti.pigbank.presentation.savings
+package com.fibelatti.pigbank.presentation.savings.add
 
 import android.app.Dialog
 import android.content.Context
