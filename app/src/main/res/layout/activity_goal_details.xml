@@ -2,7 +2,6 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,61 +22,42 @@
         layout="@layout/layout_goal_basic_info"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/layoutConditionalContent"
+        app:layout_constraintBottom_toTopOf="@+id/layoutTabs"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layoutToolbar"/>
 
-    <LinearLayout
-        android:id="@+id/layoutConditionalContent"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/layoutTabs"
+        style="@style/AppTabLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/textViewSavingsTitle"
+        app:layout_constraintBottom_toTopOf="@+id/layoutViewPager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layoutGoalBasicInfo">
 
-        <include
-            android:id="@+id/layoutSummary"
-            layout="@layout/layout_goal_summary"/>
+        <android.support.design.widget.TabItem
+            android:id="@+id/tabDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/goal_tab_title_details"/>
 
-        <include
-            android:id="@+id/layoutAchieved"
-            layout="@layout/layout_goal_achieved"
-            android:visibility="gone"/>
+        <android.support.design.widget.TabItem
+            android:id="@+id/tabSavingsLog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/goal_tab_title_savings_log"/>
+    </android.support.design.widget.TabLayout>
 
-        <include
-            android:id="@+id/layoutOverdue"
-            layout="@layout/layout_goal_overdue"
-            android:visibility="gone"/>
-
-    </LinearLayout>
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/textViewSavingsTitle"
-        style="@style/TextPrimary.Title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
-        android:gravity="center"
-        android:text="@string/goal_savings"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerViewSavings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutConditionalContent"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewSavings"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/layoutViewPager"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        style="@style/CustomScrollbars"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSavingsTitle"
-        tools:listitem="@layout/list_item_savings"/>
+        app:layout_constraintTop_toBottomOf="@+id/layoutTabs"/>
 
     <include
         layout="@layout/layout_confirmation"
@@ -98,7 +78,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/layoutConditionalContent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutTabs"
         app:layout_constraintVertical_bias="0.0"
         app:lottie_fileName="confetti.json"/>
 </android.support.constraint.ConstraintLayout>

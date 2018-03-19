@@ -6,37 +6,31 @@
     android:id="@+id/layoutRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:padding="@dimen/padding_small"
-    tools:layout_margin="@dimen/margin_small"
-    tools:showIn="@layout/activity_goal_details">
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guidelineIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.30"
-        app:layout_constraintHorizontal_chainStyle="packed"/>
+    android:layout_marginBottom="@dimen/margin_small"
+    android:layout_marginTop="@dimen/margin_small">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imageViewIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_small"
-        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_regular"
+        android:layout_marginStart="@dimen/margin_regular"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineIcon"
+        app:layout_constraintEnd_toStartOf="@+id/textViewSavings"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_coin"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textViewSavings"
         style="@style/TextPrimary.Body"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_regular"
+        android:layout_marginStart="@dimen/margin_regular"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guidelineIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageViewIcon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="200.00 saved in 01/01/2018"/>
 </android.support.constraint.ConstraintLayout>

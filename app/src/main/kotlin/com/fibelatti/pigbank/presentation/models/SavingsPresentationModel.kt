@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.fibelatti.pigbank.presentation.common.extensions.createParcel
 import com.fibelatti.pigbank.presentation.common.extensions.readDate
 import com.fibelatti.pigbank.presentation.common.extensions.writeDate
-import com.fibelatti.pigbank.presentation.goaldetail.adapter.ViewType
+import com.fibelatti.pigbank.presentation.goaldetail.savingslog.adapter.ViewType
 import java.util.Date
 
 data class SavingsPresentationModel(

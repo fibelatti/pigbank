@@ -129,6 +129,7 @@ class AddSavingsDialogFragment :
     }
 
     override fun onSavingsAdded(goal: GoalPresentationModel) {
+        layoutRoot.hideKeyboard()
         callback?.onSavingsAdded(goal)
         dismiss()
     }

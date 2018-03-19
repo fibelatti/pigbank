@@ -9,9 +9,6 @@ import java.util.Date
 import javax.inject.Inject
 
 private const val oneHundredPercent = 100F
-private const val weekDays = 7
-private const val monthDays = 30
-private const val minRelativeDaysToAlert = 0.10F
 private const val oneDayInMilliseconds = 1000 * 60 * 60 * 24
 
 class GoalDomainMapper @Inject constructor(private val savingsDomainMapper: SavingsDomainMapper) {
@@ -33,32 +30,24 @@ class GoalDomainMapper @Inject constructor(private val savingsDomainMapper: Savi
     fun toDomainModel(goalWithSavingsDataModel: GoalWithSavingsDataModel): GoalEntity = with(goalWithSavingsDataModel) {
         val totalSaved = savingsDataModelList.sumByFloat { it.amount }
         val remainingCost = goalDataModel.cost - totalSaved
-        val daysUntilDeadline = (goalDataModel.deadline.time - Date().time) / oneDayInMilliseconds
-        val percentSaved = ((totalSaved / goalDataModel.cost) * oneHundredPercent).toInt()
+        val daysUntilDeadline = ((goalDataModel.deadline.time - Date().time) / oneDayInMilliseconds).toInt()
+        val percentSaved = (totalSaved / goalDataModel.cost) * oneHundredPercent
+        val timeElapsed = Math.max(((Date().time - goalDataModel.creationDate.time) / oneDayInMilliseconds).toInt(), 1)
 
         GoalEntity(
-            id = goalDataModel.id,
-            creationDate = goalDataModel.creationDate,
             description = goalDataModel.description,
             cost = goalDataModel.cost,
+            deadline = goalDataModel.deadline,
+            id = goalDataModel.id,
+            creationDate = goalDataModel.creationDate,
+            savings = savingsDataModelList.map { savingsDomainMapper.toDomainModel(it) },
             totalSaved = totalSaved,
             remainingCost = remainingCost,
             percentSaved = percentSaved,
             isAchieved = percentSaved >= oneHundredPercent,
-            deadline = goalDataModel.deadline,
             daysUntilDeadline = daysUntilDeadline,
-            emphasizeRemainingDays = shouldEmphasizeRemainingDays(goalDataModel = goalDataModel, daysUntilDeadline = daysUntilDeadline),
             isOverdue = daysUntilDeadline < 0,
-            suggestedSavingsPerDay = remainingCost / daysUntilDeadline,
-            suggestedSavingsPerWeek = if (daysUntilDeadline >= weekDays) remainingCost / (daysUntilDeadline / weekDays) else 0F,
-            suggestedSavingsPerMonth = if (daysUntilDeadline >= monthDays) remainingCost / (daysUntilDeadline / monthDays) else 0F,
-            savings = savingsDataModelList.map { savingsDomainMapper.toDomainModel(it) }
+            timeElapsed = timeElapsed
         )
     }
-
-    private fun shouldEmphasizeRemainingDays(goalDataModel: GoalDataModel, daysUntilDeadline: Long) =
-        when (daysUntilDeadline.toFloat() / ((goalDataModel.deadline.time - goalDataModel.creationDate.time) / oneDayInMilliseconds).toFloat()) {
-            in 0F..minRelativeDaysToAlert -> true
-            else -> false
-        }
 }

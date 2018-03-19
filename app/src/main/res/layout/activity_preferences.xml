@@ -82,7 +82,7 @@
             android:layout_height="@dimen/button_height"
             android:layout_weight="1"
             android:text="@string/preferences_share"
-            android:theme="@style/AppButton.About"/>
+            android:theme="@style/AppButton.Neutral"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/buttonRate"
@@ -90,7 +90,7 @@
             android:layout_height="@dimen/button_height"
             android:layout_weight="1"
             android:text="@string/preferences_rate"
-            android:theme="@style/AppButton.About"/>
+            android:theme="@style/AppButton.Neutral"/>
     </LinearLayout>
 
     <android.support.v7.widget.AppCompatTextView

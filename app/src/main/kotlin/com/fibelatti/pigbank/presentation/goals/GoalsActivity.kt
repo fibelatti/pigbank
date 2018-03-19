@@ -11,6 +11,7 @@ import com.fibelatti.pigbank.presentation.addsavings.AddSavingsDialogFragment
 import com.fibelatti.pigbank.presentation.base.BaseActivity
 import com.fibelatti.pigbank.presentation.base.BaseIntentBuilder
 import com.fibelatti.pigbank.presentation.common.LinearLayoutManagerOffsetDecoration
+import com.fibelatti.pigbank.presentation.common.extensions.setActionBar
 import com.fibelatti.pigbank.presentation.common.extensions.toast
 import com.fibelatti.pigbank.presentation.goaldetail.GoalDetailActivity
 import com.fibelatti.pigbank.presentation.goals.adapter.GoalsAdapter
@@ -158,10 +159,7 @@ class GoalsActivity :
 
     //region Private methods
     private fun setupLayout() {
-        setSupportActionBar(toolbar)
-        supportActionBar?.apply {
-            title = getString(R.string.goal_title)
-        }
+        setActionBar(toolbar, getString(R.string.goal_title))
         buttonAddGoal.setOnClickListener { presenter.addGoal() }
     }
 
