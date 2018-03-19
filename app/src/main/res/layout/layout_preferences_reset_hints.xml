@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:text="@string/preferences_reset_hints_button"
-            android:theme="@style/AppButton.About"/>
+            android:theme="@style/AppButton.Neutral"/>
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/textViewResetHints"
