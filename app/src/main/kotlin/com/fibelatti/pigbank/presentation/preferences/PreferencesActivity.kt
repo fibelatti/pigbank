@@ -9,6 +9,7 @@ import com.fibelatti.pigbank.domain.userpreferences.models.UserPreferencesEntity
 import com.fibelatti.pigbank.presentation.addgoal.AddGoalDialogFragment
 import com.fibelatti.pigbank.presentation.base.BaseActivity
 import com.fibelatti.pigbank.presentation.base.BaseIntentBuilder
+import com.fibelatti.pigbank.presentation.common.extensions.setActionBar
 import com.fibelatti.pigbank.presentation.common.extensions.toast
 import com.fibelatti.pigbank.presentation.rateapp.RateAppDialogFragment
 import kotlinx.android.synthetic.main.activity_preferences.buttonRate
@@ -96,12 +97,13 @@ class PreferencesActivity :
 
     //region Private methods
     private fun setupLayout() {
-        setSupportActionBar(toolbar)
-        supportActionBar?.apply {
-            title = getString(R.string.preferences_title)
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_close)
-        }
+        setActionBar(
+            toolbar = toolbar,
+            title = getString(R.string.preferences_title),
+            displayHomeAsUp = true,
+            homeAsUpIcon = R.drawable.ic_close
+        )
+
         checkBoxCrashReportOptOut.setOnCheckedChangeListener { _, isChecked -> presenter.toggleCrashReport(isChecked) }
         checkBoxAnalyticsOptOut.setOnCheckedChangeListener { _, isChecked -> presenter.toggleAnalytics(isChecked) }
         buttonResetHints.setOnClickListener { presenter.resetHints() }

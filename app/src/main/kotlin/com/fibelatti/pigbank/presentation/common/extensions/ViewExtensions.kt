@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.Animator.AnimatorListener
 import android.app.Activity
 import android.content.Context
+import android.support.annotation.DrawableRes
 import android.support.annotation.LayoutRes
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TextInputLayout
@@ -11,6 +12,8 @@ import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.ViewCompat
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -99,6 +102,7 @@ fun View.showKeyboard() {
 }
 
 fun View.hideKeyboard() {
+    requestFocus()
     (context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)?.hideSoftInputFromWindow(windowToken, 0)
 }
 //endregion
@@ -106,9 +110,22 @@ fun View.hideKeyboard() {
 //region Components
 fun ViewGroup.stealFocusOnTouch() {
     setOnTouchListener { _, _ ->
-        requestFocus()
         hideKeyboard()
         return@setOnTouchListener false
+    }
+}
+
+fun AppCompatActivity.setActionBar(
+    toolbar: Toolbar,
+    title: String = "",
+    displayHomeAsUp: Boolean = false,
+    @DrawableRes homeAsUpIcon: Int? = null
+) {
+    setSupportActionBar(toolbar)
+    supportActionBar?.apply {
+        this.title = title
+        setDisplayHomeAsUpEnabled(displayHomeAsUp)
+        homeAsUpIcon?.let { setHomeAsUpIndicator(it) }
     }
 }
 

@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.support.design.widget.TabLayout.Tab
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.view.Menu
@@ -19,6 +20,7 @@ import com.fibelatti.pigbank.presentation.common.extensions.animateWithListener
 import com.fibelatti.pigbank.presentation.common.extensions.clearError
 import com.fibelatti.pigbank.presentation.common.extensions.gone
 import com.fibelatti.pigbank.presentation.common.extensions.hideKeyboard
+import com.fibelatti.pigbank.presentation.common.extensions.setActionBar
 import com.fibelatti.pigbank.presentation.common.extensions.setDateInputMask
 import com.fibelatti.pigbank.presentation.common.extensions.setElevated
 import com.fibelatti.pigbank.presentation.common.extensions.showError
@@ -56,6 +58,7 @@ class GoalDetailActivity :
     GoalDetailFragment.Callback,
     SavingsLogFragment.Callback,
     AddSavingsDialogFragment.Callback {
+
     //region Companion objects and interfaces
     companion object {
         val TAG: String = GoalDetailActivity::class.java.simpleName
@@ -223,19 +226,31 @@ class GoalDetailActivity :
 
     //region Private methods
     private fun setupLayout() {
-        setSupportActionBar(toolbar)
-        supportActionBar?.apply {
-            title = ""
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_close)
-        }
+        setActionBar(
+            toolbar = toolbar,
+            displayHomeAsUp = true,
+            homeAsUpIcon = R.drawable.ic_close
+        )
         layoutRoot.stealFocusOnTouch()
         editTextDeadline.setDateInputMask()
+        setupTabsAndPager()
+    }
 
+    private fun setupTabsAndPager() {
         pagerAdapter = GoalDetailsPagerAdapter(supportFragmentManager, goalDetailFragment, savingsLogFragment)
         layoutViewPager.adapter = pagerAdapter
-        layoutViewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(layoutTabs))
-        layoutTabs.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(layoutViewPager))
+        layoutViewPager.addOnPageChangeListener(object : TabLayout.TabLayoutOnPageChangeListener(layoutTabs) {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                layoutRoot.hideKeyboard()
+            }
+        })
+        layoutTabs.addOnTabSelectedListener(object : TabLayout.ViewPagerOnTabSelectedListener(layoutViewPager) {
+            override fun onTabSelected(tab: Tab?) {
+                super.onTabSelected(tab)
+                layoutRoot.hideKeyboard()
+            }
+        })
     }
 
     private fun parseIntent(intent: Intent) {
